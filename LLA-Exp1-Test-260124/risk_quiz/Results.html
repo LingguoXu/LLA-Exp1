@@ -1,0 +1,77 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+The End of Experiment
+{% endblock %}
+
+{% block content %}
+<hr>
+
+<style>
+    .otree-form-errors {
+        visibility: hidden;
+        display: none;
+    }
+    .otree-body {
+        max-width:1100px
+    }
+    .otree-title {
+      text-align: center;
+    }
+    input[type=radio]:checked + label {
+          font-style: normal;
+          color: rgb(56,110,246);
+          border: 1px solid rgb(56,110,246);
+          background-color: rgb(226,233,253)
+        }
+    .table {
+      width: 60%;
+      border-top: double;
+      border-bottom: double;
+    }
+</style>
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+<br>
+<p>
+    Here is a breakdown of your earnings from the experiment:
+</p>
+<ul>
+  <li>Initial participation fee: {{Constants.participationfee}} ECU </li>
+  <li>Payment for information about the existence of the nugget: {{player.participant.miner_price}} ECU </li>
+<!--  <li>Payment for waiting for the mining to complete: {{Constants.waitingpayment}} ECU </li>-->
+  <li>Earnings from the gold nugget or payment from the buyer: {{player.participant.gold_payment}} ECU </li>
+  <li>Earnings from the survey (decisions on lottery and certainty payments): {{player.participant.payoff_risk}} ECU </li>
+  <li>Earnings from the survey (others): {{Constants.surveypayment}} ECU </li>
+</ul>
+<p>
+    Your final payment is therefore {{player.participant.finalpayoff_ECU}} ECU. As a result, you earned &dollar;<b id="payoff"></b>.
+</p>
+<br>
+<p>
+        Thank you for your participation!
+</p>
+<br>
+<p>
+        Please raise your hand when you are ready to leave.
+</p>
+<br>
+<p>
+        An experimenter will come to you with further instructions.
+</p>
+<script>
+window.onload = function(){
+    let number = js_vars.finalpayoff;
+    var roundedpayoff = number.toFixed(2);
+    document.getElementById('payoff').innerHTML = roundedpayoff;
+};
+</script>
+
+<br><br>
+
+{{ endblock }}
+

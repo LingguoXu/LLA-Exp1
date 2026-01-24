@@ -1,0 +1,31 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block content %}
+<hr>
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+<br>
+<p style="margin-bottom: 10px;">
+    You are now more than halfway through the survey, and you will earn an additional {{Constants.survey_payment_2}} ECU for completing the rest.
+</p>
+
+<br>
+<p style="margin-bottom: 10px;">
+    Please describe your experience while you were waiting for the mining to complete in Part 2.
+</p>
+{{ formfield 'waiting_exp_1' }}
+<br>
+<br>
+
+
+<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+
+{{ endblock }}

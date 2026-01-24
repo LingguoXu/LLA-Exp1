@@ -1,0 +1,40 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block content %}
+<hr>
+
+<style>
+    p{
+        font-size: 26px;
+        margin-bottom: -18px;
+    }
+    .otree-body {
+        max-width:1100px
+    }
+    .otree-title {
+      text-align: center;
+    }
+</style>
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+<br>
+<p style="margin-bottom: 10px;">
+    While you were waiting for the mining to complete in Part 2, you clicked on the "See how the miner is doing" button {{participant.checkprogress}} times.
+    Could you please explain why you wanted to check on the miner. </p>
+<br>
+{{ formfield 'check_progress' }}
+<br>
+<br><br>
+
+
+<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+<br><br>
+{{ endblock }}

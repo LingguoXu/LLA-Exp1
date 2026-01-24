@@ -1,0 +1,182 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block content %}
+<style>
+    .next {
+        float: right;
+    }
+    p {
+        font-size: 25px;
+    }
+    .otree-body {
+        max-width: 1200px
+    }
+    .otree-title {
+        display: none
+    }
+</style>
+<style>
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  font-size: 25px;
+}
+
+/* Hide the default checkbox */
+.container input {
+  visibility: hidden;
+  cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.mark {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: lightgray;
+}
+
+.container:hover input ~ .mark {
+  background-color: gray;
+}
+
+.container input:checked ~ .mark {
+  background-color: Green;
+}
+
+/* Create the mark/indicator (hidden when not checked) */
+.mark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the mark when checked */
+.container input:checked ~ .mark:after {
+  display: block;
+}
+
+/* Style the mark/indicator */
+.container .mark:after {
+  left: 9px;
+  top: 5px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+</style>
+<div style="background-color: #00437d; color: white; height: 1200px">
+    <div style="max-width: 900px;  margin: auto; padding: 30px;">
+        <center>
+           <img src="{% static "Checks/unimelb_logo.png" %}" style="width:80%;" />
+        </center>
+        <p style="color: white; font-size: 22px; line-height: 30px; text-align: justify">
+            Thank you for participating in the experiment. We ask that you give us your full attention throughout the experiment.
+            Please refrain from all other activities, including using your phone and browsing the internet. If we find that you are not paying attention or are violating any
+            rules you will be dismissed without pay.
+        </p>
+        <br>
+        <div>
+            <center>
+                <h1><b>Full attention pledge</b></h1>
+            </center>
+            <br>
+            <h2>I pledge to:</h2><br>
+        <!--    <label class="container">Remain on Zoom and keep the channel of communication open at all times.-->
+        <!--      <input type="checkbox" name="p1" value="1">-->
+        <!--      <span class="mark"></span>-->
+        <!--    </label>-->
+            <label class="container"> Devote my full attention to the experiment and not engage in other activities, such as browsing the Internet.
+              <input type="checkbox" name="p2" value="1">
+              <span class="mark"></span>
+            </label>
+            <label class="container"> Put my mobile device in silent mode and not use them during the experiment.
+              <input type="checkbox" name="p3" value="1">
+              <span class="mark"></span>
+            </label>
+            <label class="container"> Not communicate with any other participants during the experiment.
+              <input type="checkbox" name="p4" value="1">
+              <span class="mark"></span>
+            </label>
+        </div>
+        <div>
+            <br>
+            <center>
+                <button id="Submit" type="button" class="btn btn-success" style="display:block;">Submit</button>
+            </center>
+        </div>
+        <div id="Start" style="display:none;" >
+            <br>
+            <p>Thank you. You may now start the experiment. </p>
+            <br>
+            <center>
+                    <button id="Next" class="btn btn-primary">Start the experiment</button>
+            </center>
+        </div>
+        <div id="Resubmit" style="display:none;" >
+            <br>
+            <p>You must click all the checkboxes to proceed. </p>
+        </div><br>
+    </div><br><br>
+</div>
+
+<script>
+    $(document).ready(function(){
+      $("#Submit").click(function() {
+        Check_submit();
+      });
+    });
+</script>
+<script>
+    var el1 = document.getElementById("radio1");
+    el1.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    });
+</script>
+<script>
+    $(document).ready(function(){
+      $('input[name=p2]').on('input', function() {
+        document.getElementById('Start').style.display = 'none';
+        document.getElementById('Resubmit').style.display = 'none';
+      });
+    });
+    $(document).ready(function(){
+      $('input[name=p3]').on('input', function() {
+        document.getElementById('Start').style.display = 'none';
+        document.getElementById('Resubmit').style.display = 'none';
+      });
+    });
+    $(document).ready(function(){
+      $('input[name=p4]').on('input', function() {
+        document.getElementById('Start').style.display = 'none';
+        document.getElementById('Resubmit').style.display = 'none';
+      });
+    });
+</script>
+<script>
+    function Check_submit() {
+        var radioValue2 = $("input[name='p2']:checked").val();
+        var radioValue3 = $("input[name='p3']:checked").val();
+        var radioValue4 = $("input[name='p4']:checked").val();
+          if (radioValue2 == radioValue3 == radioValue4 == 1) {
+            document.getElementById('Start').style.display = 'block';
+            document.getElementById('Resubmit').style.display = 'none';
+          } else {
+            document.getElementById('Start').style.display = 'none';
+            document.getElementById('Resubmit').style.display = 'block';
+          }
+    }
+</script>
+{% endblock %}
+
+

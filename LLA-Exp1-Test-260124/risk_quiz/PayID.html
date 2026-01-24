@@ -1,0 +1,45 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+PayID
+{% endblock %}
+
+{% block content %}
+<hr>
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+<br>
+<p>
+    Please enter the email address or phone number you used to register for PayID.
+</p>
+<p style="margin-bottom: -10px;">
+    If you do not have PayID, please enter your bank account details (provide both your BSB and account number).
+</p>
+    {{formfield 'PayID1'}}
+<br>
+<br>
+<p style="margin-bottom: -10px;">
+    Please enter your PayID or bank account details again.
+</p>
+    {{formfield 'PayID2'}}
+<br><br>
+<p style="margin-bottom: -10px;">
+    In case we need to contact you regarding the payment process, please provide your email address.
+</p>
+    {{formfield 'Email'}}
+<br><br>
+
+<p>
+    This information will be deleted once the payment process is complete.
+</p>
+<br><br>
+
+<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+
+{{ endblock }}
+

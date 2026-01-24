@@ -1,0 +1,52 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Part 1
+{% endblock %}
+
+{% block styles %}
+
+<link href="{% static 'css/PracticePages.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+<br>
+<p> The task is now finished. </p>
+<br>
+<p>Please click the "Next" button to proceed to Part 2.</p>
+
+<!--
+<p> <b> This table below will be hidden in the real test.</b> </p>
+
+
+    <p>
+        You answered {{ questions_correct }} out of {{ question_answered }}
+        questions correctly.
+    </p>
+
+    <table class="table">
+        <tr>
+            <th>Question</th>
+            <th>Your answer</th>
+            <th>Correct answer</th>
+        </tr>
+        {% for p in player_in_all_rounds %}
+            <tr>
+                <td>{{ p.round_number }}</td>
+                <td>{{ p.task_answers }}</td>
+                <td>{{ p.solution }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+-->
+
+<br>
+<br>
+{% next_button %}
+
+
+{% endblock %}
+
+

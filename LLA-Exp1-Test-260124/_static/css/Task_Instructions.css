@@ -1,0 +1,23 @@
+.next {
+    float: right;
+    margin: 40px auto;
+    }
+
+ .back{
+    float: left;
+    margin: 40px auto;
+    }
+.nav {
+    visibility: hidden;
+}
+p {
+  font-size: 22px;
+}
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.otree-timer {
+    display: none;
+}

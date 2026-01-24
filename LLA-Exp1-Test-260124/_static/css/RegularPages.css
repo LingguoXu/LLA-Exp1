@@ -1,0 +1,20 @@
+
+p {
+  font-size: 26px;
+}
+.otree-title {
+  text-align:center
+}
+.otree-body {
+  max-width:1100px
+}
+.otree-timer {
+    display: none;
+}
+.next {
+    float: right;
+}
+.back{
+    float: left;
+    margin: 40px auto;
+    }

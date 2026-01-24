@@ -1,0 +1,28 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block content %}
+<hr>
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+<br>
+<br>
+<p style="margin-bottom: 10px;">
+    Please describe your experience while you were waiting for the mining to complete in Part 4.
+    How does it compare to your experience in the first waiting period in Part 2?
+</p>
+{{ formfield 'waiting_exp_2' }}
+<br>
+<br>
+
+
+<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+
+{{ endblock }}

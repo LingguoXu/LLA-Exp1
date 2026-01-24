@@ -1,0 +1,57 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block content %}
+<hr>
+
+<style>
+    p{
+        font-size: 26px;
+        margin-bottom: -18px;
+    }
+    .otree-body {
+        max-width:1100px
+    }
+    .otree-title {
+      text-align: center;
+    }
+</style>
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+    <br>
+    <p>
+        Please state how much you agree with each of the statements below.
+    </p>
+    <br>
+    <br>
+    <p style="margin-bottom: -18px;">
+        1. I clicked on the "See how the miner is doing" button {{participant.checkprogress}} times because I was bored and restless.
+    </p>
+    {{ formfield 'check_progress_bored' }}
+    <br>
+    <br>
+    <p style="margin-bottom: -18px;">
+        2. I clicked on the "See how the miner is doing" button {{participant.checkprogress}} times because I was curious about the progress of the mining,
+        and nothing more.
+    </p>
+    {{ formfield 'check_progress_curious' }}
+    <br>
+    <br>
+    <p style="margin-bottom: -18px;">
+        3. I clicked on the "See how the miner is doing" button {{participant.checkprogress}} times because I was curious about the progress of the mining.
+        Additionally, I enjoy looking at the images because they remind me of the upcoming gold nugget.
+    </p>
+    {{ formfield 'check_progress_anticipation' }}
+    <br><br>
+
+
+<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+<br><br>
+{{ endblock }}

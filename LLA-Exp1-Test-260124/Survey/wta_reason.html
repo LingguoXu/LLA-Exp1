@@ -1,0 +1,46 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{{ block content }}
+<hr>
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+<br>
+
+{{ if player.participant.treatment == 1 }}
+    <p>
+        In Part 3, you were willing to accept {{player.participant.wta_t1}} ECU to forgo the gold nugget.
+    </p>
+    <br>
+    <p>
+        Why did you choose this price?
+    </p>
+    {{ formfield 'wta_reason' }}
+{{ else }}
+    <p>
+        In Part 4, you were willing to accept {{player.participant.wta_t2}} ECU to forgo the gold nugget.
+    </p>
+    <br>
+    <p>
+        Why did you choose this price?
+    </p>
+    {{ formfield 'wta_reason' }}
+    <br>
+    <p>
+        There was a delay in the mining process. How do you think the delay and the additional waiting affected your decision to come up with the price of {{player.participant.wta_t2}} ECU?
+    </p>
+    {{ formfield 'wta_delay_reason' }}
+{{endif}}
+<br><br>
+
+<button class="btn btn-primary" style="float: right;">Next</button>
+<br><br>
+
+{{ endblock }}

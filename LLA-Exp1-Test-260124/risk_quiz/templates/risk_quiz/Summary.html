@@ -1,0 +1,46 @@
+{% extends "risk_quiz/css.html" %}
+{% load otree static %}
+
+{% block title %}
+ Final Summary
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
+
+{% block content %}
+
+<p><u><b>For the Main Task</b></u></p>
+    <p>
+    Periods {{chosen_rounds}} have been randomly chosen for payment.<br>
+
+    {% for round, amount in rounds_payoffs %}
+        Your token earnings for Period {{round}}: {{amount}}<br>
+    {% endfor %}
+    <strong>Your total token earnings are: {{payoff_in_contest}}</strong>
+    <br>
+    This amount is converted at a rate of $1={{point_to_dollar_factor}} tokens.
+    <br>
+<p>Your earnings for this decision was: <strong>${{ total_dollar_payoff_game }}</strong></p>
+
+<p><b><u>For the Additional Task:</u></b></p>
+<ul>
+    <li>The task randomly selected for payment was: <b>{{ player.paying_task }} task</b></li>
+    <li>Within this task the randomly selected choice was: <b>[{{ player.paying_row }}]</b></li>
+    <li>Your decision was: <b>{{ player.your_decision }}</b></li>
+    {% if player.paying_task == 'ambiguity' %}
+        {% if player.your_decision == 'lottery' %}
+            <li>The 'p%' in ambiguity task: <b>{{ player.p_ambiguity }}%</b></li>
+        {% endif %}
+    {% endif %}
+    <li>Your earnings for this decision hence was: <b>{{ player.payoff_risk | c}} </b></li>
+</ul>
+
+<p>You will also receive a <b>{{ participation_fee }}</b> participation fee;</p>
+<p> Therefore, your total payoff is: <b>{{ player.payoff_risk | c}} + {{ total_dollar_payoff_game | c}} + {{ participation_fee }}  = {{ player.payoff_in_total }}</b></p>
+<b>{% formfields %}</b>
+{% next_button %}
+
+{% endblock %}
+

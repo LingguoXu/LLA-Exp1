@@ -1,0 +1,35 @@
+{% extends "risk_quiz/css.html" %}
+{% load otree static %}
+
+
+{% block title %}
+    Quiz
+{% endblock %}
+
+{% block content %}
+
+<p><b>Question 2</b>: Assume you have made the following decision for the environment shown below:</p>
+            <center>
+                <figure>
+                    <img src="{% static 'wicked_defaults/risk_quiz_screenshot2.png' %}" width="90%" alt="Ooops！！！There is an error">
+                </figure>
+            </center>
+    {% for d in fields %}
+        {% formfield d.name %}
+        
+        {% if show_solutions %}
+            {% if d.is_correct %}
+                <p class="solution-correct">
+                    Correct.
+                </p>
+            {% else %}
+                <p class="solution-incorrect">
+                    {{ d.explanation }}
+                </p>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% next_button %}
+
+{% endblock %}

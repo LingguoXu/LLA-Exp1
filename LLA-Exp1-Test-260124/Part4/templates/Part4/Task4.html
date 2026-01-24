@@ -1,0 +1,43 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Part 4
+{% endblock %}
+
+{% block styles %}
+
+<link href="{% static 'css/PracticePages.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+
+<p>
+    You will now be asked to complete a similar task as in Part 1. This is the last task you will complete in this experiment before moving on to the survey.
+</p>
+<p>
+    As before, you will receive <b>10 ECU</b> for every puzzle you solve correctly. Wrong answers will not affect your score.
+</p>
+<p>
+    When you are ready, please click the "Start Task" button to proceed with the task. You will have 10 minutes to solve up to 30 puzzles.
+</p>
+<p>
+    Please note that you cannot pause and restart the task. The timer will expire in exactly 10 minutes after you click the "Start Task" button.
+</p>
+
+<br>
+<br>
+<style>
+.center {
+  position: relative;
+  top: 60%;
+  left: 42%;
+}
+</style>
+
+<div class="center">
+    <button class="otree-btn-next btn btn-primary">Start Task</button>
+</div>
+
+{% endblock %}

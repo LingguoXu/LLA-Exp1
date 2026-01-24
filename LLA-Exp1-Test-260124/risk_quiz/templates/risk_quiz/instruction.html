@@ -1,0 +1,42 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+{% endblock %}
+
+{% block content %}
+<hr>
+
+{% block content %}
+
+    <p class="justify">
+        In this part, you will be asked to make three decisions. One of these three decisions will be chosen at the end of the experiment and that decision will be used to calculate your actual earnings for this part.
+    </p>
+    <p class="justify">
+        The environments for the three decisions are similar. In each case, you will see a list of 21 choices between lotteries and sure amounts of money. Lotteries will always be on the left, and sure amounts of money on the right.
+        The lists will be ordered so that you will prefer the lottery to the sure amount of money in the choice at the top of the list. As you go down the list, the strength of your preference will decrease.
+        That is, you will like the lotteries less and less as compared to the sure amounts. At some point, you will be willing to switch from preferring a lottery to preferring the corresponding sure amount of money.
+        At the point where you are willing to switch, please click on the <strong>SWITCH HERE</strong> button.
+    </p>
+    <p class="justify">
+        When you click on a <strong>SWITCH HERE</strong> button, lotteries will be your choice everywhere above that line, and sure amounts of money will be your choice everywhere below that line. All the 21 choices that you generate will be highlighted.
+        If you want to change your decision, simply click on another <strong>SWITCH HERE</strong> button. When you are ready to finalize your decision, click <strong>SUBMIT</strong>.
+    </p>
+    <p class="justify">
+        After you have made your decision, one of the 21 choices will be selected randomly and played.
+    </p>
+    <p>
+        <strong>If your preference in the choice that turns out to be actually played is a lottery, your earnings will depend on your guess and a random draw.
+        If your preference in the choice that turns out to be actually played is a sure amount of money, you will earn that amount of money.</strong>
+    </p>
+    <p class="justify">
+        You will be informed about your earnings from this part of the experiment at the very end of the session today, after you have completed all parts of the experiment.
+    </p>
+<!--    <p>-->
+<!--        <i>Are there any questions before you begin making your decisions?</i>-->
+<!--    </p>-->
+    <button class="btn btn-primary button-right">Next</button>
+
+{% endblock %}
+

@@ -1,0 +1,39 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Part 1
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<hr>
+<br>
+<p>
+    There is indeed <b>gold dust</b> in the soil!
+</p>
+<br><br>
+<p style="text-align: center">
+    <img src="{% static 'Miner/specks1.jpg' %}" style="width:70%" />
+</p>
+<br>
+<p>
+    The miner is now <b>almost certain</b> that he will find a gold nugget in the end.
+</p>
+<br>
+<P>
+    Please click "Next" to continue.
+</P>
+<br>
+<br>
+
+<button id="Next" style="float:right;" class="btn btn-primary">Next</button>
+<br>
+<p>
+</p>
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Part 3
+<br>
+(Please pay extra attention to this page)
+<p style="text-align: right; font-size: 13px; margin-top: 10px; margin-bottom: -18px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block content %}
+<hr>
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+<script>
+    $(document).ready(function(){
+      $("#kr1").click(function() {
+        document.getElementById('para2').style.display = 'block';
+        document.getElementById('kr1').style.display = 'none';
+      });
+      $("#kr2").click(function() {
+        document.getElementById('para3').style.display = 'block';
+        document.getElementById('kr2').style.display = 'none';
+      });
+      $("#kr3").click(function() {
+        document.getElementById('para4').style.display = 'block';
+        document.getElementById('kr3').style.display = 'none';
+      });
+    });
+</script>
+{{ if player.participant.found_gold == 1}}
+<div id = "para1" style="display:block">
+    <br>
+    <p>
+        Congratulations, the miner has <b>found a gold nugget</b>!
+    </p>
+    <br>
+    <p>
+        However, the value of this nugget remains uncertain and can be anywhere between {{Constants.goldvalue_low}} and {{Constants.goldvalue_high}} ECU.
+    </p>
+    <br>
+    <center>
+            <button id="kr1" type="button" class="btn btn-success" style="display:block;">Keep reading ...</button>
+    </center>
+</div>
+
+<div id = "para2" style="display:none">
+    <p>
+        Before the value of the gold is determined, you now have the opportunity to <b>sell it to a buyer for cash</b>.
+    </p>
+    <br>
+    <p>
+        The buyer, who is also uncertain about the value of the gold, has written down his offer (a number between {{Constants.goldvalue_low}} and {{Constants.goldvalue_high}} ECU) on a piece of paper.
+    </p>
+    <br>
+    <p style="text-align: center">
+        <img src="{% static 'Miner/bdm.jpg' %}" style="width:25%" />
+    </p>
+    <center>
+            <button id="kr2" type="button" class="btn btn-success" style="display:block;">Keep reading ...</button>
+    </center>
+</div>
+<div id = "para3" style="display:none">
+    <p>
+        Now, how much are you willing to accept to sell the gold nugget?
+    </p>
+    <br>
+    <center>
+            <button id="kr3" type="button" class="btn btn-success" style="display:block;">Keep reading ...</button>
+    </center>
+</div>
+<div id = "para4" style="display:none">
+    {% formfield 'wta_t1' %}
+    <br>
+    <p>
+        Note that the gold will only be sold if the buyer's offer <b>is higher than or equal to your price</b>. In that case, he will get the gold nugget and <b>pay you
+        the price you've selected above</b>; otherwise you get to keep the gold.
+    </p>
+    <br>
+    <p>
+        You learned about this mechanism at the beginning of the experiment, so you will recall that it is in your best interest to simply state how much you value the gold nugget.
+    </p>
+    <br>
+    <br>
+    <button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+    <br>
+    <br>
+    <p></p>
+</div>
+{{else}}
+<p>
+    Unfortunately the miner did not find any gold. Please proceed to the next part of the experiment.
+    <br>
+    <br>
+    <br>
+    <button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+</p>
+{{endif}}
+
+
+
+
+{{ endblock }}

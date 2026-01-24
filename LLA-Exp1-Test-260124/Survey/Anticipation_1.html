@@ -1,0 +1,73 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{{ block content }}
+<hr>
+
+<style>
+    .otree-title {
+      text-align: center;
+    }
+    #form {
+        text-align: justify;
+    }
+    .otree-form-errors {
+        visibility: hidden;
+        display: none;
+    }
+</style>
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+<br>
+
+
+<p>
+    Please state how much you agree with each of the statements below. You will be paid 25 ECU for completing this page.
+</p>
+<br>
+<div>
+    <p style="margin-bottom: -18px;">
+        1. On a typical Friday night, I prefer a home-cooked meal over eating out.
+    </p>
+    {{ formfield 'anticipation_1' }}
+</div>
+<br>
+<div>
+    <p style="margin-bottom: -18px;">
+        2. Sometimes, I like to save the best food for last.
+    </p>
+    {{ formfield 'anticipation_2' }}
+</div>
+<br>
+<div>
+    <p style="margin-bottom: -18px;">
+        3. Sometimes, when an exciting product I've ordered online arrives, I like to leave the package unopened just for a little while,
+        because it gives me pleasure to look at the enticing package.
+    </p>
+    {{ formfield 'anticipation_3' }}
+</div>
+<br>
+<div>
+    <p style="margin-bottom: -18px;">
+        4. I prefer shopping online rather than visiting stores.
+    </p>
+    {{ formfield 'anticipation_4' }}
+</div><br>
+<div>
+    <p style="margin-bottom: -18px;">
+        5. I just learned that a very desirable product I have been waiting for got delayed, but I do not mind waiting a bit longer because waiting in anticipation is part of the fun.
+    </p>
+    {{ formfield 'anticipation_5' }}
+</div>
+<br><br>
+
+<button class="btn btn-primary" style="float: right;">Next</button>
+<br><br>
+
+{{ endblock }}

@@ -1,0 +1,53 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Overview of Study
+<br>
+<p style="margin-bottom: -10px;">(Please read this page carefully)</p>
+<p style="text-align: right; font-size: 13px; margin-top: 5px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .otree-title {
+        text-align: center
+    }
+    h4.thick {
+        font-weight: 600;
+    }
+</style>
+
+<hr>
+<p>
+    In this experiment, you will be playing <b>a gold mining game in which a miner will be working on mining some gold</b> for you.
+    Please read all the instructions carefully. A clear understanding of the instructions is critical for making decisions and earning money in the experiment.
+</p>
+<br>
+<p>
+    There are four parts to the experiment. You will receive instructions for each part and will also be asked to complete a short survey after Part 4.
+</p>
+<br>
+<p>
+    In this experiment, all payments are expressed in <b>Experimental Currency Units (ECU)</b>.
+    Your payments will be converted to Australian dollars (AUD) at a rate of 50 ECU = 1 AUD and will be paid to you privately at the end of the experiment via bank transfer.
+</p>
+<br>
+<p>
+    You will receive {{Constants.participation_fee}} ECU for participating in the experiment, and you may earn additional payments throughout the experiment.
+</p>
+<br>
+<p>
+    Please raise your hand if you have any questions.
+</p>
+<br><br>
+
+
+<!--<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>-->
+
+{% endblock %}

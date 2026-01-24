@@ -1,0 +1,120 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block scripts %}
+
+<script src="{% static 'js/Instruction1.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+<style>
+    .next {
+        float: right;
+    }
+    .back{
+        float: left;
+        margin: 40px auto;
+        }
+</style>
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+<div class="tab">
+    <h2 style="text-align: center">Survey <br/> (Instruction 1/2)</h2>
+    <p style="text-align: right; font-size: 13px">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+    <hr style="margin-top: -15px;">
+    <br>
+    <p>
+        You will be asked to make three decisions (and earn more money) in the next three pages. One of the decisions will be randomly selected, and
+        the money you earned will be added to your total payment.
+    </p>
+    <br>
+    <p>
+        The setup for the three decisions is similar.
+        On each page, you will see a list of 21 choices between <b>lotteries and sure amounts of money</b>.
+        Lotteries will always be on the <b>left</b>, and sure amounts of money will always be on the <b>right</b>.
+        The order of the choices is such that you will like the lotteries less and less from top to bottom.
+    </p>
+    <br>
+    <p>
+        At some point, you would want to switch from preferring a lottery to preferring a sure amount of money.
+        Then you can click on the <strong>SWITCH HERE</strong> button at the point where you want to switch.
+    </p>
+    <br>
+    <p>
+        When you click on a <strong>SWITCH HERE</strong> button, lotteries will be your choice everywhere above that line,
+        and sure amounts of money will be your choice everywhere below that line.
+        You may change your decision by clicking on another <b>SWITCH HERE</b> button.
+    </p>
+    <br>
+    <p>
+        After you have made your decision and clicked the "Submit" button, one of the 21 choices will be selected randomly and played.
+    </p>
+    <p>
+        <button type="button" class="btn btn-primary btn-tab" data-offset="1" style="float: right">Next</button>
+    </p>
+    <br><br><br><br>
+</div>
+
+<div class="tab">
+    <h2 style="text-align: center">Survey <br/> (Instruction 2/2)</h2>
+    <p style="text-align: right; font-size: 13px">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+    <hr style="margin-top: -15px;">
+    <br>
+    <p>
+        For example, the switch point for the decision below is at row 6, or when the sure amount is $0.50.
+    </p>
+    <br>
+    <p style="text-align: center">
+        <img src="{% static 'Survey/example.png' %}" style="width:70%" />
+    </p>
+    <br>
+    <p>
+        This means the decision maker prefers lotteries when the sure amount is less than $0.50 but prefers sure amounts of money when it is equal to or higher than $0.50.
+    </p>
+    <br>
+    <p>
+        If the computer randomly selects a row above row 6, then the lottery will be played.
+    </p>
+    <br>
+    <p>
+        If the randomly selected row is at or below row 6, then the decision maker will get the sure amount of money.
+    </p>
+    <br>
+    <p>
+        When you are ready, please click "Next" to make your decisions.
+    </p>
+    <br><br>
+    <p>
+        <button type="button" class="btn btn-primary btn-tab" data-offset="-1" style="float: left;">Previous</button>
+        <button class="btn btn-primary" style="float: right;">Next</button>
+    </p>
+    <br><br><br><br>
+</div>
+
+
+<script>
+    let activeTab = 0;
+
+    function showCurrentTabOnly() {
+        let tabIndex = 0;
+        for (let tab of document.getElementsByClassName('tab')) {
+            tab.style.display = tabIndex === activeTab ? 'block' : 'none';
+            tabIndex++;
+        }
+    }
+
+    showCurrentTabOnly();
+    for (let btn of document.getElementsByClassName('btn-tab')) {
+        btn.onclick = function () {
+            activeTab += parseInt(btn.dataset.offset);
+            showCurrentTabOnly();
+            window.scrollTo(0, 0);
+        }
+    }
+</script>
+
+{% endblock %}
+
+

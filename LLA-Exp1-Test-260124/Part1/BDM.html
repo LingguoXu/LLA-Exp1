@@ -1,0 +1,285 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block scripts %}
+
+<script src="{% static 'js/Instruction1.js' %}"></script>
+
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<style>
+    .otree-title {
+        display: none
+    }
+</style>
+<style>
+    input[type=number] {
+          width: 30%;
+          padding: 2px 2px;
+          margin: 2px 0;
+        }
+</style>
+    <div class="tab">
+        <br>
+        <br>
+        <h2 style="text-align: center">Part 1 - Your valuation for an item <br> (1/4)</h2>
+        <p style="text-align: right; font-size: 13px; margin-top: 5px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+        <hr style="margin-top: -15px;">
+        <p>
+            At various points throughout the experiment, we will ask you to state the value you place on an item or the amount you are willing to pay to be informed about certain events.
+        </p>
+        <br>
+        <p>
+            We will use a mechanism that ensures it is always in your best interest to report your <b>value or willingness to pay truthfully</b>.
+        </p>
+        <br>
+        <p>
+            Please click the "Next" button to see how this works.
+        </p>
+        <br>
+        <p>
+            <button  type="button" class="btn btn-primary btn-tab" data-offset="1" style="float: right">Next</button>
+        </p>
+    </div>
+
+    <div class="tab">
+        <br>
+        <br>
+        <h2 style="text-align: center">Part 1 - Your valuation for an item <br> (2/4)</h2>
+        <p style="text-align: right; font-size: 13px; margin-top: 5px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+        <hr style="margin-top: -15px;">
+        <p>
+            Suppose that a person has an item you wish to buy. The exchange can occur at any price between 0 and 100 ECU.
+        </p>
+        <br>
+        <p>
+            You privately value this item at 70 ECU.
+        </p>
+        <br>
+        <p>
+            Now, this person, unaware of how much you value the item, will randomly select a price between 0 and 100 ECU and write it down on a piece of paper.
+        </p>
+        <br>
+        <p style="text-align: center">
+            <img src="{% static 'Miner/bdm.jpg'%}" style="width:30%" />
+
+        </p>
+        <br>
+        <p>
+            <button onclick="jumpToTop()" type="button" class="btn btn-primary btn-tab" data-offset="-1" style="float: left;">Previous</button>
+            <button onclick="jumpToTop()" type="button" class="btn btn-primary btn-tab" data-offset="1" style="float: right;">Next</button>
+        </p>
+        <br><br><br>
+    </div>
+
+    <div class="tab">
+        <br>
+        <br>
+        <h2 style="text-align: center">Part 1 - Your valuation for an item <br> (3/4)</h2>
+        <p style="text-align: right; font-size: 13px; margin-top: 5px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+        <hr style="margin-top: -15px;">
+        <br>
+        <p>
+            Now, you will decide how much you are willing to pay for the item, if:
+        </p>
+        <br>
+        <ul style="text-align: left; font-size: 32px;">
+            <li>The amount you are willing to pay <b><span>&#8805;</span></b> The price the person wrote down <span>&rArr;</span> You <b>will get</b> the item and pay the price the person wrote down</li>
+            <li style="margin-top: 25px;">The amount you are willing to pay <b><span>&lt;</span></b> The price the person wrote down <span>&rArr;</span> You <b>will not get</b> the item and will not pay anything</li>
+        </ul>
+        <br>
+        <p>
+            Note: if you get the item, you only need to pay the <b>price the person wrote down, not the amount you were willing to pay!</b>
+        </p>
+        <br><br><br><br>
+        <p>
+            <button type="button" class="btn btn-primary btn-tab" data-offset="-1" style="float: left;">Previous</button>
+            <button type="button" class="btn btn-primary btn-tab" data-offset="1" style="float: right;">Next</button>
+        </p>
+    </div>
+
+    <div class="tab">
+        <br>
+        <br>
+        <h2 style="text-align: center">Part 1 - Your valuation for an item <br> (4/4)</h2>
+        <p style="text-align: right; font-size: 13px; margin-top: 5px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+        <hr style="margin-top: -15px;">
+        <br>
+        <p>
+            Now, as an exercise, let's suppose the person has written down his price. It is time for you to decide on your willingness to pay. Which number would you choose?
+        </p>
+        <br>
+        <div>
+            <label>Please fill in a number between 0 and 100. </label>
+            <br>
+            <input class="w3-input w3-border w3-round" id="bdm" type="number" name="bdm">
+        </div>
+        <br>
+        <p>
+            Recall that you value the item at 70.
+        </p>
+        <br><br>
+        <center>
+                <button id="Confirm" type="button" class="btn btn-success" style="display:block;">Check Answer</button>
+        </center>
+        <input type="hidden" name="attempts_bdm" id="attempts_bdm" />
+        <script>
+            var el3 = document.getElementById("bdm");
+            el3.addEventListener("keypress", function(event) {
+              if (event.key === "Enter") {
+                event.preventDefault();
+              }
+            });
+        </script>
+        <script>
+            $(document).ready(function(){
+              $("#Confirm").click(function() {
+                checkcorrect();
+                checkrange();
+              });
+            });
+        </script>
+        <script>
+            function checkrange() {
+                var inputValue = $("#bdm").val();
+                  if (inputValue < 0 || inputValue > 100) {
+                     alert('Please fill in a number between 0 and 100.');
+                  }
+            }
+        </script>
+        <script>
+            let attempts_bdm = 0
+            document.getElementById('attempts_bdm').value = 0
+            function checkcorrect() {
+                var inputValue = $("#bdm").val();
+                  if (inputValue == 70) {
+                    document.getElementById('WrongAnswerlow').style.display = 'none';
+                    document.getElementById('WrongAnswerhigh').style.display = 'none';
+                    document.getElementById('CorrectAnswer').style.display = 'block';
+                    document.getElementById('Fillinanswer').style.display = 'none';
+                  } else if (inputValue < 70) {
+                    document.getElementById('WrongAnswerlow').style.display = 'block';
+                    document.getElementById('WrongAnswerhigh').style.display = 'none';
+                    document.getElementById('CorrectAnswer').style.display = 'none';
+                    document.getElementById('Fillinanswer').style.display = 'none';
+                    attempts_bdm += 1
+                  } else if (inputValue > 70 && inputValue <= 100) {
+                    document.getElementById('WrongAnswerlow').style.display = 'none';
+                    document.getElementById('WrongAnswerhigh').style.display = 'block';
+                    document.getElementById('CorrectAnswer').style.display = 'none';
+                    document.getElementById('Fillinanswer').style.display = 'none';
+                    attempts_bdm += 1
+                  }
+                document.getElementById('attempts_bdm').value = attempts_bdm + 1
+            }
+        </script>
+        <script>
+            $(document).ready(function(){
+              $('input[name=bdm]').on('input', function() {
+                    document.getElementById('WrongAnswerlow').style.display = 'none';
+                    document.getElementById('WrongAnswerhigh').style.display = 'none';
+                    document.getElementById('CorrectAnswer').style.display = 'none';
+                    document.getElementById('Fillinanswer').style.display = 'none';
+              });
+            });
+        </script>
+        <div id="WrongAnswerlow" style="width: 60%; display:none; color: red; margin-top: 10px; font-size: 20px;">
+        <p>
+            This amount is too low.
+        </p>
+        <p>
+            You picked a number less than 70. Let's suppose the person wrote down a price between your number and 70. In this case, you will not get the item,
+            even though you would be better off if you had entered your valuation for the item (70) and obtained the item at the price the person wrote down, which is less than 70.
+        </p>
+        <p>Please try again.</p>
+    </div>
+        <div id="WrongAnswerhigh" style="width: 60%; display:none; color: red; margin-top: 10px; font-size: 20px;">
+        <p>
+            This amount is too high.
+        </p>
+        <p>
+            You picked a number larger than 70. Let's suppose the person wrote down a price between 70 and the amount you are willing to pay.
+            In this case, you will get the item, but you will be worse off because you will pay the price the person wrote down, which is higher than the item's worth to you (70).
+        </p>
+        <p>Please try again.</p>
+    </div>
+        <div class="block">
+        <div id="CorrectAnswer" style="display:none;">
+            <p>
+                This amount is the best.
+            </p>
+            <p>
+                When you choose 70 ECU, regardless of the price the other person wrote down, you will not be worse off.
+            </p>
+
+            <br>
+            <ul style="text-align: left; font-size: 22px;">
+                <li>If the person wrote down a price higher than 70 ECU, you will not get the item because the price is too high for you.</li>
+                <li>If the person wrote down a price lower than or equal to 70 ECU, you will get the item and pay the price the person has written down.
+                This is still a good deal because the price you pay will be no more than your valuation of the item.</li>
+            </ul>
+            <br><br>
+            <div>
+                <button type="button" class="btn btn-primary btn-tab" data-offset="-1" style="float: left;">Previous</button>
+                <button type="button" class="btn btn-primary btn-tab" data-offset="1" style="float: right;">Next</button>
+            </div>
+            <br><br><br><br>
+        </div>
+    </div>
+        <center>
+        <span id="Fillinanswer" style="width: 60%; display:none; color: red; margin-top: 10px; font-size: 20px;">
+            Please answer all the questions.
+        </span>
+    </center>
+    </div>
+
+    <div class="tab">
+        <br>
+        <br>
+        <h2 style="text-align: center">Part 1 - Your valuation for an item </h2>
+        <p style="text-align: right; font-size: 13px; margin-top: 5px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+        <hr style="margin-top: -15px;">
+        <br>
+        <p>
+            In the later part of the experiment, we may ask you to specify the price at which you are willing to sell an item.
+        </p>
+        <br><br>
+        <p>
+            Similarly, it is in your best interest to simply state how much you value the item.
+        </P>
+        <br><br><br><br>
+        <button type="button" class="btn btn-primary btn-tab" data-offset="-1" style="float: left;">Previous</button>
+        <button class="btn btn-primary" style="float: right;">Next</button>
+        <br><br><br><br>
+        <p></p>
+    </div>
+
+    <script>
+        let activeTab = 0;
+
+        function showCurrentTabOnly() {
+            let tabIndex = 0;
+            for (let tab of document.getElementsByClassName('tab')) {
+                tab.style.display = tabIndex === activeTab ? 'block' : 'none';
+                tabIndex++;
+            }
+        }
+
+        showCurrentTabOnly();
+        for (let btn of document.getElementsByClassName('btn-tab')) {
+            btn.onclick = function () {
+                activeTab += parseInt(btn.dataset.offset);
+                showCurrentTabOnly();
+                window.scrollTo(0, 0);
+            }
+        }
+    </script>
+
+{% endblock %}
+
+

@@ -1,0 +1,114 @@
+{% extends "risk_quiz/css.html" %}
+{% load otree static %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block scripts %}
+<style>
+.table td {padding: 0.125rem; text-align: center; font-size: 14px; vertical-align: middle;}
+.button-sm-text {font-size: 11px}
+</style>
+{% endblock %}
+
+{% block content %}
+<h4>Additional task {{ subsession.round_number }}</h4><br>
+    <p><strong>Lotteries on the left: </strong> lose some amount with 50% chance or gain ${{ Constants.sure }} with 50% chance</p>
+    <table class="table">
+        {% for ad in aversion_data %}
+            <tr>
+                <td>[{{ ad.num }}]</td>
+                <td id="l_{{ ad.num }}" bgcolor="#FFC400">{{ ad.left }}</td>
+                <td><button id="b_{{ ad.num }}" type="button" class="btn btn-primary btn-sm button-sm-text" onclick="onClickSwitch(this.id)">SWITCH HERE</button></td>
+                <td id="r_{{ ad.num }}" >{{ ad.right }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td><button id="balways" type="button" class="btn btn-primary btn-sm button-sm-text" onclick="onClickAlways()">Always Lottery</button></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <p>
+        Please decide where you would like to Switch by clicking on one of the <strong>SWITCH HERE</strong> buttons above. Click <strong>SUBMIT</strong> when you are through making your decision.
+    </p>
+
+    <div>
+        <input type="hidden" id="loss_switch_point" name="loss_switch_point" />
+    </div>
+
+    <button id="submit_button" class="btn btn-primary button-right" style="display: none; float: right;">Submit</button>
+
+<script>
+
+// declare variables and stuff here
+const element_cap = 21;
+var switch_index = element_cap;
+
+// for the extra
+var lefts = [];
+var rights = [];
+
+for (var i = 1; i <= element_cap; i++)
+{
+    lefts.push(document.getElementById("l_" + i));
+    rights.push(document.getElementById("r_" + i));
+}
+
+function onClickSwitch(element_id)
+{
+    switch_index = parseInt(element_id.split('_')[1]);
+    document.getElementById("loss_switch_point").value = switch_index;
+
+    updateDisplay();
+    showSubmit();
+}
+function onClickAlways()
+{
+    switch_index = element_cap + 1;
+    document.getElementById("loss_switch_point").value = switch_index;
+
+    updateDisplay();
+    showSubmit();
+}
+
+function updateDisplay()
+{
+    //console.log(lefts);
+    //console.log(rights);
+
+    for (var i = 0; i < element_cap; i++)
+    {
+        if ((switch_index - 1) > i)
+        {
+            lefts[i].style.backgroundColor = '#ffc400';
+            rights[i].style.backgroundColor = 'transparent';
+        }
+        else
+        {
+            lefts[i].style.backgroundColor = 'transparent';
+            rights[i].style.backgroundColor = '#FFC400';
+        }
+    }
+}
+
+function showSubmit()
+{
+    var submitButton = document.getElementById("submit_button");
+    submitButton.style.display = "inline";
+}
+
+
+</script>
+
+{% endblock %}
+

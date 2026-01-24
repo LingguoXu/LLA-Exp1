@@ -1,0 +1,73 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{{ block content }}
+<hr>
+
+<style>
+    .otree-title {
+      text-align: center;
+    }
+    #form {
+        text-align: justify;
+    }
+    .otree-form-errors {
+        visibility: hidden;
+        display: none;
+    }
+</style>
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+<br>
+
+<p>
+    Please state how much you agree with each of the statements below. You will be paid 25 ECU for completing this page.
+</p>
+<br>
+<div>
+    <p style="margin-bottom: -18px;">
+        1. I would prefer saving for an overseas trip rather than frequently dining out.
+    </p>
+    {{ formfield 'anticipation_6' }}
+</div>
+<br>
+<div>
+    <p style="margin-bottom: -18px;">
+        2. When the waiter brings my food, I start with the most delicious item on the plate rather than saving it for last.
+    </p>
+    {{ formfield 'anticipation_7' }}
+</div>
+<br>
+<div>
+    <p style="margin-bottom: -18px;">
+        3. When an exciting product I've ordered online has arrived, I find no pleasure looking at the unopened package.
+    </p>
+    {{ formfield 'anticipation_8' }}
+</div>
+<br>
+<div>
+    <p style="margin-bottom: -18px;">
+        4. I prefer saving for my future rather than spending the money to enjoy life now.
+    </p>
+    {{ formfield 'anticipation_9' }}
+</div>
+<br>
+<div>
+    <p style="margin-bottom: -18px;">
+        5. When something I have been eagerly waiting for is not available when the time comes, I will give it up or find a
+        substitute because I cannot stand to wait any longer.
+    </p>
+    {{ formfield 'anticipation_10' }}
+</div>
+<br><br>
+
+<button class="btn btn-primary" style="float: right;">Next</button>
+<br><br>
+
+{{ endblock }}

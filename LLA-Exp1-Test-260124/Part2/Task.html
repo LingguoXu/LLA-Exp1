@@ -1,0 +1,400 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Part 2: wait for the mining to complete <br>
+(Round {{player.round_number}}/{{Constants.num_rounds}})
+<p style="text-align: right; font-size: 13px; margin-top: 10px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+<hr>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/progressbar.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<style>
+    * {
+      box-sizing: border-box;
+    }
+    p {
+      font-size: 26px;
+    }
+    .otree-title {
+      text-align:center
+    }
+    .otree-body {
+      max-width:1100px
+    }
+    .img-container {
+      float: left;
+      width: 50%;
+      padding: 5px;
+    }
+    .clearfix::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+    .otree-timer {
+        display: none;
+    }
+</style>
+<style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .column {
+      float: left;
+      width: 50%;
+      padding: 5px;
+    }
+
+    /* Clearfix (clear floats) */
+    .row::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+</style>
+<style>
+    .fig-row {
+    font-size: 1rem;
+    color: #404030;
+    text-align: left;
+    width: 100%;
+    margin: 1.5rem auto 0 auto;
+    padding: 0;
+    }
+    .fig1-2 { width: 48.25%; }
+    .fig-col {
+        margin: 0 0 0 2.5%;
+        display:inline-block;
+    }
+    .fig-col:first-child { margin-left: 0; } /* remove left margin from first column */
+</style>
+<script>
+    $(document).ready(function(){
+      $("#BacktoTask").click(function() {
+        document.getElementById('MiningProgress').style.display = 'none';
+        document.getElementById('TaskBlock').style.display = 'block';
+        document.getElementById('CheckProgress').style.display = 'block';
+        document.getElementById('BacktoTask').style.display = 'none';
+        window.scrollTo(0, 0);
+      });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        $('.otree-timer__time-left').on('update.countdown', function (event) {
+            if (event.offset.totalSeconds === 10) {
+                $('.otree-timer').show();
+            }
+        });
+    });
+</script>
+<script>
+    function isElementVisible(element) {
+        return element && element.offsetParent !== null;
+    }
+    document.addEventListener("DOMContentLoaded", function (event) {
+        $('.otree-timer__time-left').on('update.countdown', function (event) {
+            const elem = document.getElementById('MiningProgress');
+            if (isElementVisible(elem) && event.offset.totalSeconds === 1) {
+                const button = document.getElementById('BacktoTask');
+                button.click();
+            }
+        });
+    });
+</script>
+<script type="text/javascript" src="{% static 'js/progressbar.js' %}"></script>
+<script>
+    function initializePage() {
+        taskquestion();
+    }
+</script>
+<script>
+    var globalVariable = new Date().getTime();
+</script>
+<script>
+    let r_num = js_vars.roundnum;
+    function taskquestion() {
+        if (r_num == 1) {
+            document.getElementById("Taskquestion").innerHTML += "Which travels faster? Hot or Cold?";
+            document.getElementById("goldtrivia").innerHTML = "<b>The Victorian Gold Rush</b>: The Victorian Gold Rush was one of the largest gold rushes in history, beginning in 1851 when gold was discovered near Ballarat and Bendigo in Victoria, Australia. This discovery attracted prospectors from around the world and significantly contributed to the economic development of Australia.";
+        }
+        if (r_num == 2) {
+            document.getElementById("Taskquestion").innerHTML += "What can you hold without ever touching or using your hands?";
+            document.getElementById("goldtrivia").innerHTML = "<b>The Victorian Gold Rush</b>: The Victorian Gold Rush was one of the largest gold rushes in history, beginning in 1851 when gold was discovered near Ballarat and Bendigo in Victoria, Australia. This discovery attracted prospectors from around the world and significantly contributed to the economic development of Australia.";
+        }
+        if (r_num == 3) {
+            document.getElementById("Taskquestion").innerHTML += "First, I threw away the outside and cooked the inside. Then I ate the outside and threw away the inside. What did I eat?";
+            document.getElementById("goldtrivia").innerHTML = "<b>The Victorian Gold Rush</b>: The Victorian Gold Rush was one of the largest gold rushes in history, beginning in 1851 when gold was discovered near Ballarat and Bendigo in Victoria, Australia. This discovery attracted prospectors from around the world and significantly contributed to the economic development of Australia.";
+        }
+        if (r_num == 4) {
+            document.getElementById("Taskquestion").innerHTML += "You are in a cabin and it is pitch black. You have one match on you. Which do you light first, the newspaper, the lamp, the candle, or the fire?";
+            document.getElementById("goldtrivia").innerHTML = "<b>Golden Age of Gold</b>: The Australian gold rushes of the 19th century were so productive that Australia was the world's leading gold producer by the 1850s.";
+        }
+        if (r_num == 5) {
+            document.getElementById("Taskquestion").innerHTML += "A farmer has 17 sheep and all but nine die. How many are left?";
+            document.getElementById("goldtrivia").innerHTML = "<b>Golden Age of Gold</b>: The Australian gold rushes of the 19th century were so productive that Australia was the world's leading gold producer by the 1850s.";
+        }
+        if (r_num == 6) {
+            document.getElementById("Taskquestion").innerHTML += "The number 8,549,176,320 is a unique number. What is so special about it?";
+            document.getElementById("goldtrivia").innerHTML = "<b>Golden Age of Gold</b>: The Australian gold rushes of the 19th century were so productive that Australia was the world's leading gold producer by the 1850s.";
+        }
+        if (r_num == 7) {
+            document.getElementById("Taskquestion").innerHTML += "How far can a rabbit run into the woods?";
+            document.getElementById("goldtrivia").innerHTML = "<b>Gold and Population Growth</b>: The population of Victoria grew from 76,000 in 1851 to 540,000 in 1861, largely due to the gold rush.";
+        }
+        if (r_num == 8) {
+            document.getElementById("Taskquestion").innerHTML += "Who is bigger: Mr. Bigger, Mrs. Bigger, or their baby?";
+            document.getElementById("goldtrivia").innerHTML = "<b>Gold and Population Growth</b>: The population of Victoria grew from 76,000 in 1851 to 540,000 in 1861, largely due to the gold rush.";
+        }
+        if (r_num == 9) {
+            document.getElementById("Taskquestion").innerHTML += "Mike is a butcher. He is 5’10” tall. What does he weigh?";
+            document.getElementById("goldtrivia").innerHTML = "<b>Gold and Population Growth</b>: The population of Victoria grew from 76,000 in 1851 to 540,000 in 1861, largely due to the gold rush.";
+        }
+        if (r_num == 10) {
+            document.getElementById("Taskquestion").innerHTML += "Guess the next three letters in the series GTNTL";
+                    document.getElementById("goldtrivia").innerHTML = "<b>Immigrant Influence</b>: The gold rushes significantly influenced Australia's national identity, with immigrants from China, Europe, and North America contributing to Australia’s multicultural society.";
+        }
+        if (r_num == 11) {
+            document.getElementById("Taskquestion").innerHTML += "You do not want to have it. But when you do have it, you do not want to lose it.  What is it?";
+                    document.getElementById("goldtrivia").innerHTML = "<b>Immigrant Influence</b>: The gold rushes significantly influenced Australia's national identity, with immigrants from China, Europe, and North America contributing to Australia’s multicultural society.";
+        }
+        if (r_num == 12) {
+            document.getElementById("Taskquestion").innerHTML += "What kind of running means walking?";
+                    document.getElementById("goldtrivia").innerHTML = "<b>Immigrant Influence</b>: The gold rushes significantly influenced Australia's national identity, with immigrants from China, Europe, and North America contributing to Australia’s multicultural society.";
+        }
+        if (r_num == 13) {
+            document.getElementById("Taskquestion").innerHTML += "What is full of holes but can still hold water?";
+                    document.getElementById("goldtrivia").innerHTML = "<b>Gold Transportation</b>: The first gold escort service from the goldfields to Melbourne was established in 1851, providing safe passage for the gold and contributing to the development of regional infrastructure.";
+        }
+        if (r_num == 14) {
+            document.getElementById("Taskquestion").innerHTML += "I do not have any special powers, but I can predict the score of any football game before it begins. How can I do this?";
+                    document.getElementById("goldtrivia").innerHTML = "<b>Gold Transportation</b>: The first gold escort service from the goldfields to Melbourne was established in 1851, providing safe passage for the gold and contributing to the development of regional infrastructure.";
+        }
+        if (r_num == 15) {
+            document.getElementById("Taskquestion").innerHTML += "Imagine that you are in a boat, in the middle of the sea. Suddenly, you are surrounded by hungry sharks, just waiting to feed on you. How can you put an end to this?";
+                    document.getElementById("goldtrivia").innerHTML = "<b>Gold Transportation</b>: The first gold escort service from the goldfields to Melbourne was established in 1851, providing safe passage for the gold and contributing to the development of regional infrastructure.";
+        }
+        if (r_num == 16) {
+            document.getElementById("Taskquestion").innerHTML += "Give me food, and I will live; give me water, and I will die. What am I?";
+                    document.getElementById("goldtrivia").innerHTML = "<b>The Hand of Faith</b>: The Hand of Faith nugget, found in 1980 near Kingower, Victoria, by Kevin Hillier using a metal detector, is one of the largest gold nuggets ever found with a metal detector and weighed over 27 kilograms. It was sold to the Golden Nugget Casino in Las Vegas where it is currently on display.";
+        }
+        if (r_num == 17) {
+            document.getElementById("Taskquestion").innerHTML += "A man stands on one side of a river, his dog on the other. The man calls his dog, who immediately crosses the river without getting wet and without using a bridge or a boat. How did the dog do it?";
+                    document.getElementById("goldtrivia").innerHTML = "<b>World's Richest Shallow Alluvial Goldfield</b>: Ballarat, during the peak of the Victorian gold rush, was considered the world's richest shallow alluvial goldfield. This richness was a significant factor in its rapid growth and development.";
+        }
+        if (r_num == 18) {
+            document.getElementById("Taskquestion").innerHTML += "Turn me on my side and I am everything. Cut me in half and I am nothing. What am I?";
+                    document.getElementById("goldtrivia").innerHTML = "<b>The Gold Museum</b>: The Gold Museum in Ballarat provides an extensive collection of gold artifacts, gold nuggets, coins, and the cultural heritage of the gold rush era, offering insights into the impact of gold on Australian society.";
+        }
+        if (r_num == 19) {
+            document.getElementById("Taskquestion").innerHTML += "No matter how little or how much you use me, you change me every month. What am I?";
+                    document.getElementById("goldtrivia").innerHTML = "<b>Bendigo's Golden Heritage</b>: Bendigo, another major Victorian gold rush city, sits atop an extensive underground network of gold mines. The city's gold mining history is celebrated through attractions like the Bendigo Heritage Mines Tours, where visitors can explore the underground tunnels.";
+        }
+        if (r_num == 20) {
+            document.getElementById("Taskquestion").innerHTML += "How can 8 + 8 = 4?";
+            document.getElementById("goldtrivia").innerHTML = "<b>Legacy of the Gold Rush</b>: The wealth from the Victorian gold rush financed significant buildings in Melbourne and Victoria, contributing to the grand Victorian architecture seen in these areas today. Institutions like the Royal Exhibition Building in Melbourne, a UNESCO World Heritage Site, owe their existence to the prosperity brought by the gold rush.";
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const button = document.getElementById('checkanswer');
+
+    const handleClickOnce = () => {
+        taskanswer();
+        // Remove this event listener after the first click
+        button.removeEventListener('click', handleClickOnce);
+    };
+    // Add the event listener
+    button.addEventListener('click', handleClickOnce);
+});
+</script>
+<b></b>
+
+<!--<script>-->
+<!--    var globalVariable = new Date().getTime();-->
+<!--</script>-->
+
+<body onload="initializePage()">
+</body>
+
+<!--<p id="demo1">11</p>-->
+<!--<p id="demo2"></p>-->
+<!--<p id="demo3"></p>-->
+<!--<p id="demo4"></p>-->
+<!--<p id="demo5"></p>-->
+    <div id="TaskBlock" style="display:block;">
+        <p id="Taskquestion"><b>Question</b>: </p>
+        <br><br>
+        <p id="Taskanswer"></p>
+        <br><br>
+        <center>
+            <button id="checkanswer" type="button" class="btn btn-success" style="display:block;">Check answer</button>
+        </center>
+        <br><br>
+        <script>
+            // Define the function to execute
+            function taskanswer() {
+                let currentime = new Date().getTime();
+                let timeGap =  (currentime - globalVariable)/1000;
+                document.getElementById('check_timing_teaser').value = timeGap.toFixed(2);
+                if (r_num == 1) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: Hot is faster, because you can catch a cold.";
+                }
+                if (r_num == 2) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: Your breath!";
+                }
+                if (r_num == 3) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: Corn on the cob";
+                }
+                if (r_num == 4) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: You light the match first!";
+                }
+                if (r_num == 5) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: Nine";
+                }
+                if (r_num == 6) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: This is the only number that includes all the digits arranged in alphabetical order.";
+                }
+                if (r_num == 7) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: Halfway. After that, he is running out of the woods.";
+                }
+                if (r_num == 8) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: The baby, because he is a little bigger.";
+                }
+                if (r_num == 9) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: Meat";
+                }
+                if (r_num == 10) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: I, T, S. The complete sequence is the first letter of every word in the sentence.";
+                }
+                if (r_num == 11) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: Lawsuit";
+                }
+                if (r_num == 12) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: Running out of gas/petro";
+                }
+                if (r_num == 13) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: A sponge";
+                }
+                if (r_num == 14) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: Well, the score before any football game is always zero to zero!";
+                }
+                if (r_num == 15) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: Stop imagining!";
+                }
+                if (r_num == 16) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: Fire";
+                }
+                if (r_num == 17) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: The river was frozen";
+                }
+                if (r_num == 18) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: The number 8";
+                }
+                if (r_num == 19) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: A calendar";
+                }
+                if (r_num == 20) {
+                    document.getElementById("Taskanswer").innerHTML += "<b>Answer</b>: When you think in terms of time. 8 AM + 8 hours= 4 o’clock.";
+                }
+            }
+        </script>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <center>
+        <p style="font-size: 20px">Interesting facts about gold mining in Australia</p>
+            <hr style="width: 60%; margin-left: auto; margin-right: auto; margin-top: -12px;">
+            <p style="width: 60%; text-align: left; font-size: 20px" id="goldtrivia"></p>
+        </center>
+<!--    <button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>-->
+    </div>
+    <center id="MiningProgress" style="display:none;">
+        <br>
+        <p>The mining is going well!</p>
+        <p style="font-size: 13px">(Images for illustrative purposes only)</p>
+        <br><br>
+        <div class="row">
+          <div class="column">
+              <img style="text-align: center; display:none; width:90%; height:99%" id = "digging" src="{% static 'Miner/digging1.jpg' %}"/>
+          </div>
+          <div class="column">
+              <div class="myBar1 label-center"></div>
+          </div>
+        </div>
+        <script>
+            $(document).ready(function(){
+            let clicked = false;
+            let startTime, endTime, time, progress;
+                $("#CheckProgress").click(function() {
+                    document.getElementById('MiningProgress').style.display = 'block';
+                    let r_num = js_vars.roundnum-1;
+                    if (!clicked) {
+                        let currentime = new Date().getTime();
+                        let timeGap =  (currentime - globalVariable)/1000;
+                        clicked = true;
+                        document.getElementById('check_timing').value = timeGap.toFixed(2);
+                    }
+                    let image_percent = r_num*6+15;
+                    var bar = new ldBar(".myBar1", {
+                       "type": "fill",
+                       "img": "{% static 'Miner/nugget2.png' %}",
+                       "value": image_percent,
+                       "fill-dir": "ltr",
+                       "img-size": "510, 500"
+                      });
+                    document.getElementById('digging').style.display = 'block';
+                    document.getElementById('TaskBlock').style.display = 'none';
+                    document.getElementById('CheckProgress').style.display = 'none';
+                    document.getElementById('BacktoTask').style.display = 'block';
+                    document.getElementById('goldtrivia').style.display = 'block';
+                    startTime = new Date().getTime();
+                    window.scrollTo(0, 0);
+                });
+                let count = 0;
+                let btn = document.getElementById('CheckProgress');
+                btn.addEventListener("click", function () {
+                    count++;
+                    document.getElementById('num_checks').value = count;
+                });
+                let btn1 = document.getElementById('BacktoTask');
+                const timebox = [0, 0];
+                btn1.addEventListener("click", function () {
+                    endTime = new Date().getTime();
+                    time = endTime - startTime;
+                    timebox.push(time);
+                    let sum = 0;
+                    timebox.forEach(num => {
+                        sum += num;
+                        });
+                    document.getElementById('timeonimage').value = sum.toFixed(2)/1000;
+                    });
+            });
+        </script>
+    </center>
+    <center>
+            <br><br><br><br>
+            <button id="CheckProgress" type="button" class="btn btn-success" style="display:block;">See how the miner is doing</button>
+    </center>
+    <center>
+            <button id="BacktoTask" type="button" class="btn btn-success" style="display:none;">Back to brain teaser</button>
+    </center>
+    <br><br>
+<input type="hidden" name="num_checks" id="num_checks" value = 0 />
+<input type="hidden" name="timeonimage" id="timeonimage" value = 0 />
+<input type="hidden" name="timeleft" id="timeleft" value = 0 />
+<input type="hidden" name="check_timing" id="check_timing" value = 0 />
+<input type="hidden" name="check_timing_teaser" id="check_timing_teaser" value = 0 />
+
+{{ formfield_errors 'num_checks' }}
+
+{% endblock %}

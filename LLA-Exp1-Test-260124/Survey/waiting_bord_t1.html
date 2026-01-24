@@ -1,0 +1,28 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block content %}
+<hr>
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+<br>
+<p style="margin-bottom: 10px;">
+    Did you feel bored while waiting for the miner to finish mining in Part 2?
+    <br><br>
+    How intense was your feeling of boredom on a scale of 0 to 10, 0 being no boredom at all.
+</p>
+{{ formfield 'waiting_boredom_1' }}
+<br>
+<br>
+
+
+<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+
+{{ endblock }}

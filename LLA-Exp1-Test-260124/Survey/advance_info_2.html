@@ -1,0 +1,53 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block content %}
+<hr>
+
+<style>
+    p{
+        font-size: 26px;
+        margin-bottom: -18px;
+    }
+    .otree-body {
+        max-width:1100px
+    }
+    .otree-title {
+      text-align: center;
+    }
+</style>
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+    <br>
+    <p>
+        Please state how much you agree with each of the statements below.
+    </p>
+    <br>
+    <br>
+    <p style="margin-bottom: -18px;">
+        1. I chose to pay {{player.participant.advance_info_wtp}} ECU to see if there is any gold dust in the soil sample
+        because I dislike the uncertainty surrounding the mining outcome, and for no other reason.
+    </p>
+    {{ formfield 'advance_info_uncertainty' }}
+    <br>
+    <br>
+    <p style="margin-bottom: -18px;">
+        2. I chose to pay {{player.participant.advance_info_wtp}} ECU to see if there is any gold dust in the soil sample
+        because I dislike the uncertainty surrounding the mining outcome. Additionally, I find solace in the idea that if there is gold dust in the soil,
+        it's highly likely the miner will eventually find gold, which makes the waiting period more enjoyable for me.
+    </p>
+    {{ formfield 'advance_info_anticipation' }}
+    <br><br>
+
+
+<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+<br><br>
+{{ endblock }}

@@ -1,0 +1,31 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Part 2
+<p style="text-align: right; font-size: 13px; margin-top: 10px; margin-bottom: -18px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<hr>
+<br>
+<p>
+    The 10-minute waiting period is now over.
+</p>
+<br>
+<p>
+    You may proceed to see the outcome of the mining.
+</p>
+
+<br>
+<br>
+<br><br>
+<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+
+{% endblock %}
+
+

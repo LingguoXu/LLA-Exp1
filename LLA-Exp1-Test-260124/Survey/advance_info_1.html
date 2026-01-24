@@ -1,0 +1,38 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block content %}
+<hr>
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+    <br>
+    <p>
+        You will be paid {{Constants.survey_payment_1}} ECU for completing the next few pages of the survey.
+    </p>
+    <br>
+    <p style="margin-bottom: 10px;">
+        In Part 1, you chose to pay {{player.participant.advance_info_wtp}} ECU to see if there is any gold dust in the soil sample.
+    </p>
+    <br>
+    <p>
+        Please explain why you wanted to see this.
+    </p>
+    {{ formfield 'advance_info_reason' }}
+    <br>
+    <p>
+        Please explain how you came up with the price of {{player.participant.advance_info_wtp}} ECU.
+    </p>
+    <br>
+    {{ formfield 'advance_info_wtp' }}
+    <br><br>
+
+<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+
+{{ endblock }}

@@ -1,0 +1,68 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block content %}
+<style>
+    p{
+        font-size: 22px;
+    }
+    .otree-body {
+        max-width:1100px
+    }
+    .otree-form-errors {
+        visibility: hidden;
+        display: none;
+    }
+    .center {
+        margin: 0px 40% 0px 40%;
+    }
+    .otree-title {
+        text-align: center
+    }
+</style>
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+<hr>
+
+    <p>
+        You will be asked to make three decisions (and earn more money) in the next three pages. One of the decisions will randomly selected and
+        the money you earned will be added to your total payment.
+    </p>
+    <br>
+    <p>
+        The environments for the three decisions are similar. On each page, you will see a list of 21 choices between lotteries and sure amounts of money. Lotteries will always be on the <b>left</b>, and sure amounts of money on the <b>right</b>.
+        The 21 choices are ordered from top to bottom such that you will like the lotteries less and less as compared to the sure amounts.
+    </p>
+    <br>
+    <p>
+        At some point, you will be willing to switch from preferring a lottery to preferring the corresponding sure amount of money.
+        Then you can click on the <strong>SWITCH HERE</strong> button at the point where you want to switch.
+    </p>
+    <br>
+    <p>
+        When you click on a <strong>SWITCH HERE</strong> button, lotteries will be your choice everywhere above that line, and sure amounts of money will be your choice everywhere below that line.
+        You may change your decision by clicking on another <b>SWITCH HERE</b> button.
+    </p>
+    <p>
+        After you have made your decision and click the "Submit" button, one of the 21 choices will be selected randomly and played.
+    </p>
+<!--    <p>-->
+<!--        <strong>If your preference in the choice that turns out to be actually played is a lottery, your earnings will depend on your guess and a random draw.-->
+<!--        If your preference in the choice that turns out to be actually played is a sure amount of money, you will earn that amount of money.</strong>-->
+<!--    </p>-->
+<!--    <p class="justify">-->
+<!--        You will be informed about your earnings from this part of the experiment at the very end of the session today, after you have completed all parts of the experiment.-->
+<!--    </p>-->
+<!--    <p>-->
+<!--        <i>Are there any questions before you begin making your decisions?</i>-->
+<!--    </p>-->
+<button id="Next" style="float:right;" class="btn btn-primary">Next</button>
+
+{% endblock %}
+

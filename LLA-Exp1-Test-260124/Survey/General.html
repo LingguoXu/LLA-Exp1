@@ -1,0 +1,78 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Survey
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{{ block content }}
+<style>
+    .otree-form-errors {
+        visibility: hidden;
+        display: none;
+    }
+</style>
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+<hr>
+<br>
+
+<p>Please indicate whether you agree with the following statements:</p>
+
+<br>
+<div class="a">
+    <p>
+    a) 'It was clear from the instructions what decisions I had to make during the experiment.'
+    </p>
+    <table style="text-align: center; table-layout: fixed; width: 60%;" align="center">
+        <tr>
+            {{ for choice in form.decisions_clear }}
+                <td>{{ choice }}</td>
+            {{ endfor }}
+        </tr>
+        <tr>
+            <th>Strongly Disagree</th>
+            <th>Disagree</th>
+            <th>Agree</th>
+            <th>Strongly Agree</th>
+        </tr>
+    </table>
+</div>
+<br>
+<br>
+<div class="a">
+    <p>
+    b) 'It was clear from the instructions how my earnings would be determined based on my decisions.'
+    </p>
+    <table style="text-align: center; table-layout: fixed; width: 60%;" align="center">
+        <tr>
+            {{ for choice in form.earnings_clear }}
+                <td>{{ choice }}</td>
+            {{ endfor }}
+        </tr>
+        <tr>
+            <th>Strongly Disagree</th>
+            <th>Disagree</th>
+            <th>Agree</th>
+            <th>Strongly Agree</th>
+        </tr>
+    </table>
+</div>
+
+<br>
+<br>
+<br>
+
+<p style="margin-bottom: -18px;">
+    Were there any specific parts of the experiment that were not clear to you? If yes, please explain briefly.
+<!--    If you selected Strongly Disagree or Disagree to any of the above statements, please tell us which specific parts of the instructions were unclear.-->
+</p>
+    {{ formfield 'comments_unclear' }}
+
+<br><br>
+<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+
+{{ endblock }}

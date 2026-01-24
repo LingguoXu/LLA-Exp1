@@ -1,0 +1,41 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Part 1
+<!--<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>-->
+{% endblock %}
+
+{% block content %}
+<hr>
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{{ if player.participant.miner_price != 0 and player.participant.advance_info == 1}}
+<p>
+    Congratulations, your offer is higher than the miner's price, you get to see if there is any gold dust for {{player.participant.miner_price}}
+</p>
+<br>
+{{ elif player.participant.miner_price != 0 and player.participant.advance_info == 0}}
+<p>
+    Your offer is lower than the miner's price, you did not get to see what's in miner's pan. Please continue with the next page.
+</p>
+{{ else }}
+<br>
+<p>
+    The miner is feeling generous and has written down a price of 0 ECU.
+</p>
+<br>
+<br>
+<p>
+    Therefore, you get to see if there is any gold dust in the soil sample for free.
+</p>
+{{ endif }}
+
+<br><br>
+
+<button id="Next" style="float:right;" class="btn btn-primary">Next</button>
+
+{{ endblock }}

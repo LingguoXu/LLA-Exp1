@@ -1,0 +1,32 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Part 4
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<hr>
+<br>
+<p>
+{{ if player.participant.treatment == 1 }}
+<p>
+    Part 4 consists of another round of brain teasers, similar to those in Part 2. This part will last 8 minutes.</p>
+<br>
+{{ else }}
+<p>
+    The mining continues, and you may proceed with another round of brain teasers while you wait.
+</p>
+<br>
+{{ endif }}
+
+<br>
+<br>
+<button class="otree-btn-next btn btn-primary" style="float: right;">Next</button>
+
+{% endblock %}

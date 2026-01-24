@@ -1,0 +1,58 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Part 2: the mining
+<p style="text-align: right; font-size: 13px; margin-bottom: -15px;">Total earnings so far: {{player.participant.finalpayoff_ECU}} ECU</p>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+<hr>
+<br>
+<p>
+    The miner is now ready to start the formal mining process, which should take about 10 minutes.
+</p>
+<!--<br>-->
+<!--<p>-->
+<!--    You will be paid {{Constants.ECUwaiting}} ECU for waiting until the mining is complete.-->
+<!--</p>-->
+<br>
+<P>
+    When you are ready, please click "Next" so the miner can resume mining.
+</P>
+<br>
+<P>
+    To give you something to do during the wait, there will be {{Constants.num_rounds}} rounds of brain teasers.
+    Each brain teaser will be displayed on the screen for {{Constants.time_eachround}} seconds, and the next teaser will automatically appear after {{Constants.time_eachround}} seconds.
+    Please note that participation in these teasers is optional.
+</P>
+<br>
+<br>
+
+<center>
+    <button class="otree-btn-next btn btn-primary">Next</button>
+</center>
+
+{% endblock %}
