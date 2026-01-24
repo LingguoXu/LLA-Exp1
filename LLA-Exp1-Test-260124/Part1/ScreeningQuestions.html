@@ -1,0 +1,55 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+    <style>
+        .otree-title { display: none; }
+        .form-check-input { transform: scale(1.3); margin-right: 10px; }
+        .question-box { margin-bottom: 30px; }
+        label { font-weight: bold; font-size: 1.1rem; color: #333; }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+        <h2 style="text-align: center">Participant Survey</h2>
+        <hr>
+        <p>Before beginning the experiment, please answer the following questions truthfully:</p>
+
+        <div class="question-box">
+            {{ form.gender.label }}
+            {{ form.gender }}
+        </div>
+
+        <div class="question-box">
+            {{ form.age.label }}
+            {{ form.age }}
+        </div>
+
+        <div class="question-box">
+            {{ form.education.label }}
+            {{ form.education }}
+        </div>
+
+        <div class="question-box p-3 border rounded bg-white">
+            {{ form.is_native_english.label }}
+            <br>
+            {{ form.is_native_english }}
+        </div>
+
+        <div class="question-box p-3 border rounded bg-white">
+            {{ form.second_language_level.label }}
+            <br>
+            {{ form.second_language_level }}
+        </div>
+
+        <div style="text-align: right;">
+            <button class="btn btn-primary btn-lg">Submit Answers</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block styles %}
+    <style>
+        .otree-title { display: none; }
+        .otree-btn-next { display: none; } /* Hide default button */
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<div class="card m-5 shadow-sm">
+    <div class="card-body" style="text-align: center; padding: 50px;">
+
+        {% if passed %}
+            <h3 class="text-success">Thank You</h3>
+            <br>
+            <p style="font-size: 1.2rem;">
+                Thank you for filling out these questions.
+                <br>
+                Please click the "Next" button to proceed with the survey instructions.
+            </p>
+            <br><br>
+            <button class="btn btn-primary btn-lg">Next</button>
+
+
+        {% else %}
+            <h3 class="text-danger">Screening Result</h3>
+            <br>
+            <p style="font-size: 1.2rem;">
+                Thank you for participating.
+                <br><br>
+                Unfortunately, you do not meet the specific language requirements for this survey.
+                <br>
+                You may close this window now.
+            </p>
+            {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
