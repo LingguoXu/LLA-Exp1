@@ -86,12 +86,10 @@ class Player(BasePlayer):
     # Internal field to store if they passed (calculated in pages.py)
     screened_out = models.BooleanField()
 
-    # # Comprehension question for BDM
-    # bdm = models.IntegerField(min=0, max=100, label="Please fill in a number between 0 and 100")
-    # attempts_bdm = models.IntegerField(initial=0, blank = True)
-    #
-    # # WTP for advance information
-    # sign_wtp = models.IntegerField(min=0, max=50, label="Please fill in a number between 0 and 50")
+    # Task 1: FTR elicitation
+    task1_answers_eng = models.LongStringField()
+    task1_answers_fra = models.LongStringField()
+    task1_answers_ger = models.LongStringField()
 
 # FUNCTIONS
 def creating_session(subsession):
@@ -131,6 +129,69 @@ class ScreeningResult(Page):
         return {
             'passed': not player.screened_out
         }
+
+
+class Task1_FTR_Eng(Page):
+    form_model = 'player'
+    form_fields = ['task1_answers_eng']
+
+    def vars_for_template(player):
+        # Define the options for each of the 10 gaps
+        options = [
+            ["notices", "believes", "doubts", "ignores"],  # 1
+            ["snows", "will snow", "is going to snow", "snowed"],  # 2
+            ["is making", "makes", "made", "has made"],  # 3
+            ["won't be", "wouldn't be", "aren't", "were't"],  # 4
+            ["don't have", "am not having", "didn't have", "haven't had"],  # 5
+            ["watches", "checks", "stares", "looks"],  # 6
+            ["left", "is leaving", "leaves", "has left"],  # 7
+            ["go", "went", "will go", "am going"],  # 8
+            ["will buy", "buy", "am buying", "bought"],  # 9
+            ["prepare", "am preparing", "prepared", "will prepare"]  # 10
+        ]
+
+        # We zip the index (1-10) with the options so the template is easier to write
+        return {
+            'questions': zip(range(1, 11), options)
+        }
+
+class Task1_FTR_Fra(Page):
+    form_model = 'player'
+    form_fields = ['task1_answers_fra']
+
+    def vars_for_template(player):
+        options = [
+            ["remarque", "croit", "doute", "ignore"],                   # 1
+            ["neige", "va neiger", "neigera", "a neigé"],               # 2
+            ["fait", "est en train de faire", "a fait", "faisait"],     # 3
+            ["n'es pas", "ne pourras pas", "ne serais pas", "n'étais pas"], # 4
+            ["n'ai pas", "n'avais pas", "ne vais pas avoir", "n'aie pas"], # 5
+            ["regarde", "vérifie", "fixe", "voit"],                     # 6
+            ["part", "est parti", "partait", "serait parti"],           # 7
+            ["vais", "vais aller", "irai", "suis allé"],                # 8
+            ["achète", "vais acheter", "achèterai", "ai acheté"],       # 9
+            ["prépare", "vais préparer", "préparerai", "préparais"]     # 10
+        ]
+        return {'questions': zip(range(1, 11), options)}
+
+class Task1_FTR_Ger(Page):
+    form_model = 'player'
+    form_fields = ['task1_answers_ger']
+
+    def vars_for_template(player):
+        options = [
+            ["bemerkt", "glaubt", "bezweifelt", "ignoriert"],           # 1
+            ["schneit", "wird schneien", "würde schneien", "schneite"], # 2
+            ["macht", "macht gerade", "machte", "hat gemacht"],         # 3
+            ["bist", "wirst sein", "wärst", "warst"],                   # 4
+            ["habe keine", "hatte keine", "werde keine haben", "hätte keine"], # 5
+            ["schaut", "prüft", "starrt", "sieht"],                     # 6
+            ["fährt ab", "fuhr ab", "ist abgefahren", "würde abfahren"], # 7
+            ["gehe", "werde gehen", "bin gegangen", "ginge"],           # 8
+            ["kaufe", "werde kaufen", "kaufte", "hätte gekauft"],       # 9
+            ["bereite vor", "werde vorbereiten", "bereite gerade vor", "bereitete vor"] # 10
+        ]
+        return {'questions': zip(range(1, 11), options)}
 
 class Overview_ASU(Page):
     pass
@@ -179,4 +240,5 @@ class specks(Page):
 # page_sequence = [Overview_ASU, Instruction3, sign_wtp, specks]
 # page_sequence = [Attention_pledge, PLS_Consent, Overview_ASU, Overview BDM, Instruction1, Instruction3, sign_wtp, specks]
 # page_sequence = [Attention_pledge, PLS_Consent, Overview_ASU, Overview, BDM, Instruction1, Instruction3, sign_wtp, specks]
-page_sequence = [ScreeningQuestions, ScreeningResult, Instruction1]
+# page_sequence = [Task1_FTR_Fra, Task1_FTR_Ger]
+page_sequence = [ScreeningQuestions, ScreeningResult, Instruction1, Task1_FTR_Eng, Task1_FTR_Fra, Task1_FTR_Ger]

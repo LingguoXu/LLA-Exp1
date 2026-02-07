@@ -1,0 +1,161 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block styles %}
+<style>
+    /* Same CSS as above */
+    .story-container { font-size: 1.2rem; text-align: justify; }
+    .story-paragraph { line-height: 2.5; margin-bottom: 1.5em; margin-top: 0; }
+    .gap-container { position: relative; display: inline-block; margin: 0 2px; }
+    .gap-trigger {
+        border-bottom: none; padding: 2px 8px; cursor: pointer; color: #000;
+        font-weight: normal; user-select: none; display: inline-block;
+        min-width: 100px; text-align: center; background-color: #f0f0f0;
+        border-radius: 4px; transition: all 0.2s;
+        vertical-align: baseline; line-height: normal;
+    }
+    .gap-trigger:hover { background-color: #e0e0e0; }
+    .gap-trigger.answered {
+        font-weight: bold; color: #000; background-color: transparent;
+        min-width: auto; padding: 0 2px; text-align: left;
+    }
+    .options-menu {
+        display: none; position: absolute; top: 100%; left: 0;
+        background-color: white; border: 1px solid #ccc;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 1000;
+        min-width: max-content; text-align: left; border-radius: 4px; line-height: 1.5;
+    }
+    .options-menu.show { display: block; }
+    .option-item {
+        padding: 10px 15px; cursor: pointer; transition: background 0.2s;
+        border-bottom: 1px solid #eee; white-space: nowrap;
+    }
+    .option-item:hover { background-color: #007bff; color: white; }
+    .option-item:last-child { border-bottom: none; }
+    .arrow-icon { font-size: 0.7em; margin-left: 3px; color: #555; vertical-align: 2px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card bg-light m-3">
+    <div class="card-body">
+        <h2>Aufgabe 1</h2>
+        <p class="text-muted">Bitte füllen Sie die Lücken aus, indem Sie darauf klicken und das passende Wort auswählen.</p>
+        <hr>
+
+        <div class="story-container">
+            <p class="story-paragraph">
+                Der Himmel ist dunkel und schwer von dichten Wolken, und Lee
+                <span class="gap-placeholder" data-id="1"></span>,
+                dass die Temperatur rapide sinkt. Er sagt zu seiner Frau: "Schau dir diese Wolken an – es
+                <span class="gap-placeholder" data-id="2"></span>
+                heute Abend."
+            </p>
+
+            <p class="story-paragraph">
+                Lee hat Lust auf eine Tasse heißen Kaffee. Während er den Kaffee
+                <span class="gap-placeholder" data-id="3"></span>,
+                warnt ihn seine Frau: "Wenn du den jetzt trinkst,
+                <span class="gap-placeholder" data-id="4"></span>
+                du die ganze Nacht nicht schlafen können."
+            </p>
+
+            <p class="story-paragraph">
+                Lee antwortet: "Das ist okay. Ich
+                <span class="gap-placeholder" data-id="5"></span>
+                morgen früh keine wichtigen Termine, also kann ich ausschlafen."
+            </p>
+
+            <p class="story-paragraph">
+                Bevor er ins Bett geht,
+                <span class="gap-placeholder" data-id="6"></span>
+                Lee den Fahrplan auf seinem Handy. Er bemerkt, dass der Expresszug jeden Samstag um 10 Uhr
+                <span class="gap-placeholder" data-id="7"></span>.
+            </p>
+
+            <p class="story-paragraph">
+                Da sie dieses Wochenende einen Campingausflug machen, sagt Lee vor der Arbeit zu seiner Frau: "Morgen nach der Arbeit
+                <span class="gap-placeholder" data-id="8"></span>
+                ich zum Supermarkt, um einzukaufen. Ich
+                <span class="gap-placeholder" data-id="9"></span>
+                ein paar Steaks für unser Grillfest."
+            </p>
+
+            <p class="story-paragraph">
+                Seine Frau lächelt und antwortet: "Prima, dann
+                <span class="gap-placeholder" data-id="10"></span>
+                ich den Rest des Gepäcks zu Hause vor."
+            </p>
+        </div>
+
+        <br>
+        <div id="error-msg" class="alert alert-danger" style="display:none;">
+            Bitte füllen Sie alle 10 Lücken aus, bevor Sie fortfahren.
+        </div>
+
+        <div style="text-align: right;">
+            <button type="button" class="btn btn-primary btn-lg" onclick="validateAndSubmit()">Weiter</button>
+        </div>
+        <input type="hidden" name="task1_answers_ger" id="final-answers">
+    </div>
+</div>
+
+<script>
+    const questionOptions = {};
+    {% for idx, opts in questions %}
+        questionOptions[{{ idx }}] = {{ opts|json }};
+    {% endfor %}
+    const userAnswers = {};
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const placeholders = document.querySelectorAll('.gap-placeholder');
+        placeholders.forEach(ph => {
+            const id = ph.dataset.id;
+            const options = questionOptions[id];
+            const container = document.createElement('span'); container.className = 'gap-container';
+            const trigger = document.createElement('span'); trigger.className = 'gap-trigger';
+            trigger.innerHTML = `(${id}) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="arrow-icon">▼</span>`;
+            trigger.onclick = (e) => toggleMenu(e, container);
+            const menu = document.createElement('div'); menu.className = 'options-menu';
+            options.forEach(opt => {
+                const item = document.createElement('div'); item.className = 'option-item';
+                item.innerText = opt;
+                item.onclick = () => selectOption(id, opt, trigger, menu);
+                menu.appendChild(item);
+            });
+            container.appendChild(trigger); container.appendChild(menu); ph.replaceWith(container);
+        });
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.gap-container')) {
+                document.querySelectorAll('.options-menu').forEach(m => m.classList.remove('show'));
+            }
+        });
+    });
+
+    function toggleMenu(e, container) {
+        e.stopPropagation();
+        document.querySelectorAll('.options-menu').forEach(m => m.classList.remove('show'));
+        container.querySelector('.options-menu').classList.toggle('show');
+    }
+
+    function selectOption(id, text, triggerElement, menuElement) {
+        triggerElement.innerHTML = `${text} <span class="arrow-icon">▼</span>`;
+        triggerElement.classList.add('answered');
+        menuElement.classList.remove('show');
+        userAnswers[id] = text;
+        document.getElementById('error-msg').style.display = 'none';
+    }
+
+    function validateAndSubmit() {
+        const totalQuestions = 10;
+        const keys = Object.keys(userAnswers);
+        if (keys.length < totalQuestions) {
+            document.getElementById('error-msg').style.display = 'block';
+            document.getElementById('error-msg').innerText = `Sie haben ${keys.length} von ${totalQuestions} Fragen beantwortet. Bitte füllen Sie alle Lücken aus.`;
+            return;
+        }
+        document.getElementById('final-answers').value = JSON.stringify(userAnswers);
+        document.querySelector('form').submit();
+    }
+</script>
+{% endblock %}

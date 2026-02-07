@@ -1,154 +1,222 @@
 from otree.api import *
 import random
-import csv
+import json
 
-author = 'Lingguo XU'
 doc = """
-Part 2: Waiting for mining to complete & first task round
+Task 2: Modality Elicitation (Cloze Test) - High/Low Certainty.
+Task 3: Subjective Probability (Sliders) - 13 English Sentences.
 """
 
-class Constants(BaseConstants):
-    name_in_url = 'Part2'
-    players_per_group = None
-    ECUpercorrect = 2
-    ECUwaiting = 0
-    waitingfee = 80
-    time_eachround = 40
-    # with open('Part2/asnwerkey.csv') as questions_file:
-    #     questions = list(csv.DictReader(questions_file))
 
-    # num_rounds = len(questions)
-    num_rounds = 15
+class Constants(BaseConstants):
+    name_in_url = 'modality_task'
+    players_per_group = None
+    num_rounds = 1
+
+    # --- TASK 2 DATA ---
+    QUESTIONS_POOL = [
+        {'id': 2, 'high': "[Q: Should I bring my sun hat? A: Yes...] ...it {BE} very hot.",
+         'low': "[Q: Should I bring a jacket? A: Maybe...] ...it {SNOW} this afternoon."},
+        {'id': 3, 'high': "[Friend to Friend: You should come tonight...] ...Annie {BE} there.",
+         'low': "[Friend to Friend: You should come tonight...] ...John {BE} there."},
+        {'id': 7, 'high': "[Q: Is the exam hard? A: Prof Green is easy...] ...we {PASS}.",
+         'low': "[Q: Is the exam hard? A: Prof Johnson is random...] ...we {PASS}."},
+        {'id': 10, 'high': "[Bring an umbrella...] ...it {RAIN} in Berlin.",
+         'low': "[Bring a swimsuit...] ...the temperature {HIT} 45 degrees."},
+        {'id': 14, 'high': "[Mother: Put allowance in savings. Next month...] ...it {BE} worth more.",
+         'low': "[Father: Keep that toy. Next month...] ...it {BE} worth something."},
+        {'id': 17, 'high': "[Doctor: Sleep well. In a few months...] ...you {FEEL} better.",
+         'low': "[Doctor: Tests are concerning. In a few months...] ...you {FEEL} better."},
+        {'id': 1, 'high': "[Q: Want to see a film? A: Can't...] ...I {DINE OUT} with Ellie.",
+         'low': "[Q: What you doing? A: Hmm...] ...I {DINE OUT} with Christine."},
+        {'id': 13, 'high': "[Uncle sends money...] ...she {BUY} new skis.",
+         'low': "[Brother sends money...] ...he {SPEND} it at the bar."},
+        {'id': 16, 'high': "[Girl: Party in 3 months?] Boy: I {BE} there.",
+         'low': "[Boy: Party in 3 months?] Girl: ...I {COME}."},
+        {'id': 4, 'high': "[Q: When is the exam?] ...it {BE} at 7pm.",
+         'low': "[Q: When is the exam? I have to check...] ...it {BE} at 7pm."},
+        {'id': 8, 'high': "[Q: Sun rise tomorrow?] ...It {RISE} at 6:17.",
+         'low': "[Q: Moon rise tomorrow?] ...It {RISE} at 17:00."},
+        {'id': 12, 'high': "[Brother leaves tomorrow...] ...flight {LEAVE} next week.",
+         'low': "[Mary leaves in two weeks...] ...flight {LEAVE} next week."},
+    ]
+
 
 class Subsession(BaseSubsession):
     pass
-    # def creating_session(subsession):
-    #     if player.round_number == 1:
-    #         player.session.vars['questions'] = Constants.questions.copy()
-    #
-    #     for player in subsession.get_players():
-    #         question_data = current_question(player)
-    #         player.solution = question_data['solution']
-    #         player.round_number = player.round_number
+
 
 class Group(BaseGroup):
     pass
 
+
 class Player(BasePlayer):
-    # solution     = models.StringField()
-    # task_answers = models.StringField(label="Your answer", initial="")
-    # is_correct   = models.BooleanField(initial=0)
-    # attempts_R1  = models.IntegerField()
-    # success_R1   = models.IntegerField()
-    # task1payoff  = models.IntegerField()
+    # --- TASK 2 FIELDS ---
+    task_data_dump = models.LongStringField()
+    q1_response = models.StringField(label="")
+    q2_response = models.StringField(label="")
+    q3_response = models.StringField(label="")
+    q4_response = models.StringField(label="")
+    q5_response = models.StringField(label="")
+    q6_response = models.StringField(label="")
+    q7_response = models.StringField(label="")
+    q8_response = models.StringField(label="")
+    q9_response = models.StringField(label="")
+    q10_response = models.StringField(label="")
+    q11_response = models.StringField(label="")
+    q12_response = models.StringField(label="")
 
-    # def current_question(player):
-    #     return player.session.vars['questions'][player.round_number - 1]
+    # --- TASK 3 FIELDS (Sliders) ---
+    # We name them specifically so data analysis is easy later
+    cert_will = models.IntegerField(min=0, max=100, label="It will rain next week.")
+    cert_going_to = models.IntegerField(min=0, max=100, label="It is going to rain next week.")
+    cert_present = models.IntegerField(min=0, max=100, label="It is raining next week.")
+    cert_definitely = models.IntegerField(min=0, max=100, label="It will definitely rain next week.")
+    cert_certainly = models.IntegerField(min=0, max=100, label="It will certainly rain next week.")
+    cert_probably = models.IntegerField(min=0, max=100, label="It probably will rain next week.")
+    cert_possibly = models.IntegerField(min=0, max=100, label="It possibly will rain next week.")
+    cert_could = models.IntegerField(min=0, max=100, label="It could rain next week.")
+    cert_might = models.IntegerField(min=0, max=100, label="It might rain next week.")
+    cert_may = models.IntegerField(min=0, max=100, label="It may rain next week.")
+    cert_should = models.IntegerField(min=0, max=100, label="It should rain next week.")
+    cert_think_will = models.IntegerField(min=0, max=100, label="I think it will rain next week.")
+    cert_think_going_to = models.IntegerField(min=0, max=100, label="I think it is going to rain next week.")
 
-    num_checks  = models.IntegerField(initial=0, blank = True)
-    total_checks_R1  = models.IntegerField(initial=0, blank = True)
-    check_timing = models.FloatField(initial=0, blank = True)
-    check_timing_teaser = models.FloatField(initial=0, blank = True)
-    timeonimage = models.FloatField(initial=0, blank = True)
-    total_timeonimage_R1 = models.FloatField(initial=0, blank = True)
-    # timeleft    = models.FloatField(initial=0, blank = True)
+    # To store the randomized order for Task 3
+    task3_order_dump = models.LongStringField()
+
 
 # FUNCTIONS
-# def get_timeout_seconds(player):
-#     import time
-#     return player.participant.expiry - time.time()
+def creating_session(subsession):
+    pass
 
-# def creating_session(subsession):
-#     for player in subsession.get_players():
-#         if player.round_number == 1:
-#             player.session.vars['questions'] = Constants.questions.copy()
-#
-#         question_data       = player.current_question()
-#         player.solution     = question_data['solution']
-#         player.round_number = player.round_number
 
-# PAGES
-class ReadyTask(Page):
-    def is_displayed(player):
-        return player.round_number == 1
+# --- PAGES ---
 
-    # @staticmethod
-    # def before_next_page(player, timeout_happened):
-    #     participant = player.participant
-    #
-    #     import time
-    #     # user has 10 minutes to complete as many pages as possible
-    #     participant.vars['expiry'] = time.time() + player.session.config['task_round_timeout_seconds']
-
-    @staticmethod
+class Introduction(Page):
     def before_next_page(player, timeout_happened):
-        participant = player.participant
-        participant.finalpayoff_ECU = participant.finalpayoff_ECU + Constants.ECUwaiting
+        # -- TASK 2 SETUP --
+        items = Constants.QUESTIONS_POOL.copy()
+        random.shuffle(items)
+        assigned_data = []
+        for i, item in enumerate(items):
+            is_high = random.choice([True, False])
+            text_to_show = item['high'] if is_high else item['low']
+            data_point = {
+                'field_name': f'q{i + 1}_response',
+                'q_id': item['id'],
+                'condition': 'High' if is_high else 'Low',
+                'display_text': text_to_show
+            }
+            assigned_data.append(data_point)
+        player.task_data_dump = json.dumps(assigned_data)
 
-class Task(Page):
+        # -- TASK 3 SETUP (Randomize Order) --
+        # We create a list of the field names
+        slider_fields = [
+            'cert_will', 'cert_going_to', 'cert_present', 'cert_definitely',
+            'cert_certainly', 'cert_probably', 'cert_possibly', 'cert_could',
+            'cert_might', 'cert_may', 'cert_should', 'cert_think_will',
+            'cert_think_going_to'
+        ]
+        random.shuffle(slider_fields)
+        # We save this list to the database so the Page knows which order to display
+        player.task3_order_dump = json.dumps(slider_fields)
+
+
+class Page1(Page):
     form_model = 'player'
-    form_fields = ['num_checks', 'timeonimage', 'check_timing', 'check_timing_teaser']
-    timer_text = 'Next round in:'
-    timeout_seconds = 40
+    form_fields = ['q1_response', 'q2_response', 'q3_response', 'q4_response', 'q5_response', 'q6_response']
 
-    # get_timeout_seconds = get_timeout_seconds
-
-    # @staticmethod
-    # def is_displayed(player):
-    #     import time
-    #     return player.participant.expiry - time.time() > 1
-    #
-    # @staticmethod
-    # def vars_for_template(player):
-    #     return dict(
-    #         image_path_1='Part1/ImagQuestions/{}.png'.format(player.round_number),
-    #         image_path_2='Part1/ImagAnswers/{}.jpg'.format(player.round_number),
-    #         round_number = player.round_number
-    #     )
-
-    # @staticmethod
-    # def before_next_page(player, timeout_happened):
-    #     import time
-    #     if player.task_answers:
-    #         player.is_correct = (player.task_answers.lower() == player.solution.lower())
-    #         player.participant.finalpayoff_ECU = player.participant.finalpayoff_ECU + player.is_correct * Constants.ECUpercorrect
-
-        # if player.num_checks == None:
-        #     player.num_checks = 0
-        # if player.timeonimage == None:
-        #     player.timeonimage = 0
-
-    @staticmethod
-    def js_vars(player):
-        import time
-        return dict(
-            roundnum = player.round_number,
-            # timeleft = player.participant.expiry - time.time(),
-        )
-
-class Results_ASU(Page):
-    @staticmethod
-    def is_displayed(player):
-        return player.round_number == Constants.num_rounds
-
-    @staticmethod
     def vars_for_template(player):
-        player_in_all_rounds = player.in_all_rounds()
-        # Need to filter out the none types where the player didn't get a chance to answer the questions
+        if not player.task_data_dump: return {'questions': []}
+        all_data = json.loads(player.task_data_dump)
+        page_items = all_data[0:6]
+        display_list = []
+        for item in page_items:
+            raw = item['display_text']
+            if ']' in raw:
+                parts = raw.split(']', 1)
+                context = parts[0].replace('[', '').strip()
+                target = parts[1].strip()
+            else:
+                context = "",
+                target = raw
+            display_list.append({'field_name': item['field_name'], 'context': context, 'target': target})
+        return {'questions': display_list}
 
-        # filtered1 = [p.task_answers for p in player_in_all_rounds if p.task_answers != ""]
-        # filtered2 = [p.is_correct for p in player_in_all_rounds]
-        filtered3 = [p.num_checks for p in player_in_all_rounds]
-        filtered4 = [p.timeonimage for p in player_in_all_rounds]
 
-        # player.attempts_R1 = len(filtered1)
-        # player.success_R1 = sum(filtered2)
-        player.total_checks_R1 = sum(filtered3)
-        player.total_timeonimage_R1 = sum(filtered4)
+class Page2(Page):
+    form_model = 'player'
+    form_fields = ['q7_response', 'q8_response', 'q9_response', 'q10_response', 'q11_response', 'q12_response']
 
-        # Compute player payoff from first task
-        # player.task1payoff = Constants.ECUpercorrect * player.success_R1
-        # player.participant.task1payoff = player.task1payoff
-        player.participant.checkprogress = player.total_checks_R1
+    def vars_for_template(player):
+        if not player.task_data_dump: return {'questions': []}
+        all_data = json.loads(player.task_data_dump)
+        page_items = all_data[6:12]
+        display_list = []
+        for item in page_items:
+            raw = item['display_text']
+            if ']' in raw:
+                parts = raw.split(']', 1)
+                context = parts[0].replace('[', '').strip()
+                target = parts[1].strip()
+            else:
+                context = "",
+                target = raw
+            display_list.append({'field_name': item['field_name'], 'context': context, 'target': target})
+        return {'questions': display_list}
 
-page_sequence = [ReadyTask, Task, Results_ASU]
+
+class Task3Intro(Page):
+    pass
+
+
+class Task3(Page):
+    form_model = 'player'
+    # We must list all fields here so oTree saves the data
+    form_fields = [
+        'cert_will', 'cert_going_to', 'cert_present', 'cert_definitely',
+        'cert_certainly', 'cert_probably', 'cert_possibly', 'cert_could',
+        'cert_might', 'cert_may', 'cert_should', 'cert_think_will',
+        'cert_think_going_to'
+    ]
+
+    def vars_for_template(player):
+        # 1. Define the labels manually to avoid _meta errors
+        labels = {
+            'cert_will': "It will rain next week.",
+            'cert_going_to': "It is going to rain next week.",
+            'cert_present': "It is raining next week.",
+            'cert_definitely': "It will definitely rain next week.",
+            'cert_certainly': "It will certainly rain next week.",
+            'cert_probably': "It probably will rain next week.",
+            'cert_possibly': "It possibly will rain next week.",
+            'cert_could': "It could rain next week.",
+            'cert_might': "It might rain next week.",
+            'cert_may': "It may rain next week.",
+            'cert_should': "It should rain next week.",
+            'cert_think_will': "I think it will rain next week.",
+            'cert_think_going_to': "I think it is going to rain next week."
+        }
+
+        # 2. Determine the order (randomized or default)
+        if player.task3_order_dump:
+            field_names = json.loads(player.task3_order_dump)
+        else:
+            # Fallback if something went wrong with shuffle
+            field_names = list(labels.keys())
+
+        # 3. Build the list for the template
+        slider_items = []
+        for name in field_names:
+            slider_items.append({
+                'name': name,
+                'label': labels[name]  # Look up the label from our simple dict
+            })
+
+        return {'slider_items': slider_items}
+
+# Update the sequence
+page_sequence = [Introduction, Page1, Page2, Task3Intro, Task3]
+# page_sequence = [Task3]

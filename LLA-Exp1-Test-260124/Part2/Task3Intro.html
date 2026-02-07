@@ -1,0 +1,36 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+Part 3
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<hr>
+<br>
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+        <h3>Task 3 Instructions</h3>
+        <p>
+            In this final section, you will see a list of sentences about the future.
+        </p>
+        <p>
+            Your task is to judge the <strong>probability</strong> that the event will happen, based on the sentence provided.
+        </p>
+        <p>
+            Please use the sliders to indicate your rating from 0 (Impossible) to 100 (Certain).
+        </p>
+    </div>
+</div>
+
+<br>
+<br>
+
+<button id="Next" style="float:right;" class="btn btn-primary">Next</button>
+
+{% endblock %}

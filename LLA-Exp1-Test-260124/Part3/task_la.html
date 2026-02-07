@@ -1,0 +1,188 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block styles %}
+<style>
+    .mpl-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 5px; /* Spacing between rows */
+        margin-top: 20px;
+    }
+
+    .mpl-header th {
+        padding: 10px;
+        background-color: #f8f9fa;
+        text-align: center;
+        border-bottom: 2px solid #ddd;
+    }
+
+    .mpl-row td {
+        padding: 0; /* Let the button fill the cell */
+        vertical-align: middle;
+        height: 50px;
+    }
+
+    /* The clickable buttons */
+    .choice-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        border: 2px solid #ddd;
+        background-color: #fff;
+        transition: all 0.2s;
+        font-size: 0.95rem;
+        padding: 10px;
+    }
+
+    .choice-btn:hover {
+        background-color: #f1f1f1;
+        border-color: #ccc;
+    }
+
+    /* Selected States */
+    .choice-btn.selected-a {
+        background-color: #d4edda; /* Light Green */
+        border-color: #28a745;
+        color: #155724;
+        font-weight: bold;
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .choice-btn.selected-b {
+        background-color: #cce5ff; /* Light Blue */
+        border-color: #007bff;
+        color: #004085;
+        font-weight: bold;
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .row-num {
+        text-align: center;
+        font-weight: bold;
+        color: #666;
+        width: 50px;
+    }
+
+    .win-text { color: #28a745; font-weight: bold; }
+    .loss-text { color: #dc3545; font-weight: bold; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+        <h2 class="text-center">Decision Task</h2>
+        <p>
+            Please make a choice for each of the 12 rows below.
+        </p>
+        <div class="alert alert-info">
+            <strong>How it works:</strong>
+            If you switch from Option A to Option B in one row, the computer will automatically
+            select Option A for all rows above it and Option B for all rows below it.
+            You only need to click once to set your "switching point."
+        </div>
+
+        <table class="mpl-table">
+            <thead>
+                <tr class="mpl-header">
+                    <th>Row</th>
+                    <th style="width: 45%">Option A: Lottery</th>
+                    <th style="width: 45%">Option B: Sure Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row_num, gain, loss in rows %}
+                <tr class="mpl-row">
+                    <td class="row-num">{{ row_num }}</td>
+
+                    <td>
+                        <div class="choice-btn" id="btn-a-{{ row_num }}" onclick="clickOption('A', {{ row_num }})">
+                            50% Win {{ gain }} ECU, &nbsp; 50% Lose {{ loss }} ECU
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="choice-btn" id="btn-b-{{ row_num }}" onclick="clickOption('B', {{ row_num }})">
+                            Get 0 ECU for sure
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <br>
+        <div id="error-msg" class="alert alert-danger" style="display:none; text-align: center;">
+            Please make a selection before submitting.
+        </div>
+
+        <div style="text-align: center;">
+            <button type="button" class="btn btn-primary btn-lg" onclick="validateAndSubmit()">Submit Decisions</button>
+        </div>
+
+        <input type="hidden" name="switching_point" id="switching_point">
+    </div>
+</div>
+
+<script>
+    const totalRows = 12;
+    let currentSwitchPoint = null;
+
+    function clickOption(type, row) {
+        // Logic:
+        // If they click 'A' at row X, it means A is preferred up to row X.
+        // So the first 'B' is at X + 1. Switch Point = X + 1.
+        // If they click 'B' at row X, it means B starts at X.
+        // Switch Point = X.
+
+        if (type === 'A') {
+            currentSwitchPoint = row + 1;
+        } else {
+            currentSwitchPoint = row;
+        }
+
+        updateTableVisuals();
+    }
+
+    function updateTableVisuals() {
+        for (let i = 1; i <= totalRows; i++) {
+            const btnA = document.getElementById(`btn-a-${i}`);
+            const btnB = document.getElementById(`btn-b-${i}`);
+
+            // Reset classes
+            btnA.classList.remove('selected-a');
+            btnB.classList.remove('selected-b');
+
+            if (i < currentSwitchPoint) {
+                // Before the switch: Select A
+                btnA.classList.add('selected-a');
+            } else {
+                // At or after the switch: Select B
+                btnB.classList.add('selected-b');
+            }
+        }
+
+        // Hide error message if visible
+        document.getElementById('error-msg').style.display = 'none';
+    }
+
+    function validateAndSubmit() {
+        if (currentSwitchPoint === null) {
+            document.getElementById('error-msg').style.display = 'block';
+            return;
+        }
+
+        // Set the hidden input value
+        document.getElementById('switching_point').value = currentSwitchPoint;
+
+        // Submit the form
+        document.querySelector('form').submit();
+    }
+</script>
+
+{% endblock %}

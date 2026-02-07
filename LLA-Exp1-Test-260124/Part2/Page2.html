@@ -1,0 +1,84 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+Part 2
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+    <style>
+        /* Reduced container padding and margins */
+        .q-container {
+            border: 1px solid #e0e0e0;
+            padding: 15px;       /* Reduced from 20px */
+            margin-bottom: 15px; /* Reduced from 25px */
+            border-radius: 4px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .context-box {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 8px; /* Reduced from 15px */
+            padding-left: 10px;
+            border-left: 4px solid #007bff;
+            background-color: #f8f9fa;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        .target-sentence {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px; /* Reduced from 10px */
+            color: #333;
+        }
+        .instruction-sub {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 4px;
+        }
+        /* Make the input field slightly more compact */
+        .controls {
+            margin-top: 0px;
+        }
+        .form-group {
+            margin-bottom: 0px !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<hr>
+
+<p class="lead" style="margin-top: 10px; margin-bottom: 15px; font-size: 1rem;">
+    Please complete the sentences below as if you were speaking to a friend.
+</p>
+
+{% for q in questions %}
+    <div class="q-container">
+
+        {% if q.context %}
+            <div class="context-box">
+                {{ q.context }}
+            </div>
+        {% endif %}
+
+        <div class="target-sentence">
+            {{ q.target }}
+        </div>
+
+        <div class="instruction-sub">
+            (Type the verb phrase)
+        </div>
+
+        {% formfield q.field_name label="" %}
+    </div>
+{% endfor %}
+
+<div style="margin-top: 20px;">
+    <button id="Next" style="float:right;" class="btn btn-primary">Next</button>
+</div>
+
+{% endblock %}

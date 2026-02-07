@@ -1,0 +1,198 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+Part 3: Probability Judgment
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/RegularPages.css' %}" rel="stylesheet">
+    <style>
+        /* Container for the whole task */
+        .slider-container {
+            margin-top: 20px;
+            background-color: #fafafa;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+
+        /* Each question row */
+        .slider-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.3s; /* Smooth highlight transition */
+        }
+
+        .slider-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        /* Error state styling for a row */
+        .slider-row.error-highlight {
+            background-color: #ffe6e6; /* Light red background */
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 4px;
+        }
+
+        /* The Sentence (Left Side) */
+        .sentence-label {
+            flex: 0 0 45%;
+            font-size: 1.05rem;
+            font-weight: 500;
+            padding-right: 15px;
+            line-height: 1.2;
+            color: #333;
+        }
+
+        /* The Slider Widget (Right Side) */
+        .slider-widget {
+            flex: 1;
+        }
+
+        /* Visual scale labels */
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: -5px;
+            height: 18px;
+        }
+
+        /* --- Hiding the Thumb Logic --- */
+        input[type=range] {
+            width: 100%;
+        }
+
+        /* Hide thumb when 'untouched' */
+        input[type=range].untouched::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 0; height: 0; opacity: 0; border: none;
+        }
+        input[type=range].untouched::-moz-range-thumb {
+            width: 0; height: 0; opacity: 0; border: none;
+        }
+
+        /* Value display styling */
+        .val-display {
+            font-weight: bold;
+            color: #007bff;
+            visibility: hidden;
+        }
+
+        .form-group { margin-bottom: 0 !important; padding: 0 !important; }
+        .controls { margin-left: 0 !important; }
+    </style>
+{% endblock %}
+
+{% block content %}
+<hr>
+
+<div class="alert alert-info">
+    <strong>Instructions:</strong>
+    If someone said these sentences to you, how certain would you be that the event will actually happen?
+    <br>
+    (0 = Impossible, 100 = Certainty)
+    <br><br>
+    <small><em>Please click on the bar to select your answer.</em></small>
+</div>
+
+<div class="slider-container">
+    {% for item in slider_items %}
+        <div class="slider-row" id="row_{{ item.name }}">
+            <div class="sentence-label">
+                {{ item.label }}
+            </div>
+
+            <div class="slider-widget">
+                <input type="range" name="{{ item.name }}"
+                       min="0" max="100" step="1"
+                       class="form-range untouched"
+                       id="slider_{{ item.name }}">
+
+                <div class="scale-labels">
+                    <span>0%</span>
+                    <span class="val-display" id="val_{{ item.name }}"></span>
+                    <span>100%</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<br>
+
+<div id="error-msg" class="alert alert-danger" style="display:none; margin-top: 20px;">
+    Please answer all questions before proceeding.
+</div>
+
+<button type="button" onclick="checkAnswers()" style="float:right;" class="btn btn-primary">Next</button>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let sliders = document.querySelectorAll("input[type=range]");
+
+        sliders.forEach(function(slider) {
+            slider.addEventListener("input", function() {
+                // 1. Remove the 'untouched' class so the thumb appears
+                slider.classList.remove("untouched");
+
+                // 2. Remove error highlighting from this row if it exists
+                let row = document.getElementById("row_" + slider.name);
+                if(row) row.classList.remove("error-highlight");
+
+                // 3. Update the display value
+                let displaySpan = document.getElementById("val_" + slider.name);
+                displaySpan.innerHTML = slider.value;
+                displaySpan.style.visibility = "visible";
+
+                // 4. Hide main error message if it was showing (optional UX choice)
+                // document.getElementById("error-msg").style.display = "none";
+            });
+        });
+    });
+
+    function checkAnswers() {
+        let sliders = document.querySelectorAll("input[type=range]");
+        let allAnswered = true;
+        let firstMissing = null;
+
+        sliders.forEach(function(slider) {
+            let row = document.getElementById("row_" + slider.name);
+
+            // Check if the slider still has the 'untouched' class
+            if (slider.classList.contains("untouched")) {
+                allAnswered = false;
+                row.classList.add("error-highlight"); // Add red background
+                if (!firstMissing) firstMissing = row;
+            } else {
+                row.classList.remove("error-highlight");
+            }
+        });
+
+        if (allAnswered) {
+            document.querySelector('form').submit();
+        } else {
+            // Show error message
+            let errorMsg = document.getElementById("error-msg");
+            errorMsg.style.display = "block";
+
+            // Scroll to the first missing item so the user sees it
+            if(firstMissing) {
+                firstMissing.scrollIntoView({behavior: "smooth", block: "center"});
+            }
+        }
+    }
+</script>
+{% endblock %}
