@@ -1,0 +1,104 @@
+{% extends "global/Base.html" %}
+{% load otree %}
+
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom:25px; text-align: center;">{{ ui.surv_title }}</h2>
+
+    <div style="max-width: 500px; margin: 0 auto 30px;">
+        <div class="mb-4">
+            <label class="form-label fw-bold">{{ ui.q_age }}</label>
+            <input type="number" name="age" form="form" class="blank" required min="18" max="100"
+                   style="width: 100%; max-width: 120px; display: block; margin: 0 auto;">
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label fw-bold">{{ ui.q_gender }}</label>
+            <select name="gender" form="form" class="blank" required
+                    style="width: 100%; max-width: 250px; display: block; margin: 0 auto;">
+                <option value="" disabled selected>...</option>
+                <option value="Male">{{ ui.g_male }}</option>
+                <option value="Female">{{ ui.g_female }}</option>
+                <option value="Non-binary">{{ ui.g_nb }}</option>
+                <option value="Prefer not to say">{{ ui.g_no }}</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label fw-bold">{{ ui.q_lang }}</label>
+            <select name="native_language" form="form" class="blank" required
+                    style="width: 100%; max-width: 250px; display: block; margin: 0 auto;">
+                <option value="" disabled selected>...</option>
+                <option value="English">English</option>
+                <option value="German">Deutsch</option>
+                <option value="French">Français</option>
+                <option value="Japanese">日本語</option>
+                <option value="Chinese">中文</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="mb-5">
+        <label class="form-label fw-bold mb-3 d-block text-center">{{ ui.q_risk }}</label>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.85rem; color:var(--muted); padding: 0 10px;">
+            <span>{{ ui.risk_0 }}</span>
+            <span>{{ ui.risk_10 }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; background: var(--primary-l); padding: 15px 10px; border-radius: 10px;">
+            {% for i in likert_range %}
+                <div style="text-align:center; flex:1;">
+                    <input type="radio" name="risk_general" form="form" value="{{ i }}" required id="risk_{{ i }}" style="cursor:pointer; transform: scale(1.2);">
+                    <br>
+                    <label for="risk_{{ i }}" style="font-size:0.85rem; margin-top: 5px; font-weight: 600;">{{ i }}</label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <label class="form-label fw-bold mb-3 d-block text-center">{{ ui.q_pat }}</label>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.85rem; color:var(--muted); padding: 0 10px;">
+            <span>{{ ui.pat_0 }}</span>
+            <span>{{ ui.pat_10 }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; background: var(--primary-l); padding: 15px 10px; border-radius: 10px;">
+            {% for i in likert_range %}
+                <div style="text-align:center; flex:1;">
+                    <input type="radio" name="patience_general" form="form" value="{{ i }}" required id="pat_{{ i }}" style="cursor:pointer; transform: scale(1.2);">
+                    <br>
+                    <label for="pat_{{ i }}" style="font-size:0.85rem; margin-top: 5px; font-weight: 600;">{{ i }}</label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label fw-bold">{{ ui.q_strat }}</label>
+        <textarea name="strategy_comment" form="form" class="blank" rows="3"
+                  style="width: 100%; text-align: left; padding: 10px; min-height: 80px;"></textarea>
+    </div>
+
+    <div class="foot" style="justify-content: center; padding-top: 10px;">
+        <button type="button" class="btn btn-primary" style="padding: 12px 40px; font-size: 1.1rem;" onclick="handleSurveySubmit()">
+            {{ ui.btn_submit }}
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    function handleSurveySubmit() {
+        const form = document.getElementById('form');
+
+        // Because we added 'form="form"' to the inputs,
+        // form.checkValidity() will now correctly see them and check them.
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            form.reportValidity();
+        }
+    }
+{% endblock %}

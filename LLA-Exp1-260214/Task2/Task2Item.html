@@ -1,0 +1,125 @@
+{% extends "global/Base.html" %}
+{% load otree %}
+
+{% block extra_css %}
+<style>
+    /* Styling for the Context Header (Probability info) */
+    .ctx-header {
+        background: #f0f4f8;
+        border-left: 5px solid var(--primary);
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .ctx-title { font-weight: 700; color: var(--text); }
+    .ctx-prob {
+        background: var(--primary); color: white;
+        padding: 4px 12px; border-radius: 12px;
+        font-weight: 600; font-size: 0.9rem;
+    }
+
+    /* Conversation styling */
+    .conversation p { margin-bottom: 12px; font-size: 1.05rem; }
+    .target {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px dashed #ccc;
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="ctx-header">
+        <span class="ctx-title">{{ scenario.context_header }}</span>
+        <span class="ctx-prob">{{ scenario.context_prob }}</span>
+    </div>
+
+    <p class="small muted">{{ ui.t2_instructions }}</p>
+
+    <div id="storyBody" class="conversation"></div>
+
+    <div class="val-msg" id="valMsg">{{ ui.required_msg }}</div>
+
+    <div class="foot">
+        <button type="button" class="btn btn-primary" id="submitBtn">
+            {{ ui.btn_next }} &rarr;
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block hidden_fields %}
+<input type="hidden" name="t2_production_data" id="field">
+{% endblock %}
+
+{% block scripts %}
+(function(){
+    var rawText = {{ scenario.text|json }};
+    var scenarioId = "{{ scenario.id }}";
+    var rawExisting = {{ existing|json }};
+
+    var body = document.getElementById('storyBody');
+    var field = document.getElementById('field');
+    var valMsg = document.getElementById('valMsg');
+    var submitBtn = document.getElementById('submitBtn');
+
+    // 1. Initialize hidden field
+    field.value = rawExisting;
+
+    // 2. Render Text and Blanks
+    // Replace (N) with input fields
+    var html = rawText.replace(/\{\{(\d+)\}\}/g, function(match, num){
+        return '<input type="text" class="blank" ' +
+               'data-n="' + num + '" ' +
+               'placeholder="..." ' +
+               'autocomplete="off" autocapitalize="off" spellcheck="false">';
+    });
+    body.innerHTML = html;
+
+    // 3. Live Blank Coloring
+    body.addEventListener('input', function(e){
+        if(e.target.classList.contains('blank')){
+            e.target.classList.toggle('filled', e.target.value.trim().length > 0);
+        }
+    });
+
+    // 4. Submit Logic
+    submitBtn.addEventListener('click', function(){
+        var inputs = body.querySelectorAll('.blank');
+        var answers = {};
+        var ok = true;
+        var firstBad = null;
+
+        inputs.forEach(function(inp){
+            var v = inp.value.trim();
+            answers[inp.getAttribute('data-n')] = v;
+            if(!v){ ok = false; if(!firstBad) firstBad = inp; }
+        });
+
+        // Validation Check
+        // To disable validation for testing, uncomment: ok = true;
+        if(!ok){
+            valMsg.classList.add('show');
+            if(firstBad) firstBad.focus();
+            return;
+        }
+        valMsg.classList.remove('show');
+
+        // Save Data
+        var allData;
+        try { allData = JSON.parse(field.value || '{}'); } catch(e){ allData = {}; }
+
+        allData[scenarioId] = answers;
+        field.value = JSON.stringify(allData);
+
+        // Submit Form
+        document.getElementById('form').submit();
+    });
+
+})();
+{% endblock %}

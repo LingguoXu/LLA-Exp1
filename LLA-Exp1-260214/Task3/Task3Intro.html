@@ -1,0 +1,18 @@
+{% extends "global/Base.html" %}
+{% load otree %}
+
+{% block content %}
+<div class="card" style="text-align:center; padding: 40px 20px;">
+    <h1>{{ ui.intro_title }}</h1>
+
+    <p style="font-size:1.1rem; color: #64748b; margin-top: 15px; margin-bottom: 30px;">
+        {{ ui.intro_text }}
+    </p>
+
+    <div class="foot" style="justify-content:center;">
+        <button type="button" class="btn btn-primary" onclick="submitPage()">
+            {{ ui.btn_next }} &rarr;
+        </button>
+    </div>
+</div>
+{% endblock %}

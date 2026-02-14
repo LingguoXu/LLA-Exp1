@@ -1,0 +1,154 @@
+{% extends "global/Base.html" %}
+{% load otree %}
+
+{% block extra_css %}
+<style>
+    .slider-item {
+        margin-bottom: 35px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    .slider-item:last-child { border-bottom: none; }
+
+    .stmt { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; }
+
+    .range-wrap { position: relative; padding: 0 10px; }
+
+    /* Custom Slider Styling */
+    input[type=range] {
+        width: 100%;
+        margin: 10px 0;
+        cursor: pointer;
+    }
+
+    .labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: -5px;
+    }
+
+    .val-display {
+        font-weight: 700;
+        color: var(--primary);
+        margin-left: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom:10px;">{{ ui.slider_title }}</h2>
+    <p class="muted">{{ ui.slider_prompt }}</p>
+    <hr class="divider">
+
+    <div id="sliderContainer">
+        </div>
+
+    <div class="val-msg" id="valMsg">{{ ui.required_msg }}</div>
+
+    <div class="foot">
+        <button type="button" class="btn btn-primary" id="submitBtn">
+            {{ ui.btn_submit }}
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block hidden_fields %}
+<input type="hidden" name="t2_perception_data" id="field">
+{% endblock %}
+
+{% block scripts %}
+(function(){
+    var items = {{ items|json }};
+    var rawExisting = {{ existing|json }};
+
+    // Fetch labels from the UI dictionary for translation
+    var labelImpossible = "{{ ui.impossible }}";
+    var labelCertain = "{{ ui.certain }}";
+
+    var container = document.getElementById('sliderContainer');
+    var field = document.getElementById('field');
+    var valMsg = document.getElementById('valMsg');
+    var submitBtn = document.getElementById('submitBtn');
+
+    // Init hidden field
+    field.value = rawExisting;
+
+    // Parse existing data if any (e.g. if page reloaded)
+    var savedData = {};
+    try { savedData = JSON.parse(rawExisting || '{}'); } catch(e){}
+
+    // Build Slider Items
+    items.forEach(function(txt, idx){
+        var div = document.createElement('div');
+        div.className = 'slider-item';
+
+        // Check if previously answered
+        var prevVal = savedData[txt] !== undefined ? savedData[txt] : -1;
+        var hasVal = prevVal !== -1;
+
+        // Use translated labels in the slider template
+        var html = `
+            <div class="stmt">${txt} <span class="val-display" id="disp_${idx}"></span></div>
+            <div class="range-wrap">
+                <input type="range" class="q-slider" data-idx="${idx}" data-txt="${txt}"
+                       min="0" max="100" step="1" value="${hasVal ? prevVal : 50}">
+                <div class="labels">
+                    <span>0% (${labelImpossible})</span>
+                    <span>50%</span>
+                    <span>100% (${labelCertain})</span>
+                </div>
+            </div>
+        `;
+        div.innerHTML = html;
+        container.appendChild(div);
+
+        // Update display on load if value exists
+        if(hasVal) {
+             div.querySelector(`#disp_${idx}`).innerText = prevVal + '%';
+             div.querySelector('input').classList.add('touched');
+        }
+    });
+
+    // Slider Interaction
+    container.addEventListener('input', function(e){
+        if(e.target.classList.contains('q-slider')){
+            var slider = e.target;
+            var idx = slider.getAttribute('data-idx');
+            // Mark as touched so we know user interacted
+            slider.classList.add('touched');
+            document.getElementById('disp_'+idx).innerText = slider.value + '%';
+        }
+    });
+
+    // Submit Logic
+    submitBtn.addEventListener('click', function(){
+        var sliders = container.querySelectorAll('.q-slider');
+        var answers = {};
+        var allTouched = true;
+
+        sliders.forEach(function(sl){
+            if(!sl.classList.contains('touched')){
+                allTouched = false;
+                sl.parentElement.style.border = "1px solid red"; // Highlight missed
+            } else {
+                sl.parentElement.style.border = "none";
+                var txt = sl.getAttribute('data-txt');
+                answers[txt] = parseInt(sl.value);
+            }
+        });
+
+        if(!allTouched){
+            valMsg.classList.add('show');
+            return;
+        }
+
+        field.value = JSON.stringify(answers);
+        document.getElementById('form').submit();
+    });
+
+})();
+{% endblock %}

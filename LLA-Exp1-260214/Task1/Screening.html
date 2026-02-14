@@ -1,0 +1,61 @@
+{% extends "global/Base.html" %}
+{% load otree %}
+
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom:25px; text-align: center;">{{ ui.screen_title }}</h2>
+
+    <div class="mb-5">
+        <label class="form-label fw-bold mb-3 d-block">{{ ui.q_mother_tongue }}</label>
+
+        <div style="display: flex; gap: 20px;">
+            <div style="flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 15px; text-align: center;">
+                <input type="radio" name="is_native" value="True" required id="native_yes"
+                       form="form" style="cursor:pointer; transform: scale(1.3); margin-right: 8px;">
+                <label for="native_yes" style="font-weight: 600; cursor: pointer;">{{ ui.yes }}</label>
+            </div>
+
+            <div style="flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 15px; text-align: center;">
+                <input type="radio" name="is_native" value="False" required id="native_no"
+                       form="form" style="cursor:pointer; transform: scale(1.3); margin-right: 8px;">
+                <label for="native_no" style="font-weight: 600; cursor: pointer;">{{ ui.no }}</label>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="mb-5">
+        <label class="form-label fw-bold mb-3 d-block">{{ ui.q_other_lang }}</label>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            {% for val, label in level_choices %}
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 15px; transition: 0.2s;">
+                <label style="display: flex; align-items: flex-start; cursor: pointer; margin: 0; width: 100%;">
+                    <input type="radio" name="other_language_level" value="{{ val }}" required
+                           form="form" style="margin-top: 5px; margin-right: 12px; transform: scale(1.2);">
+                    <span style="font-size: 0.95rem; line-height: 1.5;">{{ label }}</span>
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="foot" style="justify-content: center; padding-top: 10px;">
+        <button type="button" class="btn btn-primary" onclick="handleScreeningSubmit()">
+            {{ ui.btn_continue }}
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    function handleScreeningSubmit() {
+        const form = document.getElementById('form');
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            form.reportValidity();
+        }
+    }
+{% endblock %}

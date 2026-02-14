@@ -1,6 +1,6 @@
 {% load otree %}
 <!DOCTYPE html>
-<html lang="{{ lang }}">
+<html lang="{{ lang|default:'en' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -186,7 +186,7 @@
 </head>
 <body>
 
-    {% if progress %}
+    {% if progress is not None %}
     <div class="progress-bar">
         <div class="progress-track">
             <div class="progress-fill" style="width:{{ progress }}%"></div>
@@ -198,7 +198,9 @@
     <div class="container">
         {% block content %}{% endblock %}
 
+        <!-- Hidden oTree form -->
         <form method="post" id="form" style="display:none">
+            {% csrf_token %}
             {% block hidden_fields %}{% endblock %}
             <button type="submit" id="oTreeSubmit"></button>
         </form>

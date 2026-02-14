@@ -1,0 +1,106 @@
+{% extends "global/Base.html" %}
+{% load otree static %}
+
+{% block extra_css %}
+<style>
+    .mpl-table { width: 100%; border-collapse: separate; border-spacing: 0 5px; margin-top: 20px; }
+    .mpl-header th { padding: 10px; background-color: #f8f9fa; text-align: center; border-bottom: 2px solid var(--border); color: var(--muted); font-size: 0.85rem; text-transform: uppercase; }
+    .mpl-row td { padding: 0; vertical-align: middle; height: 52px; }
+    .choice-btn { display: flex; align-items: center; justify-content: center; width: 98%; height: 100%; margin: 0 auto; cursor: pointer; border: 2px solid var(--border); background-color: #fff; transition: all 0.2s; font-size: 0.92rem; border-radius: 8px; }
+    .choice-btn:hover { background-color: #f8fafc; border-color: #cbd5e1; }
+    .choice-btn.selected-a { background-color: #ecfdf5; border-color: var(--success); color: #065f46; font-weight: 700; box-shadow: inset 0 0 4px rgba(0,0,0,0.05); }
+    .choice-btn.selected-b { background-color: #eef2ff; border-color: var(--primary); color: #312e81; font-weight: 700; box-shadow: inset 0 0 4px rgba(0,0,0,0.05); }
+    .row-num { text-align: center; font-weight: 700; color: #94a3b8; width: 45px; }
+    .alert-custom { background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2 style="text-align:center;">{{ ui.intro_title }}</h2>
+    <p class="muted text-center">{{ ui.la_inst }}</p>
+
+    <div class="alert-custom">
+        <strong>{{ ui.la_alert_head }}</strong> {{ ui.la_alert_text }}
+    </div>
+
+    <table class="mpl-table">
+        <thead>
+            <tr class="mpl-header">
+                <th>#</th>
+                <th style="width: 45%">{{ ui.opt_a }}</th>
+                <th style="width: 45%">{{ ui.opt_b }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr class="mpl-row">
+                <td class="row-num">{{ row.id }}</td>
+                <td>
+                    <div class="choice-btn" id="btn-a-{{ row.id }}" onclick="clickOption('A', {{ row.id }})">
+                        50% {{ ui.win }} {{ row.gain }}, &nbsp; 50% {{ ui.lose }} {{ row.loss }}
+                    </div>
+                </td>
+                <td>
+                    <div class="choice-btn" id="btn-b-{{ row.id }}" onclick="clickOption('B', {{ row.id }})">
+                        {{ ui.reject }}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="error-msg" class="val-msg" style="text-align: center;">{{ ui.error_sel }}</div>
+
+    <div class="foot" style="justify-content: center; margin-top:30px;">
+        <button type="button" class="btn btn-primary" onclick="validateAndSubmit()">{{ ui.btn_submit }}</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block hidden_fields %}
+<input type="hidden" name="la_switching_point" id="switching_point">
+{% endblock %}
+
+{% block scripts %}
+(function(){
+    const totalRows = {{ rows|length }};
+    let currentSwitchPoint = null;
+
+    window.clickOption = function(type, row) {
+        // Logic from source: click A at X means switch is at X+1. click B at X means switch is at X.
+        if (type === 'A') {
+            currentSwitchPoint = row + 1;
+        } else {
+            currentSwitchPoint = row;
+        }
+        updateTableVisuals();
+    };
+
+    function updateTableVisuals() {
+        for (let i = 1; i <= totalRows; i++) {
+            const btnA = document.getElementById(`btn-a-${i}`);
+            const btnB = document.getElementById(`btn-b-${i}`);
+            btnA.classList.remove('selected-a');
+            btnB.classList.remove('selected-b');
+
+            if (i < currentSwitchPoint) {
+                btnA.classList.add('selected-a');
+            } else {
+                btnB.classList.add('selected-b');
+            }
+        }
+        document.getElementById('error-msg').classList.remove('show');
+    }
+
+    window.validateAndSubmit = function() {
+        if (currentSwitchPoint === null) {
+            document.getElementById('error-msg').classList.add('show');
+            return;
+        }
+        document.getElementById('switching_point').value = currentSwitchPoint;
+        submitPage();
+    };
+})();
+{% endblock %}

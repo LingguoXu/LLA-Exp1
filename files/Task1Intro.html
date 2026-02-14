@@ -1,0 +1,14 @@
+{% extends "global/Base.html" %}
+
+{% block content %}
+<div class="card" style="text-align:center;">
+    <div style="font-size:2.4rem; margin-bottom:14px;">📖</div>
+    <h1>{{ ui.task1_title }}</h1>
+    <p class="muted" style="max-width:520px; margin:0 auto 28px;">
+        {{ ui.task1_intro }}
+    </p>
+    <button type="button" class="btn btn-primary" onclick="submitPage()">
+        {{ ui.btn_start }} &rarr;
+    </button>
+</div>
+{% endblock %}

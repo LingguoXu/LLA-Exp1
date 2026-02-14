@@ -1,0 +1,151 @@
+{% extends "global/Base.html" %}
+{% load otree %}
+
+{% block extra_css %}
+.story-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px;
+}
+/* on mobile, make blanks a bit wider for fat fingers */
+@media (max-width: 500px) {
+    .blank { min-width: 90px; max-width: 140px; font-size: .88rem; }
+}
+{% endblock %}
+
+{% block content %}
+<div class="card" id="storyCard">
+
+    <!-- header -->
+    <div class="story-head">
+        <span class="badge">{{ story_num }} / {{ total }}</span>
+        <h2 style="margin:0">{{ story.title }}</h2>
+    </div>
+
+    <!-- paragraphs injected here by JS -->
+    <div id="storyBody"></div>
+
+    <!-- reveal button -->
+    <div style="text-align:center; margin:14px 0" id="revealWrap">
+        <button type="button" class="btn btn-soft" id="revealBtn">
+            {{ ui.btn_read_more }}
+        </button>
+    </div>
+
+    <!-- footer (hidden until all paras revealed) -->
+    <div id="foot" style="display:none">
+        <hr class="divider">
+        <div class="val-msg" id="valMsg">{{ ui.required_msg }}</div>
+        <div class="foot">
+            <button type="button" class="btn btn-primary" id="submitBtn">
+                {{ ui.btn_continue }} &rarr;
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block hidden_fields %}
+<input type="hidden" name="task1_responses" id="field" value='{{ existing }}'>
+{% endblock %}
+
+{% block scripts %}
+(function(){
+    /* ── data from server ──────────────────────────── */
+    var paras     = {{ story.paragraphs|json }};
+    var storyNum  = {{ story_num }};
+
+    var body      = document.getElementById('storyBody');
+    var revealBtn = document.getElementById('revealBtn');
+    var revealW   = document.getElementById('revealWrap');
+    var foot      = document.getElementById('foot');
+    var valMsg    = document.getElementById('valMsg');
+    var submitBtn = document.getElementById('submitBtn');
+
+    /* ── build paragraph DOM elements ──────────────── */
+    var paraEls = [];
+
+    paras.forEach(function(txt, pIdx){
+        var div = document.createElement('div');
+        div.className = 'story-para reveal';
+
+        /* Replace {{N}} markers with badge + input */
+        var html = txt.replace(/\{\{(\d+)\}\}/g, function(match, num){
+            return '<span class="blank-num">' + num + '</span>' +
+                   '<input type="text" class="blank" ' +
+                   'data-n="' + num + '" ' +
+                   'placeholder="(' + num + ')" ' +
+                   'autocomplete="off" autocapitalize="off" spellcheck="false">';
+        });
+        div.innerHTML = html;
+        body.appendChild(div);
+        paraEls.push(div);
+    });
+
+    /* ── progressive reveal ────────────────────────── */
+    var revealed = 0;
+
+    function revealNext(){
+        if(revealed >= paraEls.length) return;
+        var el = paraEls[revealed];
+        el.classList.add('show');
+        /* smooth scroll to it (except the very first) */
+        if(revealed > 0){
+            setTimeout(function(){
+                el.scrollIntoView({ behavior:'smooth', block:'center' });
+            }, 80);
+        }
+        revealed++;
+        /* all shown? swap button */
+        if(revealed >= paraEls.length){
+            revealW.style.display = 'none';
+            foot.style.display = 'block';
+            setTimeout(function(){
+                foot.scrollIntoView({ behavior:'smooth', block:'end' });
+            }, 120);
+        }
+    }
+
+    /* show first paragraph immediately */
+    requestAnimationFrame(revealNext);
+
+    revealBtn.addEventListener('click', revealNext);
+
+    /* ── live colour on blanks ─────────────────────── */
+    body.addEventListener('input', function(e){
+        if(e.target.classList.contains('blank')){
+            e.target.classList.toggle('filled', e.target.value.trim().length > 0);
+        }
+    });
+
+    /* ── submit ────────────────────────────────────── */
+    submitBtn.addEventListener('click', function(){
+        var inputs   = body.querySelectorAll('.blank');
+        var answers  = {};
+        var ok       = true;
+        var firstBad = null;
+
+        inputs.forEach(function(inp){
+            var v = inp.value.trim();
+            answers[inp.getAttribute('data-n')] = v;
+            if(!v){ ok = false; if(!firstBad) firstBad = inp; }
+        });
+
+        if(!ok){
+            valMsg.classList.add('show');
+            firstBad.focus();
+            firstBad.scrollIntoView({ behavior:'smooth', block:'center' });
+            return;
+        }
+        valMsg.classList.remove('show');
+
+        /* merge with existing data from previous stories */
+        var field = document.getElementById('field');
+        var all;
+        try { all = JSON.parse(field.value || '{}'); } catch(e){ all = {}; }
+        all['story_' + storyNum] = answers;
+        field.value = JSON.stringify(all);
+
+        submitPage();
+    });
+})();
+{% endblock %}
