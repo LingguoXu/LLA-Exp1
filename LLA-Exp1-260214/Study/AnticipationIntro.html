@@ -1,0 +1,36 @@
+{% extends "global/Page.html" %}
+
+{% block progress %}40{% endblock %}
+{% block top_bar_meta %}Anticipation Assessment{% endblock %}
+
+{% block card_content %}
+<div class="animate-in">
+    <p class="subtitle">One more thing</p>
+    <h2>Imagining the Waiting Period</h2>
+</div>
+
+<div class="animate-in animate-in-delay-1">
+    <p>
+        Now, we&rsquo;d like you to imagine that you <em>have</em> chosen Drug B &mdash;
+        the revolutionary treatment with the 6-month waiting period.
+    </p>
+    <p>
+        During those 6 months, you don&rsquo;t yet know whether the outcome
+        will be good (living to 75) or bad (losing years from 70). You&rsquo;re
+        simply waiting.
+    </p>
+</div>
+
+<div class="animate-in animate-in-delay-2">
+    <div class="callout">
+        <p>
+            On the next page, we will ask you a few questions about how you think
+            you would <strong>feel</strong> during this waiting period.
+            There are no right or wrong answers &mdash; we are interested in
+            your honest reactions.
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block button_text %}Continue to questions{% endblock %}

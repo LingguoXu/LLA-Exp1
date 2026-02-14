@@ -1,0 +1,16 @@
+{% extends "global/Base.html" %}
+
+{% block content %}
+<form method="post" class="card animate-in animate-in-delay-1" id="form">
+    {% block card_content %}{% endblock %}
+
+    <div class="card-actions animate-in animate-in-delay-3">
+        {% block actions %}
+        <button type="submit" class="btn btn-primary">
+            {% block button_text %}Continue{% endblock %}
+            <span class="arrow">&rarr;</span>
+        </button>
+        {% endblock %}
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends "global/Base.html" %}
+
+{% block progress %}45{% endblock %}
+{% block top_bar_meta %}Anticipation Assessment{% endblock %}
+
+{% block extra_css %}
+<style>
+    .scenario-reminder {
+        background: var(--color-primary-ghost); border-radius: var(--radius-sm);
+        padding: var(--space-3) var(--space-4); margin-bottom: var(--space-6);
+        font-size: var(--text-xs); color: var(--color-text-secondary);
+        display: flex; align-items: center; gap: var(--space-2);
+    }
+    .scenario-reminder svg { flex-shrink: 0; }
+
+    .rating-block {
+        padding: var(--space-6) 0;
+        border-bottom: 1px solid var(--color-border-light);
+    }
+    .rating-block:last-child { border-bottom: none; }
+
+    .rating-question {
+        font-family: var(--font-heading); font-size: var(--text-base);
+        font-weight: 600; margin-bottom: var(--space-2); color: var(--color-text);
+    }
+    .rating-context {
+        font-size: var(--text-sm); color: var(--color-text-secondary);
+        margin-bottom: var(--space-5); line-height: 1.5;
+    }
+
+    /* Custom likert scale */
+    .likert-row {
+        display: flex; justify-content: space-between; gap: var(--space-1);
+        margin: 0;
+    }
+    .likert-item { flex: 1; text-align: center; }
+    .likert-item label {
+        display: flex; flex-direction: column; align-items: center; gap: var(--space-2);
+        cursor: pointer; padding: var(--space-3) var(--space-1);
+        border-radius: var(--radius-sm); transition: all 0.2s;
+        font-size: var(--text-xs); color: var(--color-text-muted);
+    }
+    .likert-item label:hover { background: var(--color-primary-ghost); }
+    .likert-item input[type="radio"] {
+        appearance: none; -webkit-appearance: none;
+        width: 28px; height: 28px; border: 2px solid var(--color-border);
+        border-radius: 50%; cursor: pointer; transition: all 0.2s;
+        margin: 0;
+    }
+    .likert-item input[type="radio"]:checked {
+        border-color: var(--color-primary); background: var(--color-primary);
+        box-shadow: inset 0 0 0 4px white;
+    }
+    .likert-item input[type="radio"]:hover:not(:checked) {
+        border-color: var(--color-primary-light);
+    }
+    .likert-anchors {
+        display: flex; justify-content: space-between;
+        font-size: var(--text-xs); color: var(--color-text-muted);
+        margin-top: var(--space-1);
+    }
+
+    .final-actions { margin-top: var(--space-8); display: flex; justify-content: flex-end; }
+</style>
+{% endblock %}
+
+{% block content %}
+<form method="post" id="form">
+<div class="card animate-in animate-in-delay-1">
+
+    <div class="scenario-reminder">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Imagine: You chose Drug B. You are waiting 6 months for the result (good or bad).
+    </div>
+
+    <div class="animate-in">
+        <p class="subtitle">How would you feel?</p>
+        <h2>During the Waiting Period</h2>
+    </div>
+
+    <div class="animate-in animate-in-delay-1">
+        <p style="font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Think about the 6-month period where you don&rsquo;t yet know the result.
+            Rate how you would feel on each dimension below.
+        </p>
+    </div>
+
+    <!-- DREAD -->
+    <div class="rating-block animate-in animate-in-delay-2">
+        <div class="rating-question">How anxious would you feel while waiting?</div>
+        <div class="rating-context">Think about feelings of worry, nervousness, or unease about the possible bad outcome.</div>
+
+        <div class="likert-row">
+            {% for i in "123456789" %}
+            <div class="likert-item">
+                <label>
+                    <input type="radio" name="dread" value="{{ i }}" required>
+                    {{ i }}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="likert-anchors">
+            <span>Not at all anxious</span>
+            <span>Extremely anxious</span>
+        </div>
+    </div>
+
+    <!-- SAVOURING -->
+    <div class="rating-block animate-in animate-in-delay-3">
+        <div class="rating-question">How excited would you feel while waiting?</div>
+        <div class="rating-context">Think about feelings of hope, anticipation, or excitement about the possible good outcome.</div>
+
+        <div class="likert-row">
+            {% for i in "123456789" %}
+            <div class="likert-item">
+                <label>
+                    <input type="radio" name="savouring" value="{{ i }}" required>
+                    {{ i }}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="likert-anchors">
+            <span>Not at all excited</span>
+            <span>Extremely excited</span>
+        </div>
+    </div>
+
+    <!-- ATTENTION -->
+    <div class="rating-block animate-in animate-in-delay-4">
+        <div class="rating-question">How often would you think about the outcome?</div>
+        <div class="rating-context">Consider how frequently the pending result would come to mind during the waiting period.</div>
+
+        <div class="likert-row">
+            {% for i in "123456789" %}
+            <div class="likert-item">
+                <label>
+                    <input type="radio" name="attention" value="{{ i }}" required>
+                    {{ i }}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="likert-anchors">
+            <span>Hardly ever</span>
+            <span>Almost constantly</span>
+        </div>
+    </div>
+
+    <!-- VIVIDNESS -->
+    <div class="rating-block">
+        <div class="rating-question">How vividly could you imagine the outcome?</div>
+        <div class="rating-context">Think about how clearly and concretely you could picture either outcome (good or bad) in your mind.</div>
+
+        <div class="likert-row">
+            {% for i in "123456789" %}
+            <div class="likert-item">
+                <label>
+                    <input type="radio" name="vividness" value="{{ i }}" required>
+                    {{ i }}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="likert-anchors">
+            <span>Not at all vividly</span>
+            <span>Extremely vividly</span>
+        </div>
+    </div>
+
+    <div class="final-actions">
+        <button type="submit" class="btn btn-primary">
+            Continue <span class="arrow">&rarr;</span>
+        </button>
+    </div>
+</div>
+</form>
+{% endblock %}
