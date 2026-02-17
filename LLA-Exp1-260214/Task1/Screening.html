@@ -1,61 +1,311 @@
 {% extends "global/Base.html" %}
 {% load otree %}
 
+{% block extra_css %}
+<style>
+    .intro-body p {
+        margin-bottom: 12px;
+        line-height: 1.65;
+    }
+
+    /* ── Question blocks ── */
+    .q-block { margin-bottom: 32px; }
+    .q-block:last-child { margin-bottom: 12px; }
+    .q-label {
+        font-weight: 600;
+        margin-bottom: 14px;
+        display: block;
+        font-size: 1rem;
+    }
+
+    /* ── Inline radio row (age, device, education) ── */
+    .radio-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .radio-pill {
+        flex: 1 1 auto;
+        min-width: 100px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: center;
+        transition: border-color 0.2s, background 0.2s;
+        cursor: pointer;
+    }
+    .radio-pill:has(input:checked) {
+        border-color: var(--primary);
+        background: rgba(99, 102, 241, 0.06);
+    }
+    .radio-pill input { display: none; }
+    .radio-pill span { font-weight: 500; font-size: 0.95rem; }
+
+    /* ── Yes/No pair ── */
+    .yn-row { display: flex; gap: 20px; }
+    .yn-option {
+        flex: 1;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.2s, background 0.2s;
+    }
+    .yn-option:has(input:checked) {
+        border-color: var(--primary);
+        background: rgba(99, 102, 241, 0.06);
+    }
+    .yn-option input {
+        cursor: pointer;
+        transform: scale(1.3);
+        margin-right: 8px;
+    }
+    .yn-option label { font-weight: 600; cursor: pointer; }
+
+    /* ── Stacked radio list (proficiency levels) ── */
+    .radio-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .radio-stack-item {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 15px;
+        transition: border-color 0.2s, background 0.2s;
+    }
+    .radio-stack-item:has(input:checked) {
+        border-color: var(--primary);
+        background: rgba(99, 102, 241, 0.06);
+    }
+    .radio-stack-item label {
+        display: flex;
+        align-items: flex-start;
+        cursor: pointer;
+        margin: 0;
+        width: 100%;
+    }
+    .radio-stack-item input {
+        margin-top: 5px;
+        margin-right: 12px;
+        transform: scale(1.2);
+    }
+    .radio-stack-item span {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* ── Validation hint ── */
+    .val-hint {
+        color: #e53e3e;
+        font-size: 0.88rem;
+        margin-top: 8px;
+    }
+
+    /* ── Dim previous card once done ── */
+    .card.done {
+        opacity: 0.55;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+    }
+    .card.done .foot { display: none; }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="card">
-    <h2 style="margin-bottom:25px; text-align: center;">{{ ui.screen_title }}</h2>
 
-    <div class="mb-5">
-        <label class="form-label fw-bold mb-3 d-block">{{ ui.q_mother_tongue }}</label>
+{# ══════════════════════════════════════════════════ #}
+{# Card 0: Study Introduction (always visible)       #}
+{# ══════════════════════════════════════════════════ #}
+<div class="card" id="introCard">
+    <h2 style="margin-bottom:10px; text-align:center;">{{ ui.welcome_title }}</h2>
+    <hr class="divider">
 
-        <div style="display: flex; gap: 20px;">
-            <div style="flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 15px; text-align: center;">
-                <input type="radio" name="is_native" value="True" required id="native_yes"
-                       form="form" style="cursor:pointer; transform: scale(1.3); margin-right: 8px;">
-                <label for="native_yes" style="font-weight: 600; cursor: pointer;">{{ ui.yes }}</label>
+    <div class="intro-body">
+        <p>{{ ui.welcome_body }}</p>
+        <p>{{ ui.welcome_duration }}</p>
+        <p>{{ ui.welcome_anon }}</p>
+    </div>
+
+    <div class="foot" style="justify-content:center; padding-top:10px;">
+        <button type="button" class="btn btn-primary" id="beginBtn">
+            {{ ui.btn_begin }}
+        </button>
+    </div>
+</div>
+
+{# ══════════════════════════════════════════════════ #}
+{# Card 1: Batch 1 — Age, Mother Tongue, Education   #}
+{# HIDDEN on load via inline style                    #}
+{# ══════════════════════════════════════════════════ #}
+<div class="card" id="batch1Card" style="display:none;">
+    <h2 style="margin-bottom:6px; text-align:center;">{{ ui.screen_title }}</h2>
+    <p class="muted" style="text-align:center; margin-bottom:20px;">{{ ui.screen_subtitle }}</p>
+    <hr class="divider">
+
+    {# ── Q1: Age (distractor) ── #}
+    <div class="q-block">
+        <span class="q-label">{{ ui.q_age }}</span>
+        <div class="radio-row">
+            {% for val, label in age_choices %}
+            <label class="radio-pill">
+                <input type="radio" name="age_range" value="{{ val }}" form="form" class="b1-input">
+                <span>{{ label }}</span>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    {# ── Q2: Mother Tongue (CRITICAL) ── #}
+    <div class="q-block">
+        <span class="q-label">{{ ui.q_mother_tongue }}</span>
+        <div class="yn-row">
+            <div class="yn-option">
+                <input type="radio" name="is_native" value="True" id="native_yes" form="form" class="b1-input">
+                <label for="native_yes">{{ ui.yes }}</label>
             </div>
-
-            <div style="flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 15px; text-align: center;">
-                <input type="radio" name="is_native" value="False" required id="native_no"
-                       form="form" style="cursor:pointer; transform: scale(1.3); margin-right: 8px;">
-                <label for="native_no" style="font-weight: 600; cursor: pointer;">{{ ui.no }}</label>
+            <div class="yn-option">
+                <input type="radio" name="is_native" value="False" id="native_no" form="form" class="b1-input">
+                <label for="native_no">{{ ui.no }}</label>
             </div>
         </div>
     </div>
 
+    {# ── Q3: Education (distractor) ── #}
+    <div class="q-block">
+        <span class="q-label">{{ ui.q_education }}</span>
+        <div class="radio-row">
+            {% for val, label in edu_choices %}
+            <label class="radio-pill">
+                <input type="radio" name="education" value="{{ val }}" form="form" class="b1-input">
+                <span>{{ label }}</span>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="val-hint" id="b1Hint" style="display:none;">{{ ui.required_msg }}</div>
+
+    <div class="foot" style="justify-content:center; padding-top:10px;">
+        <button type="button" class="btn btn-primary" id="batch1Btn">
+            {{ ui.btn_continue }}
+        </button>
+    </div>
+</div>
+
+{# ══════════════════════════════════════════════════ #}
+{# Card 2: Batch 2 — Language Proficiency, Device     #}
+{# HIDDEN on load via inline style                    #}
+{# ══════════════════════════════════════════════════ #}
+<div class="card" id="batch2Card" style="display:none;">
+    <h2 style="margin-bottom:6px; text-align:center;">{{ ui.screen_title }}</h2>
     <hr class="divider">
 
-    <div class="mb-5">
-        <label class="form-label fw-bold mb-3 d-block">{{ ui.q_other_lang }}</label>
-
-        <div style="display: flex; flex-direction: column; gap: 10px;">
+    {# ── Q4: Other Language Proficiency (CRITICAL) ── #}
+    <div class="q-block">
+        <span class="q-label">{{ ui.q_other_lang }}</span>
+        <div class="radio-stack">
             {% for val, label in level_choices %}
-            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 15px; transition: 0.2s;">
-                <label style="display: flex; align-items: flex-start; cursor: pointer; margin: 0; width: 100%;">
-                    <input type="radio" name="other_language_level" value="{{ val }}" required
-                           form="form" style="margin-top: 5px; margin-right: 12px; transform: scale(1.2);">
-                    <span style="font-size: 0.95rem; line-height: 1.5;">{{ label }}</span>
+            <div class="radio-stack-item">
+                <label>
+                    <input type="radio" name="other_language_level" value="{{ val }}" form="form" class="b2-input">
+                    <span>{{ label }}</span>
                 </label>
             </div>
             {% endfor %}
         </div>
     </div>
 
-    <div class="foot" style="justify-content: center; padding-top: 10px;">
-        <button type="button" class="btn btn-primary" onclick="handleScreeningSubmit()">
+    <hr class="divider">
+
+    {# ── Q5: Device (distractor) ── #}
+    <div class="q-block">
+        <span class="q-label">{{ ui.q_device }}</span>
+        <div class="radio-row">
+            {% for val, label in device_choices %}
+            <label class="radio-pill">
+                <input type="radio" name="device" value="{{ val }}" form="form" class="b2-input">
+                <span>{{ label }}</span>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="val-hint" id="b2Hint" style="display:none;">{{ ui.required_msg }}</div>
+
+    <div class="foot" style="justify-content:center; padding-top:10px;">
+        <button type="button" class="btn btn-primary" id="batch2Btn">
             {{ ui.btn_continue }}
         </button>
     </div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}
-    function handleScreeningSubmit() {
-        const form = document.getElementById('form');
-        if (form.checkValidity()) {
-            form.submit();
-        } else {
-            form.reportValidity();
+(function(){
+    var introCard  = document.getElementById('introCard');
+    var batch1Card = document.getElementById('batch1Card');
+    var batch2Card = document.getElementById('batch2Card');
+
+    // ── Check all radio groups in a batch are answered ──
+    function batchComplete(className) {
+        var inputs = document.querySelectorAll('.' + className);
+        var groups = {};
+        inputs.forEach(function(inp){
+            groups[inp.name] = groups[inp.name] || false;
+            if(inp.checked) groups[inp.name] = true;
+        });
+        for(var g in groups){
+            if(!groups[g]) return false;
         }
+        return true;
     }
+
+    // ── Reveal a card with slide-in ──
+    function revealCard(card) {
+        card.style.display = 'block';
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(16px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        // Force reflow before applying final styles
+        card.offsetHeight;
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+        // Scroll to the new card
+        setTimeout(function(){
+            card.scrollIntoView({behavior:'smooth', block:'start'});
+        }, 100);
+    }
+
+    // ── Begin → show Batch 1, dim intro ──
+    document.getElementById('beginBtn').addEventListener('click', function(){
+        introCard.classList.add('done');
+        revealCard(batch1Card);
+    });
+
+    // ── Batch 1 → show Batch 2, dim Batch 1 ──
+    document.getElementById('batch1Btn').addEventListener('click', function(){
+        if(!batchComplete('b1-input')){
+            document.getElementById('b1Hint').style.display = 'block';
+            return;
+        }
+        document.getElementById('b1Hint').style.display = 'none';
+        batch1Card.classList.add('done');
+        revealCard(batch2Card);
+    });
+
+    // ── Batch 2 → Submit ──
+    document.getElementById('batch2Btn').addEventListener('click', function(){
+        if(!batchComplete('b2-input')){
+            document.getElementById('b2Hint').style.display = 'block';
+            return;
+        }
+        document.getElementById('b2Hint').style.display = 'none';
+        document.getElementById('form').submit();
+    });
+
+})();
 {% endblock %}

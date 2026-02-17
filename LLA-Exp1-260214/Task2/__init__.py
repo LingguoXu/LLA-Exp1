@@ -46,7 +46,7 @@ UI = dict(
         de="Bitte vervollständigen Sie das Gespräch. Verwenden Sie das Verb in Klammern als Orientierung (z. B. 'gehen' → 'wird gehen', 'könnte gehen').",
         ja="会話を完成させてください。括弧内の動詞を参考に、文脈に合わせて自然な形に変えてください（例：「行く」→「行きます」、「行くでしょう」、「行くかもしれません」など）。",
     ),
-    # ── Task 2.2 Slider Task (CRITICAL FIX) ──
+    # ── Task 2.2 Slider Task ──
     slider_title = dict(
         en="Part 2: Certainty Ratings",
         fr="Partie 2: Évaluation de la certitude",
@@ -60,18 +60,18 @@ UI = dict(
         ja="各文を読み、話し手がどの程度「確信」を持っていると感じるかを示してください（0% = ありえない、100% = 確実）。",
     ),
     # ── Slider Label Translations ──
-        impossible = dict(
-            en="Impossible",
-            fr="Impossible",
-            de="Unmöglich",
-            ja="ありえない"
-        ),
-        certain = dict(
-            en="Certain",
-            fr="Certain",
-            de="Sicher",
-            ja="確実"
-        ),
+    impossible = dict(
+        en="Impossible",
+        fr="Impossible",
+        de="Unmöglich",
+        ja="ありえない"
+    ),
+    certain = dict(
+        en="Certain",
+        fr="Certain",
+        de="Sicher",
+        ja="確実"
+    ),
 )
 
 
@@ -178,24 +178,103 @@ SCENARIOS = dict(
     ]
 )
 
+
 # ═══════════════════════════════════════════════════════════
-# TASK 2.2 SENTENCES (Perception)
+# TASK 2.2 SENTENCES (Perception / Subjective Probability)
+# Based on Robertson et al. (2023) — 13 items for English.
+#
+# DESIGN RATIONALE:
+# - English & Japanese: 13 items (direct mapping of Robertson items).
+# - French: 14 items testing French-specific FTR constructions
+#   (futur simple, futur proche, conditionnel, subjunctive triggers,
+#    modal adverbs, devoir épistémique, présent futur).
+# - German: 14 items testing German-specific FTR constructions
+#   (werden+Inf, Präsens futur, modal verbs können/dürfte/soll/mag,
+#    Konjunktiv II, modal particles wohl/bestimmt/vielleicht/
+#    wahrscheinlich/sicherlich).
+#
+# All items use the same propositional content ("rain next week")
+# to isolate the effect of grammatical construction on perceived
+# certainty.
 # ═══════════════════════════════════════════════════════════
 SLIDER_ITEMS = dict(
+    # ── English: 13 items (Robertson et al., 2023) ──
     en=[
-        "It is going to rain next week.",
-        "It will rain next week.",
-        "I think it will rain next week.",
-        "It will definitely rain next week.",
-        "It might rain next week."
+        "It is going to rain next week.",           #  1. be going to
+        "It will rain next week.",                   #  2. will (bare)
+        "I think it will rain next week.",           #  3. I think + will
+        "It will definitely rain next week.",        #  4. will + definitely
+        "It may rain next week.",                    #  5. may
+        "It could rain next week.",                  #  6. could
+        "It might rain next week.",                  #  7. might
+        "It will certainly rain next week.",         #  8. will + certainly
+        "I think it is going to rain next week.",    #  9. I think + be going to
+        "It possibly will rain next week.",          # 10. possibly + will
+        "It should rain next week.",                 # 11. should
+        "It probably will rain next week.",          # 12. probably + will
+        "It is raining next week.",                  # 13. present progressive (futurate)
     ],
+
+    # ── Japanese: 13 items (translation of English constructions) ──
+    # Maps each English FTR construction to its closest Japanese
+    # equivalent, covering the spectrum from low to high certainty.
     ja=[
-        "来週、雨が降るでしょう。",  # It is going to/will rain (neutral prediction)
-        "来週、雨が降ります。",  # It will rain (definitive)
-        "来週、雨が降ると思います。",  # I think it will rain
-        "来週、間違いなく雨が降ります。",  # It will definitely rain
-        "来週、雨が降るかもしれません。"  # It might rain
-    ]
+        "来週、雨が降るだろう。",                     #  1. ～だろう (conjecture, neutral) ≈ be going to
+        "来週、雨が降ります。",                       #  2. ～ます (polite, declarative) ≈ will
+        "来週、雨が降ると思います。",                  #  3. ～と思います (I think) ≈ I think + will
+        "来週、間違いなく雨が降ります。",              #  4. 間違いなく (without doubt) ≈ will definitely
+        "来週、雨が降るかもしれない。",                #  5. ～かもしれない (possibility) ≈ may
+        "来週、雨が降りうる。",                       #  6. ～うる (potential/capable of) ≈ could
+        "来週、雨が降るかもしれません。",              #  7. ～かもしれません (polite possibility) ≈ might
+        "来週、必ず雨が降ります。",                   #  8. 必ず (certainly) ≈ will certainly
+        "来週、雨が降るんじゃないかと思います。",       #  9. ～んじゃないかと思う (hedged opinion) ≈ I think + going to
+        "来週、ひょっとしたら雨が降るかもしれない。",    # 10. ひょっとしたら～かもしれない (remote poss.) ≈ possibly will
+        "来週、雨が降るはずです。",                   # 11. ～はずです (expectation) ≈ should
+        "来週、おそらく雨が降るでしょう。",            # 12. おそらく～でしょう (probably) ≈ probably will
+        "来週、雨が降る。",                          # 13. dictionary form (casual declarative) ≈ present progressive futurate
+    ],
+
+    # ── French: 14 items (French-specific FTR constructions) ──
+    # Tests the full range of French future-time reference forms,
+    # including futur simple vs. futur proche, modal constructions,
+    # conditional, and subjunctive-triggering expressions.
+    fr=[
+        "Il va pleuvoir la semaine prochaine.",                #  1. Futur proche (aller + inf) — near/planned future
+        "Il pleuvra la semaine prochaine.",                    #  2. Futur simple — general future prediction
+        "Je pense qu'il va pleuvoir la semaine prochaine.",    #  3. Je pense que + futur proche — hedged opinion (near)
+        "Je pense qu'il pleuvra la semaine prochaine.",        #  4. Je pense que + futur simple — hedged opinion (general)
+        "Il pleuvra certainement la semaine prochaine.",       #  5. Futur simple + certainement — high certainty
+        "Il pleuvra sans doute la semaine prochaine.",         #  6. Futur simple + sans doute — probable (≈ probably)
+        "Il pourrait pleuvoir la semaine prochaine.",          #  7. Conditionnel (pouvoir) — possibility
+        "Il devrait pleuvoir la semaine prochaine.",           #  8. Conditionnel (devoir) — expectation/should
+        "Il se peut qu'il pleuve la semaine prochaine.",       #  9. Il se peut que + subjonctif — impersonal possibility
+        "Il est possible qu'il pleuve la semaine prochaine.",  # 10. Il est possible que + subjonctif — possible
+        "Peut-être qu'il pleuvra la semaine prochaine.",       # 11. Peut-être que + futur simple — perhaps
+        "Il pleuvrait la semaine prochaine.",                  # 12. Conditionnel (reportatif/hearsay) — rumour/reported
+        "Il va sûrement pleuvoir la semaine prochaine.",       # 13. Futur proche + sûrement — surely (near future)
+        "Il pleut la semaine prochaine.",                      # 14. Présent à valeur de futur — present-as-future
+    ],
+
+    # ── German: 14 items (German-specific FTR constructions) ──
+    # Tests werden+Infinitiv, Präsens with future meaning,
+    # modal verbs (können, dürfen, sollen, mögen), Konjunktiv II,
+    # and the rich system of German modal particles/adverbs.
+    de=[
+        "Es wird nächste Woche regnen.",                       #  1. werden + Inf — standard future
+        "Es regnet nächste Woche.",                            #  2. Präsens (futurisch) — present-as-future
+        "Ich denke, es wird nächste Woche regnen.",            #  3. Ich denke + werden — hedged opinion
+        "Es wird bestimmt nächste Woche regnen.",              #  4. werden + bestimmt — definite certainty
+        "Es wird sicherlich nächste Woche regnen.",            #  5. werden + sicherlich — certainly
+        "Es könnte nächste Woche regnen.",                     #  6. Konjunktiv II (können) — could/possibility
+        "Es kann nächste Woche regnen.",                       #  7. können (Indikativ) — can/may
+        "Es dürfte nächste Woche regnen.",                     #  8. dürfen (Konj. II) — ought to/likely
+        "Es mag nächste Woche regnen.",                        #  9. mögen (Indikativ) — may (literary/formal)
+        "Es soll nächste Woche regnen.",                       # 10. sollen — is said to / reported
+        "Vielleicht regnet es nächste Woche.",                 # 11. vielleicht + Präsens — perhaps
+        "Es wird wohl nächste Woche regnen.",                  # 12. werden + wohl — probably (modal particle)
+        "Es wird wahrscheinlich nächste Woche regnen.",        # 13. werden + wahrscheinlich — probably (adverb)
+        "Ich glaube, es regnet nächste Woche.",                # 14. Ich glaube + Präsens — I believe (colloquial)
+    ],
 )
 
 

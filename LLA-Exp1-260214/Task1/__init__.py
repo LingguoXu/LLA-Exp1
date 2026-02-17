@@ -29,13 +29,67 @@ UI = dict(
         ja='先に進む前にすべての空欄を埋めてください。',
     ),
 
+    # ── Welcome / Study Introduction ──
+    welcome_title=dict(
+        en='Welcome',
+        fr='Bienvenue',
+        de='Willkommen',
+        ja='ようこそ',
+    ),
+    welcome_body=dict(
+        en='Thank you for taking part in this study. You will complete a series of short language tasks — reading stories, filling in blanks, and rating sentences. There are no right or wrong answers; we are interested in how you naturally use language.',
+        fr='Merci de participer à cette étude. Vous allez réaliser une série de courtes tâches linguistiques — lire des histoires, compléter des phrases et évaluer des énoncés. Il n\u2019y a pas de bonnes ou de mauvaises réponses ; nous nous intéressons à votre usage naturel de la langue.',
+        de='Vielen Dank für Ihre Teilnahme an dieser Studie. Sie werden eine Reihe kurzer Sprachaufgaben bearbeiten — Geschichten lesen, Lücken ausfüllen und Sätze bewerten. Es gibt keine richtigen oder falschen Antworten; uns interessiert, wie Sie Sprache natürlich verwenden.',
+        ja='この調査にご参加いただきありがとうございます。短い言語タスク（物語を読む、空欄を埋める、文を評価する）に取り組んでいただきます。正解や不正解はありません。あなたが自然に言葉を使う様子に関心があります。',
+    ),
+    welcome_duration=dict(
+        en='The study takes approximately 15–20 minutes.',
+        fr='L\u2019étude dure environ 15 à 20 minutes.',
+        de='Die Studie dauert etwa 15–20 Minuten.',
+        ja='所要時間は約15〜20分です。',
+    ),
+    welcome_anon=dict(
+        en='All responses are anonymous and will be used for research purposes only.',
+        fr='Toutes les réponses sont anonymes et seront utilisées uniquement à des fins de recherche.',
+        de='Alle Antworten sind anonym und werden ausschließlich zu Forschungszwecken verwendet.',
+        ja='すべての回答は匿名であり、研究目的にのみ使用されます。',
+    ),
+    btn_begin=dict(
+        en='Begin',
+        fr='Commencer',
+        de='Beginnen',
+        ja='始める',
+    ),
+
     # ── Screening Page ──
     screen_title=dict(
-        en='Preliminary Questions',
-        fr='Questions préliminaires',
-        de='Vorläufige Fragen',
-        ja='事前質問',
+        en='About You',
+        fr='À propos de vous',
+        de='Über Sie',
+        ja='あなたについて',
     ),
+    screen_subtitle=dict(
+        en='Please answer the following questions before we begin.',
+        fr='Veuillez répondre aux questions suivantes avant de commencer.',
+        de='Bitte beantworten Sie die folgenden Fragen, bevor wir beginnen.',
+        ja='始める前に、以下の質問にお答えください。',
+    ),
+
+    # ── Q1: Age Range (distractor) ──
+    q_age=dict(
+        en='What is your age?',
+        fr='Quel est votre âge ?',
+        de='Wie alt sind Sie?',
+        ja='あなたの年齢は？',
+    ),
+    age_18=dict(en='18–24', fr='18–24', de='18–24', ja='18〜24歳'),
+    age_25=dict(en='25–34', fr='25–34', de='25–34', ja='25〜34歳'),
+    age_35=dict(en='35–44', fr='35–44', de='35–44', ja='35〜44歳'),
+    age_45=dict(en='45–54', fr='45–54', de='45–54', ja='45〜54歳'),
+    age_55=dict(en='55–64', fr='55–64', de='55–64', ja='55〜64歳'),
+    age_65=dict(en='65+', fr='65+', de='65+', ja='65歳以上'),
+
+    # ── Q2: Mother tongue (CRITICAL) ──
     q_mother_tongue=dict(
         en='Is your mother tongue English?',
         fr='Votre langue maternelle est-elle le français ?',
@@ -45,11 +99,50 @@ UI = dict(
     yes=dict(en='Yes', fr='Oui', de='Ja', ja='はい'),
     no=dict(en='No', fr='Non', de='Nein', ja='いいえ'),
 
+    # ── Q3: Education (distractor) ──
+    q_education=dict(
+        en='What is the highest level of education you have completed?',
+        fr='Quel est le plus haut niveau d\u2019études que vous avez atteint ?',
+        de='Was ist Ihr höchster Bildungsabschluss?',
+        ja='最終学歴を教えてください。',
+    ),
+    edu_high=dict(
+        en='Secondary school / High school',
+        fr='Lycée / Baccalauréat',
+        de='Abitur / Mittlere Reife',
+        ja='高等学校卒業',
+    ),
+    edu_bachelor=dict(
+        en='Bachelor\u2019s degree',
+        fr='Licence',
+        de='Bachelor',
+        ja='学士号',
+    ),
+    edu_master=dict(
+        en='Master\u2019s degree',
+        fr='Master',
+        de='Master',
+        ja='修士号',
+    ),
+    edu_phd=dict(
+        en='Doctorate / PhD',
+        fr='Doctorat',
+        de='Promotion / Doktortitel',
+        ja='博士号',
+    ),
+    edu_other=dict(
+        en='Other',
+        fr='Autre',
+        de='Sonstiges',
+        ja='その他',
+    ),
+
+    # ── Q4: Other language proficiency (CRITICAL) ──
     q_other_lang=dict(
-        en='Please list any languages other than your mother tongue (English) you have been exposed to, and rate your proficiency:',
-        fr='Veuillez indiquer les langues autres que votre langue maternelle (Français) auxquelles vous avez été exposé(e) et évaluer votre niveau :',
-        de='Bitte listen Sie alle Sprachen außer Ihrer Muttersprache (Deutsch) auf, mit denen Sie in Kontakt gekommen sind, und bewerten Sie Ihre Kenntnisse:',
-        ja='母国語（日本語）以外に触れたことのある言語を挙げ、その習熟度を評価してください：',
+        en='Apart from English, what is your highest level of proficiency in any other language?',
+        fr='En dehors du français, quel est votre plus haut niveau de maîtrise dans une autre langue ?',
+        de='Abgesehen von Deutsch, wie hoch ist Ihr höchstes Sprachniveau in einer anderen Sprache?',
+        ja='日本語以外の言語で、あなたの最も高い習熟度はどのレベルですか？',
     ),
 
     # Proficiency Levels
@@ -88,6 +181,32 @@ UI = dict(
         fr="Niveau 5 : Très courant ; je peux utiliser la langue comme un locuteur natif.",
         de="Stufe 5: Sehr fließend; ich kann die Sprache wie ein Muttersprachler verwenden.",
         ja="レベル5：非常に流暢で、ネイティブスピーカーのように言語を使用できます。"
+    ),
+
+    # ── Q5: Device (distractor) ──
+    q_device=dict(
+        en='What device are you using to complete this study?',
+        fr='Quel appareil utilisez-vous pour répondre à cette étude ?',
+        de='Welches Gerät verwenden Sie, um an dieser Studie teilzunehmen?',
+        ja='この調査にはどのデバイスを使用していますか？',
+    ),
+    dev_computer=dict(
+        en='Desktop / Laptop computer',
+        fr='Ordinateur de bureau / portable',
+        de='Desktop / Laptop',
+        ja='デスクトップ / ノートパソコン',
+    ),
+    dev_tablet=dict(
+        en='Tablet',
+        fr='Tablette',
+        de='Tablet',
+        ja='タブレット',
+    ),
+    dev_phone=dict(
+        en='Smartphone',
+        fr='Smartphone',
+        de='Smartphone',
+        ja='スマートフォン',
     ),
 
     # Screenout Message
@@ -309,11 +428,21 @@ class Player(BasePlayer):
     language = models.StringField(initial='en')
 
     # ── Screening Fields ──
+    # Distractor: Age range
+    age_range = models.StringField()
+
+    # CRITICAL: Native speaker check
     # True = Native, False = Not Native
     is_native = models.BooleanField()
 
-    # Level 0-5
+    # Distractor: Education level
+    education = models.StringField()
+
+    # CRITICAL: Other language proficiency (Level 0-5)
     other_language_level = models.IntegerField()
+
+    # Distractor: Device type
+    device = models.StringField()
 
     # Track if user failed screening
     screened_out = models.BooleanField(initial=False)
@@ -334,7 +463,7 @@ def _ctx(player, progress):
 
 class Screening(Page):
     form_model = 'player'
-    form_fields = ['is_native', 'other_language_level']
+    form_fields = ['age_range', 'is_native', 'education', 'other_language_level', 'device']
 
     @staticmethod
     def vars_for_template(player):
@@ -344,22 +473,47 @@ class Screening(Page):
         player.participant.language = lang
 
         # 2. Get the base context (lang + ui + progress)
-        # Using progress=0 for the start
         ctx = _ctx(player, 0)
+        ui = ctx['ui']
 
-        # 3. Add custom variables for this page
-        level_choices = [
-            (0, ctx['ui']['lvl_0']),
-            (1, ctx['ui']['lvl_1']),
-            (2, ctx['ui']['lvl_2']),
-            (3, ctx['ui']['lvl_3']),
-            (4, ctx['ui']['lvl_4']),
-            (5, ctx['ui']['lvl_5']),
+        # 3. Build choice lists for template
+        age_choices = [
+            ('18-24', ui['age_18']),
+            ('25-34', ui['age_25']),
+            ('35-44', ui['age_35']),
+            ('45-54', ui['age_45']),
+            ('55-64', ui['age_55']),
+            ('65+',   ui['age_65']),
         ]
 
-        # Merge them
+        edu_choices = [
+            ('high_school', ui['edu_high']),
+            ('bachelor',    ui['edu_bachelor']),
+            ('master',      ui['edu_master']),
+            ('phd',         ui['edu_phd']),
+            ('other',       ui['edu_other']),
+        ]
+
+        level_choices = [
+            (0, ui['lvl_0']),
+            (1, ui['lvl_1']),
+            (2, ui['lvl_2']),
+            (3, ui['lvl_3']),
+            (4, ui['lvl_4']),
+            (5, ui['lvl_5']),
+        ]
+
+        device_choices = [
+            ('computer', ui['dev_computer']),
+            ('tablet',   ui['dev_tablet']),
+            ('phone',    ui['dev_phone']),
+        ]
+
         return dict(
+            age_choices=age_choices,
             level_choices=level_choices,
+            edu_choices=edu_choices,
+            device_choices=device_choices,
             **ctx
         )
 
