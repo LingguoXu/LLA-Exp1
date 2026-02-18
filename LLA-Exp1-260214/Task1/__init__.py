@@ -259,43 +259,85 @@ STORIES = dict(
     en=[
         # ── Story 1: Anna's Toothache ──
         dict(title="Anna\u2019s Toothache", paragraphs=[
-            'Anna was having dinner {{1}} suddenly, she felt a sharp pain in her wisdom tooth. Her friend warned her: \u201cYou must see a dentist immediately, otherwise the tooth {{2}} swell up very soon.\u201d',
-            'Anna was lucky and got an appointment for 4:00 PM. She thought to herself, \u201cAlthough I am afraid of pain, this doctor is very skilled. I believe the surgery {{3}} go smoothly.\u201d',
-            'Anna arrived at the clinic. The dentist examined {{4}} teeth and said, \u201cWe must pull it out today. It\u2019s a quick procedure. The wound {{5}} heal completely within a week, and by then you {{6}} be able to eat normally.\u201d',
-            'Anna returned home after she had finished {{7}} the extraction. However, the pain was still intense. She looked in the mirror and {{8}} realized: the doctor had pulled the wrong one! The painful left tooth was still there; the one removed was {{9}} the right one, which hadn\u2019t hurt at all.',
-            'Anna burst into tears: \u201cOh my god, does that mean I {{10}} suffer through this all over again? Just my luck!\u201d',
+            'Anna was having dinner with her friend. Suddenly, she {{1}} **{FEEL}** a sharp pain in her wisdom tooth. Her friend warned her: "You must see a dentist immediately, otherwise the tooth {{2}} **{SWELL}** up very soon."',
+            'Anna was lucky and got an appointment for 4:00 PM. She thought to herself, "Although I am afraid of pain, this doctor is very skilled. I believe the surgery {{3}} **{GO}** smoothly."',
+            'Anna arrived at the clinic. The dentist {{4}} **{EXAMINE}** her teeth and said, "We must pull it out today. It\u2019s a quick procedure. The wound {{5}} **{HEAL}** completely within a week, and by then you {{6}} **{BE}** able to eat normally."',
+            'Anna {{7}} **{RETURN}** home after the surgery was finished. However, the pain was still intense. She looked in the mirror and then realized: the doctor had pulled the wrong one! The painful left tooth was still there; the doctor {{8}} **{REMOVE}** the good one, which hadn\u2019t hurt at all. Her friend told her, "Then the dentist {{9}} **{NEED}** to pull the bad tooth as well."',
+            'Anna {{10}} **{CRY}**: "Oh no, does that mean I have to do this again?"'
         ]),
+
         # ── Story 2: Alex's Interview ──
         dict(title="Alex\u2019s Interview", paragraphs=[
-            'Yesterday morning, Alex woke up with a feeling of dread. He pulled back the curtains and immediately {{1}} the dark, heavy clouds rolling over the city skyline.',
-            'He turned on the television news. The weatherman announced: \u201cBe prepared, everyone. The heavy rain {{2}} continue all afternoon.\u201d',
-            'Alex sighed and thought to herself: \u201cGreat. If I walk to the station in this weather, my suit {{3}} be completely ruined before the interview.\u201d',
-            'He ran to the hallway closet, frantically searching {{4}} his large umbrella. Suddenly, a notification popped up on his phone: the downtown subway line had {{5}} due to a signal failure.',
-            '\u201cThat\u2019s it!\u201d Alex shouted, grabbing his keys {{6}} the table. \u201cI {{7}} drive my car instead. It\u2019s the only way.\u201d',
-            'He took a deep breath to calm down. \u201cI {{8}} call the recruiter from the car to let them know I might be late,\u201d he decided.',
-            'He began {{9}} gather his documents, trying to stay positive. \u201cCome on, Alex,\u201d he whispered to himself. \u201cEven with the rain, I know this interview {{10}} go well.\u201d',
+            'In the morning, Alex woke up with a feeling of worry. He {{1}} **{PULL}** back the curtains and immediately noticed the dark, heavy clouds {{2}} **{MOVE}** over the city. He turned on the television news. The weatherman announced: "Be prepared, everyone. The heavy rain {{3}} **{CONTINUE}** all afternoon."',
+            'Alex sighed and thought to herself: "This is bad. If I walk to the station in this weather, my suit {{4}} **{BE}** completely ruined before the interview."',
+            'Suddenly, a notification popped up on {{5}} **{HE}** phone: the downtown subway line had been {{6}} **{CLOSE}** due to a technical problem.',
+            'Alex said, "With this traffic, the drive {{7}} **{TAKE}** at least an hour. I need to call a taxi right now."',
+            'He took a deep breath to calm down. "If I\u2019m late, the interviewer {{8}} **{THINK}** I\u2019m unprofessional," he thought.',
+            'He began to gather his documents, {{9}} **{TRY}** to stay positive. He whispered to himself. "Even with the rain, I know this interview {{10}} **{GO}** well."'
         ]),
+
         # ── Story 3: Marco's Panic Morning ──
         dict(title="Marco\u2019s Panic Morning", paragraphs=[
-            'Marco woke up and {{1}} realized his alarm hadn\u2019t gone off. He rushed to the bus stop, only to find the next bus wasn\u2019t coming until 8:30. Suddenly, it started to rain. Looking at the gloomy sky, he was worried that he {{2}} miss the morning meeting.',
-            'He quickly hailed a taxi. Inside, he {{3}} the radio announcer say, \u201cThe rain is heavy, and it {{4}} not stop until this afternoon.\u201d',
-            'At that moment, his girlfriend Sarah called and asked, \u201cWhat are you {{5}} this afternoon?\u201d Marco replied anxiously, \u201cToday {{6}} be very busy; I have to prepare materials for next week\u2019s meeting.\u201d',
-            'Sarah was surprised: \u201cBut today is Sunday!\u201d Marco was stunned. Sarah laughed, \u201cYes, Sunday is a rest day! Let\u2019s go have lunch instead.\u201d',
-            'Marco sighed with relief, his mood instantly lifting. \u201cNo problem. I {{7}} book the restaurant right now, and afterwards we can go for a {{8}} in the park.\u201d',
-            'The taxi arrived. Marco paid {{9}} driver and felt that this {{10}} be a wonderful day after all.',
+            'Marco woke up and he {{1}} **{NOTICE}** his alarm didn\u2019t ring. He rushed to the bus stop, only to find the next bus wasn\u2019t coming until 8:30. Suddenly, it started to rain. Looking at the dark sky, He worried, "Oh no, I {{2}} **{MISS}** the morning meeting."',
+            'He called a taxi. Inside, he {{3}} **{HEAR}** the radio announcer say, "The rain is heavy, and it {{4}} **{NOT STOP}** until this afternoon."',
+            'At that moment, his girlfriend Sarah called and asked, "What are you {{5}} **{DO}** this afternoon?" Marco replied anxiously, "Today {{6}} **{BE}** very busy; I have to prepare materials for next week\u2019s meeting."',
+            'Sarah was surprised: "But today is Sunday!" Marco was shocked. Sarah laughed, "Yes, Sunday is a rest day! Let\u2019s {{7}} **{HAVE}** lunch instead."',
+            'Marco sighed with relief. He immediately {{8}} **{FEEL}** much better. "No problem. The restaurant {{9}} **{BE}** crowded on a Sunday. Let me book it right now. Afterwards, we can go for a walk in the park."',
+            'The taxi arrived. Marco paid the driver and thought, "this {{10}} **{BE}** a wonderful day after all!"'
         ]),
+
         # ── Story 4: Lee's Camping Trip ──
         dict(title="Lee\u2019s Camping Trip", paragraphs=[
-            'The sky was dark with heavy clouds, and the temperature began to drop. Lee pointed out the window and said to his wife, \u201cLook at those clouds. It {{1}} definitely snow tonight.\u201d',
-            'Lee felt cold and wanted a cup of hot coffee. While he was {{2}} the coffee, his wife stopped him and said, \u201cIf you drink that coffee now, you {{3}} not sleep all night.\u201d',
-            'Lee hesitated and put down the cup. \u201cYou\u2019re right. I have to get up early tomorrow. If I don\u2019t sleep well, driving {{4}} be dangerous.\u201d',
-            'Before going to bed, he checked the train schedule and found {{5}} the weekend train departed at 10:00 AM on Saturday.',
-            'The next morning, planning for the weekend camping trip, Lee assigned tasks before work: \u201cAfter work tonight, I {{6}} go to the supermarket to buy groceries.\u201d',
-            'His wife nodded, \u201cOkay, then I am responsible {{7}} packing the luggage. By the way, do we need thick coats?\u201d',
-            'Lee checked the weather forecast on his phone and said, \u201cBetter bring them. The temperature in the mountains is {{8}} lower than here. If we don\u2019t dress warmly, we {{9}} catch a cold.\u201d',
-            'They smiled at each other, both expecting that this camping trip {{10}} be very fun.',
+            'The sky was dark with heavy clouds, and the temperature began to {{1}} **{DROP}**. Lee looked at his phone and said to his wife, "The forecast says it {{2}} **{SNOW}** tonight." Lee felt cold and wanted a cup of hot coffee. While he was {{3}} **{MAKE}** the coffee, his wife stopped him and {{4}} **{SAY}**, "If you drink that coffee now, it {{5}} **{KEEP}** you awake all night."',
+            'Lee hesitated and put down the cup. "You\u2019re right. I have to get up early tomorrow. If I don\u2019t sleep well, driving {{6}} **{BE}** dangerous."',
+            'Before going to bed, he checked his map app and {{7}} **{FIND}** that the drive to the mountain takes about three hours.',
+            'The next morning, his wife asked, "Do we need thick coats?"',
+            'Lee checked the weather again and said, "We should bring them. The temperature in the mountains is much lower than here. If we don\u2019t {{8}} **{DRESS}** warmly, we {{9}} **{CATCH}** a cold."',
+            'They smiled at each other, both expecting that this camping trip {{10}} **{BE}** very fun."'
         ]),
     ],
+
+# STORIES = dict(
+#     en=[
+#         # ── Story 1: Anna's Toothache ──
+#         dict(title="Anna\u2019s Toothache", paragraphs=[
+#             'Anna was having dinner {{1}} suddenly, she felt a sharp pain in her wisdom tooth. Her friend warned her: \u201cYou must see a dentist immediately, otherwise the tooth {{2}} swell up very soon.\u201d',
+#             'Anna was lucky and got an appointment for 4:00 PM. She thought to herself, \u201cAlthough I am afraid of pain, this doctor is very skilled. I believe the surgery {{3}} go smoothly.\u201d',
+#             'Anna arrived at the clinic. The dentist examined {{4}} teeth and said, \u201cWe must pull it out today. It\u2019s a quick procedure. The wound {{5}} heal completely within a week, and by then you {{6}} be able to eat normally.\u201d',
+#             'Anna returned home after she had finished {{7}} the extraction. However, the pain was still intense. She looked in the mirror and {{8}} realized: the doctor had pulled the wrong one! The painful left tooth was still there; the one removed was {{9}} the right one, which hadn\u2019t hurt at all.',
+#             'Anna burst into tears: \u201cOh my god, does that mean I {{10}} suffer through this all over again? Just my luck!\u201d',
+#         ]),
+#         # ── Story 2: Alex's Interview ──
+#         dict(title="Alex\u2019s Interview", paragraphs=[
+#             'Yesterday morning, Alex woke up with a feeling of dread. He pulled back the curtains and immediately {{1}} the dark, heavy clouds rolling over the city skyline.',
+#             'He turned on the television news. The weatherman announced: \u201cBe prepared, everyone. The heavy rain {{2}} continue all afternoon.\u201d',
+#             'Alex sighed and thought to herself: \u201cGreat. If I walk to the station in this weather, my suit {{3}} be completely ruined before the interview.\u201d',
+#             'He ran to the hallway closet, frantically searching {{4}} his large umbrella. Suddenly, a notification popped up on his phone: the downtown subway line had {{5}} due to a signal failure.',
+#             '\u201cThat\u2019s it!\u201d Alex shouted, grabbing his keys {{6}} the table. \u201cI {{7}} drive my car instead. It\u2019s the only way.\u201d',
+#             'He took a deep breath to calm down. \u201cI {{8}} call the recruiter from the car to let them know I might be late,\u201d he decided.',
+#             'He began {{9}} gather his documents, trying to stay positive. \u201cCome on, Alex,\u201d he whispered to himself. \u201cEven with the rain, I know this interview {{10}} go well.\u201d',
+#         ]),
+#         # ── Story 3: Marco's Panic Morning ──
+#         dict(title="Marco\u2019s Panic Morning", paragraphs=[
+#             'Marco woke up and {{1}} realized his alarm hadn\u2019t gone off. He rushed to the bus stop, only to find the next bus wasn\u2019t coming until 8:30. Suddenly, it started to rain. Looking at the gloomy sky, he was worried that he {{2}} miss the morning meeting.',
+#             'He quickly hailed a taxi. Inside, he {{3}} the radio announcer say, \u201cThe rain is heavy, and it {{4}} not stop until this afternoon.\u201d',
+#             'At that moment, his girlfriend Sarah called and asked, \u201cWhat are you {{5}} this afternoon?\u201d Marco replied anxiously, \u201cToday {{6}} be very busy; I have to prepare materials for next week\u2019s meeting.\u201d',
+#             'Sarah was surprised: \u201cBut today is Sunday!\u201d Marco was stunned. Sarah laughed, \u201cYes, Sunday is a rest day! Let\u2019s go have lunch instead.\u201d',
+#             'Marco sighed with relief, his mood instantly lifting. \u201cNo problem. I {{7}} book the restaurant right now, and afterwards we can go for a {{8}} in the park.\u201d',
+#             'The taxi arrived. Marco paid {{9}} driver and felt that this {{10}} be a wonderful day after all.',
+#         ]),
+#         # ── Story 4: Lee's Camping Trip ──
+#         dict(title="Lee\u2019s Camping Trip", paragraphs=[
+#             'The sky was dark with heavy clouds, and the temperature began to drop. Lee pointed out the window and said to his wife, \u201cLook at those clouds. It {{1}} definitely snow tonight.\u201d',
+#             'Lee felt cold and wanted a cup of hot coffee. While he was {{2}} the coffee, his wife stopped him and said, \u201cIf you drink that coffee now, you {{3}} not sleep all night.\u201d',
+#             'Lee hesitated and put down the cup. \u201cYou\u2019re right. I have to get up early tomorrow. If I don\u2019t sleep well, driving {{4}} be dangerous.\u201d',
+#             'Before going to bed, he checked the train schedule and found {{5}} the weekend train departed at 10:00 AM on Saturday.',
+#             'The next morning, planning for the weekend camping trip, Lee assigned tasks before work: \u201cAfter work tonight, I {{6}} go to the supermarket to buy groceries.\u201d',
+#             'His wife nodded, \u201cOkay, then I am responsible {{7}} packing the luggage. By the way, do we need thick coats?\u201d',
+#             'Lee checked the weather forecast on his phone and said, \u201cBetter bring them. The temperature in the mountains is {{8}} lower than here. If we don\u2019t dress warmly, we {{9}} catch a cold.\u201d',
+#             'They smiled at each other, both expecting that this camping trip {{10}} be very fun.',
+#         ]),
+#     ],
 
     # ── FRENCH ─────────────────────────────────────────────
     fr=[
