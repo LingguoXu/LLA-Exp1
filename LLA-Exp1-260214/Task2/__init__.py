@@ -9,7 +9,7 @@ Languages: English (en), French (fr), German (de), Japanese (ja).
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'task2'
+    NAME_IN_URL = 'Task2'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
 
@@ -322,7 +322,7 @@ class Task2Intro(Page):
 
 
 class Task2Item(Page):
-    template_name = 'task2/Task2Item.html'
+    template_name = 'Task2/Task2Item.html'
     form_model = 'player'
     form_fields = ['t2_production_data']
 

@@ -9,7 +9,7 @@ Languages: English (en), French (fr), German (de), Japanese (ja).
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'task3'
+    NAME_IN_URL = 'Task3'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
 
