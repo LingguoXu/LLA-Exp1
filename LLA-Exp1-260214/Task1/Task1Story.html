@@ -72,7 +72,8 @@
         div.className = 'story-para reveal';
 
         /* Replace (N) markers with badge + input */
-        var html = txt.replace(/\{\{(\d+)\}\}/g, function(match, num){
+        var html = txt.replace(/\*\*(\{[^}]+\})\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\{\{(\d+)\}\}/g, function(match, num){
             return '<span class="blank-num">' + num + '</span>' +
                    '<input type="text" class="blank" ' +
                    'data-n="' + num + '" ' +
