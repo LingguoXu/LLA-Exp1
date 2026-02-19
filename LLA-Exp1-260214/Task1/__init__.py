@@ -674,3 +674,8 @@ page_sequence = [
     Task1Story3,
     Task1Story4,
 ]
+
+# steps to get latest code from github, then push it to heroku for testing (for Lin)
+# pull from git, cd to root folder, then pull git with: git pull
+# then push to heroku: git push heroku `git subtree split --prefix LLA-Exp1-260214 main`:main --force
+# Then reset database: heroku run otree resetdb
