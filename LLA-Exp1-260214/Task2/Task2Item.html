@@ -3,45 +3,106 @@
 
 {% block extra_css %}
 <style>
-    /* Styling for the Context Header (Probability info) */
+    /* ── Instruction bar ── */
+    .task-instructions {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin-bottom: 24px;
+        font-size: 0.95rem;
+        color: #475569;
+    }
+
+    /* ── Per-scenario block ── */
+    .scenario-block {
+        margin-bottom: 28px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .scenario-block:last-of-type {
+        border-bottom: none;
+        margin-bottom: 8px;
+    }
+
+    /* ── Item counter badge ── */
+    .item-counter {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 8px;
+    }
+
+    /* ── Context header ── */
     .ctx-header {
         background: #f0f4f8;
-        border-left: 5px solid var(--primary);
-        padding: 15px;
-        margin-bottom: 20px;
-        border-radius: 4px;
+        border-left: 4px solid var(--primary);
+        padding: 10px 14px;
+        margin-bottom: 14px;
+        border-radius: 3px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 12px;
     }
-    .ctx-title { font-weight: 700; color: var(--text); }
+    .ctx-title { font-weight: 600; color: var(--text); font-size: 0.95rem; }
     .ctx-prob {
-        background: var(--primary); color: white;
-        padding: 4px 12px; border-radius: 12px;
-        font-weight: 600; font-size: 0.9rem;
+        background: var(--primary);
+        color: white;
+        padding: 3px 10px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.82rem;
+        white-space: nowrap;
     }
 
-    /* Conversation styling */
-    .conversation p { margin-bottom: 12px; font-size: 1.05rem; }
+    /* ── Story / conversation ── */
+    .conversation { font-size: 1.02rem; }
+    .conversation p { margin-bottom: 10px; }
     .target {
-        margin-top: 15px;
-        padding-top: 15px;
-        border-top: 1px dashed #ccc;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #cbd5e1;
         font-weight: 500;
+    }
+
+    /* ── Inline blank inputs ── */
+    input.blank {
+        display: inline-block;
+        width: 140px;
+        padding: 3px 8px;
+        border: 1px solid #94a3b8;
+        border-radius: 4px;
+        font-size: 1rem;
+        font-family: inherit;
+        background: #fff;
+        transition: border-color 0.15s, background 0.15s;
+        vertical-align: baseline;
+    }
+    input.blank:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(99,102,241,0.15);
+    }
+    input.blank.filled {
+        border-color: #22c55e;
+        background: #f0fdf4;
+    }
+    input.blank.error {
+        border-color: #ef4444;
+        background: #fef2f2;
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="card">
-    <div class="ctx-header">
-        <span class="ctx-title">{{ scenario.context_header }}</span>
-        <span class="ctx-prob">{{ scenario.context_prob }}</span>
-    </div>
 
-    <p class="small muted">{{ ui.t2_instructions }}</p>
+    <p class="task-instructions">{{ ui.t2_instructions }}</p>
 
-    <div id="storyBody" class="conversation"></div>
+    <div id="allScenarios"></div>
 
     <div class="val-msg" id="valMsg">{{ ui.required_msg }}</div>
 
@@ -59,65 +120,104 @@
 
 {% block scripts %}
 (function(){
-    var rawText = {{ scenario.text|json }};
-    var scenarioId = "{{ scenario.id }}";
-    var rawExisting = {{ existing|json }};
+    // scenarios: list of {id, context_header, context_prob, text, ...}
+    var scenarioList = {{ scenarios|json }};
+    var rawExisting  = {{ existing|json }};
 
-    var body = document.getElementById('storyBody');
-    var field = document.getElementById('field');
-    var valMsg = document.getElementById('valMsg');
+    var container = document.getElementById('allScenarios');
+    var field     = document.getElementById('field');
+    var valMsg    = document.getElementById('valMsg');
     var submitBtn = document.getElementById('submitBtn');
 
-    // 1. Initialize hidden field
+    // Initialise hidden field and parse existing answers
     field.value = rawExisting;
+    var allData = {};
+    try { allData = JSON.parse(rawExisting || '{}'); } catch(e){}
 
-    // 2. Render Text and Blanks
-    // Replace (N) with input fields
-    var html = rawText.replace(/\{\{(\d+)\}\}/g, function(match, num){
-        return '<input type="text" class="blank" ' +
-               'data-n="' + num + '" ' +
-               'placeholder="..." ' +
-               'autocomplete="off" autocapitalize="off" spellcheck="false">';
-    });
-    body.innerHTML = html;
+    // ── Render each scenario block ──────────────────────────────────────
+    scenarioList.forEach(function(sc, idx){
+        var block = document.createElement('div');
+        block.className = 'scenario-block';
+        block.setAttribute('data-sc-id', sc.id);
 
-    // 3. Live Blank Coloring
-    body.addEventListener('input', function(e){
-        if(e.target.classList.contains('blank')){
-            e.target.classList.toggle('filled', e.target.value.trim().length > 0);
-        }
-    });
+        // Counter label  e.g. "1 / 7"
+        var counterDiv = '<div class="item-counter">' + (idx + 1) + ' / ' + scenarioList.length + '</div>';
 
-    // 4. Submit Logic
-    submitBtn.addEventListener('click', function(){
-        var inputs = body.querySelectorAll('.blank');
-        var answers = {};
-        var ok = true;
-        var firstBad = null;
+        // Context header (only show prob badge if non-empty)
+        // Badge wording follows Robertson (2023): "You are X% certain"
+        var probBadge = sc.context_prob
+            ? '<span class="ctx-prob">&#x1F4AC; ' + sc.context_prob + '</span>'
+            : '';
+        var header = '<div class="ctx-header">'
+            + '<span class="ctx-title">' + sc.context_header + '</span>'
+            + probBadge
+            + '</div>';
 
-        inputs.forEach(function(inp){
-            var v = inp.value.trim();
-            answers[inp.getAttribute('data-n')] = v;
-            if(!v){ ok = false; if(!firstBad) firstBad = inp; }
+        // Replace (N) placeholders with inputs
+        var savedAnswers = allData[sc.id] || {};
+        var storyHtml = sc.text.replace(/\{\{(\d+)\}\}/g, function(match, num){
+            var saved = savedAnswers[num] || '';
+            var filled = saved ? ' filled' : '';
+            // Escape any double-quotes in saved value for the HTML attribute
+            var safeVal = saved.replace(/"/g, '&quot;');
+            return '<input type="text"'
+                + ' class="blank' + filled + '"'
+                + ' data-sc="' + sc.id + '"'
+                + ' data-n="' + num + '"'
+                + ' value="' + safeVal + '"'
+                + ' placeholder="..."'
+                + ' autocomplete="off" autocapitalize="off" spellcheck="false">';
         });
 
-        // Validation Check
-        // To disable validation for testing, uncomment: ok = true;
+        block.innerHTML = counterDiv + header
+            + '<div class="conversation">' + storyHtml + '</div>';
+        container.appendChild(block);
+    });
+
+    // ── Live blank colouring ────────────────────────────────────────────
+    container.addEventListener('input', function(e){
+        if(e.target.classList.contains('blank')){
+            var v = e.target.value.trim();
+            e.target.classList.toggle('filled', v.length > 0);
+            e.target.classList.remove('error');   // clear red on edit
+        }
+    });
+
+    // ── Submit ──────────────────────────────────────────────────────────
+    submitBtn.addEventListener('click', function(){
+        var inputs   = container.querySelectorAll('input.blank');
+        var ok       = true;
+        var firstBad = null;
+
+        // Collect all values; mark empties red
+        inputs.forEach(function(inp){
+            var v    = inp.value.trim();
+            var scId = inp.getAttribute('data-sc');
+            var n    = inp.getAttribute('data-n');
+
+            if(!allData[scId]) allData[scId] = {};
+            allData[scId][n] = v;
+
+            if(!v){
+                ok = false;
+                inp.classList.add('error');
+                if(!firstBad) firstBad = inp;
+            } else {
+                inp.classList.remove('error');
+            }
+        });
+
         if(!ok){
             valMsg.classList.add('show');
-            if(firstBad) firstBad.focus();
+            if(firstBad){
+                firstBad.scrollIntoView({behavior:'smooth', block:'center'});
+                firstBad.focus();
+            }
             return;
         }
+
         valMsg.classList.remove('show');
-
-        // Save Data
-        var allData;
-        try { allData = JSON.parse(field.value || '{}'); } catch(e){ allData = {}; }
-
-        allData[scenarioId] = answers;
         field.value = JSON.stringify(allData);
-
-        // Submit Form
         document.getElementById('form').submit();
     });
 

@@ -314,10 +314,10 @@
         var el = document.getElementById(elementId);
         if (!el) return;
         var xStr = '<strong>' + x.toFixed(1) + ' ECU</strong>';
-        if (LANG === 'fr') el.innerHTML = '50% de chance: perdre ' + xStr;
-        else if (LANG === 'de') el.innerHTML = '50% Chance: ' + xStr + ' verlieren';
-        else if (LANG === 'ja') el.innerHTML = '50%の確率で：' + xStr + ' 損失';
-        else el.innerHTML = '50% chance: lose ' + xStr;
+        if (LANG === 'fr') el.innerHTML = '50% de chance: <strong>perdre</strong> ' + xStr;
+        else if (LANG === 'de') el.innerHTML = '50% Chance: ' + xStr + ' <strong>verlieren</strong>';
+        else if (LANG === 'ja') el.innerHTML = '50%の確率で：' + xStr + ' <strong>損失</strong>';
+        else el.innerHTML = '50% chance: <strong>lose</strong> ' + xStr;
     }
 
     // ── Update progress pips ──

@@ -1,0 +1,311 @@
+{% extends "global/Base.html" %}
+{% load otree %}
+
+{% block extra_css %}
+<style>
+
+/* ── Horizon progress tracker ─────────────────────────────── */
+.td-tracker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 0;
+}
+.td-tracker-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 140px;
+    position: relative;
+}
+.td-tracker-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: calc(50% + 18px);
+    right: calc(-50% + 18px);
+    height: 3px;
+    background: #e2e8f0;
+    transition: background 0.4s;
+    z-index: 0;
+}
+.td-tracker-step.done::after { background: #86efac; }
+.td-bubble {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700;
+    background: #e2e8f0; color: #94a3b8;
+    border: 2px solid #e2e8f0;
+    transition: all 0.35s ease;
+    position: relative; z-index: 1;
+}
+.td-tracker-step.active .td-bubble {
+    background: #fff; border-color: var(--primary); color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.18);
+}
+.td-tracker-step.done .td-bubble {
+    background: #86efac; border-color: #22c55e; color: #14532d;
+}
+.td-tracker-label {
+    font-size: 0.72rem; font-weight: 600; color: #94a3b8;
+    text-align: center; white-space: nowrap; transition: color 0.35s;
+}
+.td-tracker-step.active .td-tracker-label { color: var(--primary); }
+.td-tracker-step.done   .td-tracker-label { color: #16a34a; }
+
+/* ── Horizon panels ────────────────────────────────────────── */
+.td-panel { display: none; }
+.td-panel.active { display: block; }
+
+/* ── MPL table ─────────────────────────────────────────────── */
+.td-table {
+    width: 100%; border-collapse: separate; border-spacing: 0 5px; margin: 20px 0;
+}
+.td-table thead th {
+    padding: 9px 12px; background: #f8fafc;
+    border-bottom: 2px solid var(--border);
+    font-size: 0.78rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); text-align: center;
+}
+.td-table tbody td { padding: 0; height: 54px; vertical-align: middle; }
+.td-row-num { width: 30px; text-align: center; font-weight: 700; color: #cbd5e1; font-size: 0.85rem; }
+
+.td-btn {
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; width: 97%; height: 100%;
+    margin: 0 auto; border: 2px solid var(--border);
+    border-radius: 8px; background: #fff; cursor: pointer;
+    transition: all 0.2s ease; font-size: 0.9rem;
+    text-align: center; padding: 6px 10px; line-height: 1.3;
+}
+.td-btn:hover { background: #f8fafc; border-color: #94a3b8; }
+.td-btn.selected-sooner {
+    background: #ecfdf5; border-color: var(--success); color: #065f46;
+    font-weight: 700; box-shadow: inset 0 0 4px rgba(0,0,0,0.04);
+}
+.td-btn.selected-later {
+    background: #eef2ff; border-color: var(--primary); color: #312e81;
+    font-weight: 700; box-shadow: inset 0 0 4px rgba(0,0,0,0.04);
+}
+.td-when { font-size: 0.72rem; font-weight: 500; color: #64748b; margin-top: 2px; display: block; }
+.selected-sooner .td-when { color: #059669; }
+.selected-later  .td-when { color: #6366f1; }
+
+.alert-custom { background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem; }
+
+.td-error {
+    display: none; background: #fef2f2;
+    border-left: 4px solid #ef4444; padding: 10px 14px;
+    border-radius: 6px; font-size: 0.88rem; color: #991b1b; margin-top: 14px;
+}
+.td-error.show { display: block; }
+
+</style>
+{% endblock %}
+
+
+{% block hidden_fields %}
+<input type="hidden" name="td_switching_1mo" id="field_sw_1mo">
+<input type="hidden" name="td_switching_6mo" id="field_sw_6mo">
+<input type="hidden" name="td_switching_2yr" id="field_sw_2yr">
+<input type="hidden" name="td_data"           id="field_td_data">
+{% endblock %}
+
+
+{% block content %}
+<div class="card">
+
+    <h2 style="text-align:center;">{{ ui.td_title }}</h2>
+    <p style="color:#475569; margin-bottom:18px;">{{ ui.td_intro }}</p>
+
+    <div class="alert-custom">{{ ui.td_alert }}</div>
+
+    <!-- Progress tracker -->
+    <div class="td-tracker">
+        {% for h in horizons %}
+        <div class="td-tracker-step {% if forloop.counter0 == 0 %}active{% endif %}"
+             id="tracker-{{ forloop.counter0 }}">
+            <div class="td-bubble">{{ forloop.counter }}</div>
+            <div class="td-tracker-label">{{ h.label }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Horizon panels -->
+    {% for h in horizons %}
+    <div class="td-panel {% if forloop.counter0 == 0 %}active{% endif %}"
+         id="td-panel-{{ forloop.counter0 }}"
+         data-hid="{{ h.id }}">
+
+        <p style="font-size:0.9rem; color:#64748b; margin-bottom:14px;">
+            {% if lang == 'en' %}
+                Each row: <strong>{{ sooner_ecu }} ECU {{ h.sooner_label }}</strong> (Option&nbsp;A)
+                &nbsp;or&nbsp; a larger amount <strong>{{ h.later_label }}</strong> (Option&nbsp;B).
+            {% elif lang == 'fr' %}
+                Chaque ligne : <strong>{{ sooner_ecu }} ECU {{ h.sooner_label }}</strong> (Option&nbsp;A)
+                &nbsp;ou&nbsp; un montant plus élevé <strong>{{ h.later_label }}</strong> (Option&nbsp;B).
+            {% elif lang == 'de' %}
+                Jede Zeile: <strong>{{ sooner_ecu }} ECU {{ h.sooner_label }}</strong> (Option&nbsp;A)
+                &nbsp;oder&nbsp; einen höheren Betrag <strong>{{ h.later_label }}</strong> (Option&nbsp;B).
+            {% elif lang == 'ja' %}
+                各行：<strong>{{ sooner_ecu }} ECU（{{ h.sooner_label }}）</strong>（選択肢A）
+                または より多くのECU（<strong>{{ h.later_label }}</strong>）（選択肢B）。
+            {% endif %}
+        </p>
+
+        <table class="td-table">
+            <thead>
+                <tr>
+                    <th style="width:30px;">#</th>
+                    <th style="width:46%;">{{ ui.td_col_sooner }}</th>
+                    <th style="width:46%;">{{ ui.td_col_later }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in h.rows %}
+                <tr>
+                    <td class="td-row-num">{{ row.row }}</td>
+                    <td>
+                        <div class="td-btn"
+                             id="btn-sooner-{{ h.id }}-{{ row.row }}"
+                             onclick="tdClick('sooner','{{ h.id }}',{{ row.row }},{{ h.rows|length }})">
+                            <strong>{{ row.sooner }} ECU</strong>
+                            <span class="td-when">{{ h.sooner_label }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="td-btn"
+                             id="btn-later-{{ h.id }}-{{ row.row }}"
+                             onclick="tdClick('later','{{ h.id }}',{{ row.row }},{{ h.rows|length }})">
+                            <strong>{{ row.later }} ECU</strong>
+                            <span class="td-when">{{ h.later_label }}</span>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="td-error" id="td-error-{{ forloop.counter0 }}">
+            {{ ui.td_error }}
+        </div>
+
+        <div class="foot" style="justify-content:flex-end; margin-top:16px;">
+            {% if not forloop.counter == n_horizons %}
+            <button type="button" class="btn btn-primary"
+                    onclick="tdNext({{ forloop.counter0 }})">
+                {{ ui.td_btn_next_horizon }}
+            </button>
+            {% else %}
+            <button type="button" class="btn btn-primary"
+                    onclick="tdSubmit({{ forloop.counter0 }})">
+                {{ ui.td_btn_submit }}
+            </button>
+            {% endif %}
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+(function () {
+
+    var N = {{ n_horizons }};
+    var switchPoints = {};
+    var allChoices   = {};
+
+    window.tdClick = function (type, hId, row, nRows) {
+        // Single-switching: sooner at row X  → SP = X; later at row X → SP = X+1
+        var sp = (type === 'sooner') ? row : row + 1;
+        switchPoints[hId] = sp;
+        if (!allChoices[hId]) allChoices[hId] = {};
+
+        for (var r = 1; r <= nRows; r++) {
+            var btnS = document.getElementById('btn-sooner-' + hId + '-' + r);
+            var btnL = document.getElementById('btn-later-'  + hId + '-' + r);
+            if (!btnS) continue;
+            btnS.classList.remove('selected-sooner', 'selected-later');
+            btnL.classList.remove('selected-sooner', 'selected-later');
+            if (r < sp) {
+                btnL.classList.add('selected-later');
+                allChoices[hId][r] = 'later';
+            } else {
+                btnS.classList.add('selected-sooner');
+                allChoices[hId][r] = 'sooner';
+            }
+        }
+        var err = document.getElementById('td-error-' + panelIdx(hId));
+        if (err) err.classList.remove('show');
+    };
+
+    window.tdNext = function (idx) {
+        var panel = document.getElementById('td-panel-' + idx);
+        var hId   = panel.getAttribute('data-hid');
+
+        if (!switchPoints[hId]) {
+            document.getElementById('td-error-' + idx).classList.add('show');
+            return;
+        }
+
+        var cur  = document.getElementById('tracker-' + idx);
+        var next = document.getElementById('tracker-' + (idx + 1));
+        if (cur)  { cur.classList.remove('active'); cur.classList.add('done');
+                    cur.querySelector('.td-bubble').textContent = '✓'; }
+        if (next) { next.classList.add('active'); }
+
+        panel.classList.remove('active');
+        var nextPanel = document.getElementById('td-panel-' + (idx + 1));
+        if (nextPanel) {
+            nextPanel.classList.add('active');
+            nextPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
+    window.tdSubmit = function (lastIdx) {
+        var panel = document.getElementById('td-panel-' + lastIdx);
+        var hId   = panel.getAttribute('data-hid');
+
+        if (!switchPoints[hId]) {
+            document.getElementById('td-error-' + lastIdx).classList.add('show');
+            return;
+        }
+
+        // Confirm all horizons answered
+        for (var i = 0; i < N; i++) {
+            var p = document.getElementById('td-panel-' + i);
+            if (p && !switchPoints[p.getAttribute('data-hid')]) {
+                document.getElementById('td-error-' + lastIdx).classList.add('show');
+                return;
+            }
+        }
+
+        document.getElementById('field_sw_1mo').value  = switchPoints['1mo'] || '';
+        document.getElementById('field_sw_6mo').value  = switchPoints['6mo'] || '';
+        document.getElementById('field_sw_2yr').value  = switchPoints['2yr'] || '';
+        document.getElementById('field_td_data').value = JSON.stringify({
+            switch_points: switchPoints,
+            all_choices:   allChoices,
+        });
+
+        document.getElementById('form').submit();
+    };
+
+    function panelIdx(hId) {
+        for (var i = 0; i < N; i++) {
+            var p = document.getElementById('td-panel-' + i);
+            if (p && p.getAttribute('data-hid') === hId) return i;
+        }
+        return 0;
+    }
+
+})();
+{% endblock %}

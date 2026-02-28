@@ -26,8 +26,80 @@ class C(BaseConstants):
     X_MAX = 20.0           # maximum possible loss in gamble (ECU)
     BISECTION_STEPS = 5    # number of binary choices before slider
 
+    # ── ECU exchange rate (per language / recruitment locale) ────────────
+    # Calibrated so 500 ECU (TD task maximum) ≈ local €1.50 equivalent.
+    # French = EUR (France/Belgium). Update to CAD if recruiting Quebec francophones.
+    ECU_RATES = dict(
+        en=dict(rate=0.003, currency='USD', symbol='$',  example='100 ECU = $0.30'),
+        fr=dict(rate=0.003, currency='EUR', symbol='€',  example='100 ECU = €0.30'),
+        de=dict(rate=0.003, currency='EUR', symbol='€',  example='100 ECU = €0.30'),
+        ja=dict(rate=0.45,  currency='JPY', symbol='¥',  example='100 ECU = ¥45'),
+    )
+
     # Range for Risk/Patience Likert scales (0-10)
     LIKERT_RANGE = list(range(11))
+
+    # ── Temporal Discounting MPL ──────────────────────────────────────────
+    # Three-horizon MPL with single-switching enforcement.
+    # Horizons deliberately match the FTR temporal distances: 1 month, 6 months, 2 years.
+    # Front-end delay: sooner option is always "in 2 weeks" (not "today") to control
+    # for immediacy/present bias and payment-trust confounds (Coller & Williams 1999).
+    # Amounts calibrated using hyperbolic model V = A/(1+kT), SS = 100 ECU:
+    #   1-month  horizon: k = 0 … 12  (annual)
+    #   6-month  horizon: k = 0 … 4
+    #   2-year   horizon: k = 0 … 2
+    TD_SOONER_ECU = 100   # fixed sooner-option amount
+
+    TD_HORIZONS = [
+        dict(
+            id='1mo',
+            delay_days=30,
+            rows=[
+                dict(row=1, sooner=100, later=100),   # k=0
+                dict(row=2, sooner=100, later=108),   # k=1
+                dict(row=3, sooner=100, later=117),   # k=2
+                dict(row=4, sooner=100, later=125),   # k=3
+                dict(row=5, sooner=100, later=133),   # k=4
+                dict(row=6, sooner=100, later=150),   # k=6
+                dict(row=7, sooner=100, later=200),   # k=12
+            ],
+            label       =dict(en='1 Month',   fr='1 mois',      de='1 Monat',    ja='1ヶ月'),
+            sooner_label=dict(en='in 2 weeks', fr='dans 2 sem.', de='in 2 Wo.',   ja='2週間後'),
+            later_label =dict(en='in 6 weeks', fr='dans 6 sem.', de='in 6 Wo.',   ja='6週間後'),
+        ),
+        dict(
+            id='6mo',
+            delay_days=180,
+            rows=[
+                dict(row=1, sooner=100, later=100),   # k=0
+                dict(row=2, sooner=100, later=125),   # k=0.5
+                dict(row=3, sooner=100, later=150),   # k=1
+                dict(row=4, sooner=100, later=175),   # k=1.5
+                dict(row=5, sooner=100, later=200),   # k=2
+                dict(row=6, sooner=100, later=250),   # k=3
+                dict(row=7, sooner=100, later=300),   # k=4
+            ],
+            label       =dict(en='6 Months',       fr='6 mois',       de='6 Monate',       ja='6ヶ月'),
+            sooner_label=dict(en='in 2 weeks',     fr='dans 2 sem.',   de='in 2 Wo.',       ja='2週間後'),
+            later_label =dict(en='in ~6.5 months', fr='dans ~6,5 mo.', de='in ~6,5 Mon.',   ja='約6.5ヶ月後'),
+        ),
+        dict(
+            id='2yr',
+            delay_days=730,
+            rows=[
+                dict(row=1, sooner=100, later=100),   # k=0
+                dict(row=2, sooner=100, later=150),   # k=0.25
+                dict(row=3, sooner=100, later=200),   # k=0.5
+                dict(row=4, sooner=100, later=250),   # k=0.75
+                dict(row=5, sooner=100, later=300),   # k=1.0
+                dict(row=6, sooner=100, later=400),   # k=1.5
+                dict(row=7, sooner=100, later=500),   # k=2.0
+            ],
+            label       =dict(en='2 Years',     fr='2 ans',        de='2 Jahre',       ja='2年'),
+            sooner_label=dict(en='in 2 weeks',  fr='dans 2 sem.',   de='in 2 Wo.',      ja='2週間後'),
+            later_label =dict(en='in ~2 years', fr='dans ~2 ans',   de='in ~2 Jahren',  ja='約2年後'),
+        ),
+    ]
 
 
 class Subsession(BaseSubsession):
@@ -58,6 +130,15 @@ class Player(BasePlayer):
         blank=True
     )
 
+    # --- TEMPORAL DISCOUNTING FIELDS ---
+    td_switching_1mo = models.IntegerField(min=1, max=8, blank=True)
+    td_switching_6mo = models.IntegerField(min=1, max=8, blank=True)
+    td_switching_2yr = models.IntegerField(min=1, max=8, blank=True)
+    td_data             = models.LongStringField(blank=True)
+    td_selected_horizon = models.StringField(blank=True)
+    td_selected_row     = models.IntegerField(blank=True)
+    td_choice           = models.StringField(blank=True)
+
     # --- SURVEY FIELDS ---
     age = models.IntegerField(min=18, max=100)
     gender = models.StringField()
@@ -75,21 +156,67 @@ UI = dict(
     btn_submit=dict(en='Submit Decisions', fr='Soumettre', de='Entscheidungen absenden', ja='決定を送信'),
     intro_title=dict(en='Part 3: Decision Making', fr='Partie 3: Prise de décision', de='Teil 3: Entscheidungsfindung', ja='パート3: 意思決定'),
     intro_text=dict(
-        en='In this final task, you will make a series of decisions involving potential gains and losses.',
-        fr='Dans cette dernière tâche, vous prendrez une série de décisions impliquant des gains et des pertes.',
-        de='In dieser letzten Aufgabe treffen Sie eine Reihe von Entscheidungen mit Gewinnen und Verlusten.',
-        ja='この最後の課題では、潜在的な利益と損失を含む一連の意思決定を行います。'
+        en=(
+            'In this final part, you will make a series of decisions involving potential gains and losses. '
+            'Amounts are expressed in <strong>ECU (Experimental Currency Units)</strong>, the in-study currency. '
+            'At the end of the study, <strong>one of your decisions will be selected at random</strong> '
+            'and paid out to you at the exchange rate shown below, in addition to your participation fee.'
+        ),
+        fr=(
+            'Dans cette dernière partie, vous prendrez une série de décisions impliquant des gains et des pertes potentiels. '
+            'Les montants sont exprimés en <strong>ECU (Experimental Currency Units)</strong>, la monnaie de cette étude. '
+            'À la fin de l\'étude, <strong>une de vos décisions sera sélectionnée au hasard</strong> '
+            'et vous sera payée au taux de change indiqué ci-dessous, en plus de votre indemnité de participation.'
+        ),
+        de=(
+            'In diesem letzten Teil treffen Sie eine Reihe von Entscheidungen mit potenziellen Gewinnen und Verlusten. '
+            'Beträge werden in <strong>ECU (Experimental Currency Units)</strong> angegeben, der Währung dieser Studie. '
+            'Am Ende der Studie wird <strong>eine Ihrer Entscheidungen zufällig ausgewählt</strong> '
+            'und Ihnen zum unten angegebenen Kurs ausgezahlt, zusätzlich zu Ihrer Teilnahmevergütung.'
+        ),
+        ja=(
+            'この最終パートでは、潜在的な利益と損失を含む一連の意思決定を行います。'
+            '金額は本研究で使用する通貨<strong>ECU（Experimental Currency Units）</strong>で表示されます。'
+            '研究終了後、<strong>あなたの意思決定の中から1つがランダムに選ばれ</strong>、'
+            '以下に示す交換レートで実際に支払われます（参加報酬に加算）。'
+        ),
     ),
+
 
     # --- MPL labels ---
     la_alert_head=dict(en='How it works:', fr='Comment ça marche :', de='So funktioniert es:', ja='仕組み:'),
     la_alert_text=dict(
-        en='If you switch from Option A to Option B in one row, the computer will automatically select Option A for all rows above it and Option B for all rows below it. You only need to click once to set your "switching point."',
-        fr='Si vous passez de l\'option A à l\'option B sur une ligne, l\'ordinateur sélectionnera automatiquement l\'option A pour toutes les lignes situées au-dessus et l\'option B pour toutes les lignes situées en dessous.',
-        de='Wenn Sie in einer Zeile von Option A zu Option B wechseln, wählt der Computer automatisch Option A für alle darüber liegenden Zeilen und Option B für alle darunter liegenden Zeilen.',
-        ja='ある行で選択肢Aから選択肢Bに切り替えると、それより上のすべての行で選択肢Aが、それより下のすべての行で選択肢Bが自動的に選択されます。「切り替えポイント」を設定するには、一度クリックするだけです。'
+        en=(
+            '<strong>Option A</strong> is a lottery: a 50% chance to <strong>win 10 ECU</strong> and a 50% chance to <strong>lose X ECU</strong>, where X increases with each row. '
+            '<strong>Option B</strong> is to receive <strong>0 ECU for certain</strong> (you reject the lottery). '
+            'Most people start by preferring Option A when the potential loss is small, then switch to Option B as the loss grows. '
+            'You should switch <em>at most once</em>. Click any row to set your switch point — the table updates automatically.'
+        ),
+        fr=(
+            '<strong>L\'option A</strong> est un tirage au sort : 50 % de chances de <strong>gagner 10 ECU</strong> et 50 % de chances de <strong>perdre X ECU</strong>, X augmentant à chaque ligne. '
+            '<strong>L\'option B</strong> consiste à recevoir <strong>0 ECU de façon certaine</strong> (vous refusez le tirage au sort). '
+            'La plupart des gens préfèrent d\'abord l\'option A quand la perte est faible, puis basculent vers l\'option B quand elle augmente. '
+            'Vous ne devez basculer <em>qu\'une seule fois au maximum</em>. Cliquez sur n\'importe quelle ligne pour définir votre point de bascule — le tableau se met à jour automatiquement.'
+        ),
+        de=(
+            '<strong>Option A</strong> ist eine Lotterie: 50 % Chance, <strong>10 ECU zu gewinnen</strong>, und 50 % Chance, <strong>X ECU zu verlieren</strong>, wobei X mit jeder Zeile steigt. '
+            '<strong>Option B</strong> bedeutet, <strong>sicher 0 ECU</strong> zu erhalten (Sie lehnen die Lotterie ab). '
+            'Die meisten Menschen bevorzugen zunächst Option A, wenn der mögliche Verlust gering ist, und wechseln zu Option B, wenn er größer wird. '
+            'Sie sollten <em>höchstens einmal wechseln</em>. Klicken Sie auf eine beliebige Zeile — die Tabelle aktualisiert sich automatisch.'
+        ),
+        ja=(
+            '<strong>選択肢A</strong>はくじです：50%の確率で<strong>10 ECUを獲得</strong>し、50%の確率で<strong>X ECUを失います</strong>（Xは行ごとに増加）。'
+            '<strong>選択肢B</strong>は<strong>確実に0 ECU</strong>を受け取ること（くじを断る）です。'
+            'ほとんどの方は、損失が小さいうちは選択肢Aを好み、損失が大きくなるにつれて選択肢Bに切り替えます。'
+            '切り替えは<em>最大1回</em>だけです。どの行をクリックしても切り替えポイントを設定でき、表は自動更新されます。'
+        ),
     ),
-    la_inst=dict(en='Please make a choice for each of the 12 rows below.', ja='以下の12の行それぞれについて選択してください。'),
+    la_inst=dict(
+        en='Each row presents the same choice with a different potential loss. Click once to set your switch point — the rest fills in automatically.',
+        fr='Chaque ligne présente le même choix avec une perte potentielle différente. Cliquez une fois pour définir votre point de bascule — le reste se remplit automatiquement.',
+        de='Jede Zeile zeigt dieselbe Entscheidung mit einem anderen möglichen Verlust. Klicken Sie einmal, um Ihren Wechselpunkt festzulegen — der Rest wird automatisch ausgefüllt.',
+        ja='各行は損失額だけが異なる同じ選択を示しています。一度クリックすれば切り替えポイントが設定され、残りは自動的に入力されます。',
+    ),
     opt_a=dict(en='Option A: Lottery', ja='選択肢A: くじ'),
     opt_b=dict(en='Option B: Sure Amount', ja='選択肢B: 確実な金額'),
     win=dict(en='Win', ja='獲得'),
@@ -204,6 +331,104 @@ UI = dict(
         de='Kurz gesagt, wie haben Sie Ihre Entscheidungen in der Lotterieaufgabe getroffen?',
         ja='くじの課題でどのように決定を下したか、簡単に説明してください。'
     ),
+    ecu_box_head=dict(
+        en='Payment Currency',
+        fr='Monnaie de paiement',
+        de='Zahlungswährung',
+        ja='支払い通貨',
+    ),
+    ecu_box_note=dict(
+        en='One decision will be selected at random and paid out at this rate, on top of your participation fee.',
+        fr='Une décision sera sélectionnée au hasard et payée à ce taux, en plus de votre indemnité de participation.',
+        de='Eine Entscheidung wird zufällig ausgewählt und zu diesem Kurs ausgezahlt, zusätzlich zu Ihrer Teilnahmevergütung.',
+        ja='1つの意思決定がランダムに選ばれ、このレートで支払われます（参加報酬に加算）。',
+    ),
+
+    # --- Temporal Discounting labels ---
+    td_title=dict(
+        en='Part 3C: Time Preferences',
+        fr='Partie 3C : Préférences temporelles',
+        de='Teil 3C: Zeitpräferenzen',
+        ja='パート3C：時間的選好',
+    ),
+    td_intro=dict(
+        en=(
+            'You will now make a series of choices between two payment options. '
+            'One option pays a <strong>smaller amount sooner</strong>; '
+            'the other pays a <strong>larger amount later</strong>. '
+            'There are no right or wrong answers — we simply want to know your genuine preference. '
+            '<strong>One of your choices will be selected at random and paid out.</strong>'
+        ),
+        fr=(
+            'Vous allez maintenant faire une série de choix entre deux options de paiement. '
+            'Une option verse un <strong>montant plus faible plus tôt</strong> ; '
+            "l'autre verse un <strong>montant plus élevé plus tard</strong>. "
+            "Il n'y a pas de bonnes ou de mauvaises réponses — nous voulons simplement connaître vos préférences réelles. "
+            '<strong>Un de vos choix sera sélectionné au hasard et payé.</strong>'
+        ),
+        de=(
+            'Sie treffen nun eine Reihe von Entscheidungen zwischen zwei Zahlungsoptionen. '
+            'Eine Option zahlt einen <strong>kleineren Betrag früher</strong>; '
+            'die andere zahlt einen <strong>größeren Betrag später</strong>. '
+            'Es gibt keine richtigen oder falschen Antworten — wir möchten nur Ihre ehrliche Präferenz kennen. '
+            '<strong>Eine Ihrer Entscheidungen wird zufällig ausgewählt und ausgezahlt.</strong>'
+        ),
+        ja=(
+            'これから、2つの支払いオプションの間で一連の選択を行います。'
+            '一方は<strong>少額を早く</strong>受け取るオプション、'
+            'もう一方は<strong>多額を後で</strong>受け取るオプションです。'
+            '正解・不正解はありません。あなたの正直な好みを教えてください。'
+            '<strong>あなたの選択のうち1つがランダムに選ばれ、実際に支払われます。</strong>'
+        ),
+    ),
+    td_alert=dict(
+        en=(
+            '<strong>How it works:</strong> Each row offers the same sooner amount but a higher later amount. '
+            'Once you prefer the sooner option on a row, you will prefer it on all rows above too — '
+            'click once to set your switch point and the table updates automatically.'
+        ),
+        fr=(
+            '<strong>Comment ça marche :</strong> Chaque ligne propose le même montant précoce mais un montant tardif plus élevé. '
+            "Une fois que vous préférez l'option précoce sur une ligne, vous la préférerez aussi sur toutes les lignes supérieures — "
+            'cliquez une fois pour définir votre point de bascule, le tableau se met à jour automatiquement.'
+        ),
+        de=(
+            '<strong>So funktioniert es:</strong> Jede Zeile bietet denselben früheren Betrag, aber einen höheren späteren Betrag. '
+            'Wenn Sie in einer Zeile die frühere Option bevorzugen, tun Sie dies auch in allen darüber liegenden — '
+            'klicken Sie einmal, um Ihren Wechselpunkt festzulegen, die Tabelle aktualisiert sich automatisch.'
+        ),
+        ja=(
+            '<strong>仕組み：</strong>各行は同じ早期金額ですが、後期金額が高くなっています。'
+            'ある行で早期オプションを選ぶなら、それより上の全ての行でも早期を選ぶはずです。'
+            '一度クリックして切り替えポイントを設定すると、テーブルが自動更新されます。'
+        ),
+    ),
+    td_col_sooner=dict(
+        en='Option A — Sooner', fr='Option A — Plus tôt',
+        de='Option A — Früher', ja='選択肢A — 早く',
+    ),
+    td_col_later=dict(
+        en='Option B — Later',  fr='Option B — Plus tard',
+        de='Option B — Später', ja='選択肢B — 後で',
+    ),
+    td_btn_next_horizon=dict(
+        en='Continue to next horizon →',
+        fr="Continuer vers l'horizon suivant →",
+        de='Weiter zum nächsten Horizont →',
+        ja='次のホライズンへ →',
+    ),
+    td_btn_submit=dict(
+        en='Submit Decisions →',
+        fr='Soumettre les décisions →',
+        de='Entscheidungen absenden →',
+        ja='決定を送信 →',
+    ),
+    td_error=dict(
+        en='Please make a choice in each row before continuing.',
+        fr='Veuillez faire un choix dans chaque ligne avant de continuer.',
+        de='Bitte treffen Sie in jeder Zeile eine Auswahl, bevor Sie fortfahren.',
+        ja='続ける前に各行で選択してください。',
+    ),
     end_title=dict(en='Experiment Completed', fr='Expérience terminée', de='Experiment beendet', ja='実験終了'),
     end_msg=dict(
         en='Thank you for participating! You may now close this window.',
@@ -235,7 +460,15 @@ class Task3Intro(Page):
     @staticmethod
     def vars_for_template(player):
         player.language = player.session.config.get('language', 'en')
-        return _ctx(player, 99)
+        lang = player.language
+        ecu = C.ECU_RATES.get(lang, C.ECU_RATES['en'])
+        return dict(
+            ecu_rate    = ecu['rate'],
+            ecu_symbol  = ecu['symbol'],
+            ecu_currency= ecu['currency'],
+            ecu_example = ecu['example'],
+            **_ctx(player, 99),
+        )
 
 
 class LossAversionTask(Page):
@@ -309,6 +542,59 @@ class LossAversionBisection(Page):
         )
 
 
+class TemporalDiscounting(Page):
+    """
+    Intertemporal choice MPL — 3 horizons (1 month / 6 months / 2 years).
+    Horizons match the FTR temporal distances used in Tasks 1 & 2, enabling
+    direct correlation between habitual FTR encoding and discount rates.
+    Front-end delay: sooner option = 'in 2 weeks' throughout, to control for
+    immediacy bias and payment-trust confounds (Coller & Williams 1999).
+    Single-switching enforced: one click sets the entire column pattern.
+    Incentive compatible: one randomly selected row is paid out.
+    """
+    form_model  = 'player'
+    form_fields = ['td_switching_1mo', 'td_switching_6mo', 'td_switching_2yr', 'td_data']
+
+    @staticmethod
+    def vars_for_template(player):
+        lang = player.language
+        ui   = ui_dict(lang)
+
+        horizons_localised = []
+        for h in C.TD_HORIZONS:
+            horizons_localised.append(dict(
+                id           = h['id'],
+                rows         = h['rows'],
+                label        = h['label'].get(lang, h['label']['en']),
+                sooner_label = h['sooner_label'].get(lang, h['sooner_label']['en']),
+                later_label  = h['later_label'].get(lang,  h['later_label']['en']),
+            ))
+
+        return dict(
+            horizons   = horizons_localised,
+            n_horizons = len(C.TD_HORIZONS),
+            sooner_ecu = C.TD_SOONER_ECU,
+            **_ctx(player, 99),
+        )
+
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        """Randomly select one row for incentive-compatible payment."""
+        horizon = random.choice(C.TD_HORIZONS)
+        row     = random.choice(horizon['rows'])
+
+        player.td_selected_horizon = horizon['id']
+        player.td_selected_row     = row['row']
+
+        sp_map = {
+            '1mo': player.td_switching_1mo or 8,
+            '6mo': player.td_switching_6mo or 8,
+            '2yr': player.td_switching_2yr or 8,
+        }
+        sp = sp_map[horizon['id']]
+        player.td_choice = 'sooner' if row['row'] >= sp else 'later'
+
+
 class Survey(Page):
     form_model = 'player'
     form_fields = ['age', 'gender', 'native_language', 'risk_general', 'patience_general', 'strategy_comment']
@@ -329,8 +615,8 @@ class FinalThankYou(Page):
 
 page_sequence = [
     Task3Intro,
-    LossAversionTask,          # Original MPL method (kept intact)
-    LossAversionBisection,     # New bisection + slider method
+    LossAversionBisection,     # Bisection + slider (Abdellaoui et al. 2007)
+    TemporalDiscounting,       # 3-horizon intertemporal choice MPL (Coller & Williams 1999)
     Survey,
-    FinalThankYou
+    FinalThankYou,
 ]
