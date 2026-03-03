@@ -7,22 +7,18 @@
 /* ── Horizon progress tracker ─────────────────────────────── */
 .td-tracker {
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     margin-bottom: 30px;
     gap: 0;
-    width: 100%;
 }
 .td-tracker-step {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
-    flex: 1 1 0;
-    min-width: 0;
-    max-width: 160px;
+    flex: 1;
+    max-width: 140px;
     position: relative;
 }
 .td-tracker-step:not(:last-child)::after {
@@ -130,10 +126,7 @@
     <div class="alert-custom">{{ ui.td_alert }}</div>
 
     <!-- Progress tracker -->
-    <div style="text-align:center; font-size:0.82rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:10px;">
-        {{ ui.td_tracker_header }}
-    </div>
-    <div class="td-tracker" style="display:flex; flex-direction:row; flex-wrap:nowrap; align-items:flex-start; justify-content:center; width:100%;">
+    <div class="td-tracker">
         {% for h in horizons %}
         <div class="td-tracker-step {% if forloop.counter0 == 0 %}active{% endif %}"
              id="tracker-{{ forloop.counter0 }}">
@@ -148,7 +141,7 @@
     <div class="td-panel {% if forloop.counter0 == 0 %}active{% endif %}"
          id="td-panel-{{ forloop.counter0 }}"
          data-hid="{{ h.id }}">
-        <br>
+
         <p style="font-size:0.9rem; color:#64748b; margin-bottom:14px;">
             {% if lang == 'en' %}
                 Each row: <strong>{{ symbol }}{{ h.rows.0.sooner }} {{ h.sooner_label }}</strong> (Option&nbsp;A)
@@ -231,10 +224,8 @@
     var allChoices   = {};
 
     window.tdClick = function (type, hId, row, nRows) {
-        // SP = first row where participant switches to 'later'
-        // Click 'later' on row X → SP = X (this row & below = later)
-        // Click 'sooner' on row X → SP = X+1 (this row & above = sooner)
-        var sp = (type === 'later') ? row : row + 1;
+        // Single-switching: sooner at row X  → SP = X; later at row X → SP = X+1
+        var sp = (type === 'sooner') ? row : row + 1;
         switchPoints[hId] = sp;
         if (!allChoices[hId]) allChoices[hId] = {};
 
@@ -244,7 +235,7 @@
             if (!btnS) continue;
             btnS.classList.remove('selected-sooner', 'selected-later');
             btnL.classList.remove('selected-sooner', 'selected-later');
-            if (r >= sp) {
+            if (r < sp) {
                 btnL.classList.add('selected-later');
                 allChoices[hId][r] = 'later';
             } else {

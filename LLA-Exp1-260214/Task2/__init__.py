@@ -67,36 +67,90 @@ UI = dict(
     # ── Task 2 Intro ──
     intro_title = dict(en='Part 2', fr='Partie 2', de='Teil 2', ja='パート2'),
     intro_text  = dict(
-        en='You are now moving on to the second part of the study. Please click the button below to continue.',
-        fr="Vous passez maintenant à la deuxième partie de l'étude. Veuillez cliquer sur le bouton ci-dessous pour continuer.",
-        de='Sie fahren nun mit dem zweiten Teil der Studie fort. Bitte klicken Sie auf die Schaltfläche unten, um fortzufahren.',
-        ja='調査の第2パートに移ります。下のボタンをクリックして進んでください。',
+        en='You are now moving on to the second part of the study.',
+        fr="Vous passez maintenant à la deuxième partie de l'étude.",
+        de='Sie fahren nun mit dem zweiten Teil der Studie fort.',
+        ja='調査の第2パートに移ります。',
+    ),
+    t2_how_title=dict(
+        en='How it works',
+        fr='Comment ça marche',
+        de='So funktioniert es',
+        ja='やり方',
+    ),
+    t2_how_step1=dict(
+        en='You will see short dialogue scenarios. Each one has a gap where a word or phrase is missing. The missing word appears as a blue hint.',
+        fr='Vous verrez de courts scénarios de dialogue. Chacun comporte un espace où un mot ou une expression manque. Le mot manquant apparaît sous forme d\u2019indice en bleu.',
+        de='Sie sehen kurze Dialogszenarien. Jedes hat eine Lücke, in der ein Wort oder eine Phrase fehlt. Das fehlende Wort erscheint als blauer Hinweis.',
+        ja='短い会話のシナリオが表示されます。それぞれに単語やフレーズが欠けている空欄があります。欠けている単語は青いヒントとして表示されます。',
+    ),
+    t2_how_step2=dict(
+        en='Click the blue hint to open the gap, then type what feels most natural to you. Use the hint verb as a guide.',
+        fr='Cliquez sur l\u2019indice bleu pour ouvrir l\u2019espace, puis tapez ce qui vous semble le plus naturel. Utilisez le verbe indiqué comme guide.',
+        de='Klicken Sie auf den blauen Hinweis, um die Lücke zu öffnen, und geben Sie ein, was sich für Sie am natürlichsten anfühlt. Verwenden Sie das Hinweiswort als Orientierung.',
+        ja='青いヒントをクリックして空欄を開き、最も自然だと感じる表現を入力してください。ヒントの動詞を参考にしてください。',
+    ),
+    t2_how_step3=dict(
+        en='Where a certainty percentage is shown, imagine you are exactly that certain and write what you would naturally say.',
+        fr='Lorsqu\u2019un pourcentage de certitude est indiqué, imaginez que vous êtes exactement aussi certain(e) et écrivez ce que vous diriez naturellement.',
+        de='Wenn ein Sicherheitsprozentsatz angegeben ist, stellen Sie sich vor, genau so sicher zu sein, und schreiben Sie, was Sie natürlich sagen würden.',
+        ja='確率（％）が表示されている場合は、その確率で確信していると想像し、自然に言うであろう表現を書いてください。',
+    ),
+    t2_practice_label=dict(
+        en='\u270f\ufe0f Try it yourself',
+        fr='\u270f\ufe0f Essayez vous-m\u00eame',
+        de='\u270f\ufe0f Probieren Sie es aus',
+        ja='\u270f\ufe0f 練習してみましょう',
+    ),
+    t2_guidelines_title=dict(
+        en='Tips',
+        fr='Conseils',
+        de='Tipps',
+        ja='ヒント',
+    ),
+    t2_guideline_1=dict(
+        en='\u2714\ufe0f There are no right or wrong answers. Write whatever feels most natural.',
+        fr='\u2714\ufe0f Il n\u2019y a pas de bonne ou de mauvaise r\u00e9ponse. \u00c9crivez ce qui vous semble le plus naturel.',
+        de='\u2714\ufe0f Es gibt keine richtigen oder falschen Antworten. Schreiben Sie, was Ihnen am nat\u00fcrlichsten vorkommt.',
+        ja='\u2714\ufe0f 正解や不正解はありません。最も自然だと感じるものを書いてください。',
+    ),
+    t2_guideline_2=dict(
+        en='\u2714\ufe0f Imagine you are talking to a close friend.',
+        fr='\u2714\ufe0f Imaginez que vous parlez \u00e0 un ami proche.',
+        de='\u2714\ufe0f Stellen Sie sich vor, Sie sprechen mit einem guten Freund.',
+        ja='\u2714\ufe0f 親しい友人に話しているつもりで書いてください。',
+    ),
+    t2_guideline_3=dict(
+        en='\u2714\ufe0f One word or a short phrase is enough.',
+        fr='\u2714\ufe0f Un mot ou une courte expression suffit.',
+        de='\u2714\ufe0f Ein Wort oder eine kurze Phrase reicht aus.',
+        ja='\u2714\ufe0f 一語または短いフレーズで十分です。',
     ),
     # ── Task 2.1 Instructions ──
     t2_instructions = dict(
         en=(
-            "There are no correct answers. "
+            # "There are no correct answers. "
             "Please complete the sentence as though you were speaking to a close friend. "
             "Use the verb shown in italics as a guide, and write whatever feels most natural to you. "
             "Where a certainty percentage is shown, imagine you are exactly that certain "
             "and write what you would say."
         ),
         fr=(
-            "Il n'y a pas de bonnes ou de mauvaises réponses. "
+            # "Il n'y a pas de bonnes ou de mauvaises réponses. "
             "Complétez la phrase comme si vous parliez à un(e) ami(e) proche. "
             "Le verbe en italique est une indication — écrivez ce qui vous semble le plus naturel. "
             "Lorsqu'un pourcentage de certitude est indiqué, imaginez que vous êtes exactement "
             "aussi certain(e) et écrivez ce que vous diriez."
         ),
         de=(
-            "Es gibt keine richtigen oder falschen Antworten. "
+            # "Es gibt keine richtigen oder falschen Antworten. "
             "Vervollständigen Sie den Satz, als würden Sie mit einem guten Freund / einer guten Freundin sprechen. "
             "Das kursiv gedruckte Verb dient als Hinweis — schreiben Sie, was sich für Sie am natürlichsten anfühlt. "
             "Wenn ein Sicherheitsprozentsatz angegeben ist, stellen Sie sich vor, genau so sicher zu sein, "
             "und schreiben Sie, was Sie sagen würden."
         ),
         ja=(
-            "正解・不正解はありません。"
+            # "正解・不正解はありません。"
             "親しい友人に話しかけるつもりで文を完成させてください。"
             "斜体の動詞はヒントです——最も自然に感じる表現を書いてください。"
             "確率（%）が表示されている場合は、自分がちょうどその確率で確信しているとイメージして、"
@@ -165,10 +219,10 @@ def ui_dict(lang):
 
 # ── Probability badge templates ──
 _PROB = {
-    40:   dict(en="~40 % Likely", fr="~40 % probable", de="~40 % wahrscheinlich", ja="約40 %の確率"),
-    50:   dict(en="~50 % Likely", fr="~50 % probable", de="~50 % wahrscheinlich", ja="約50 %の確率"),
-    60:   dict(en="~60 % Likely", fr="~60 % probable", de="~60 % wahrscheinlich", ja="約60 %の確率"),
-    100:  dict(en="100 % Certain", fr="100 % certain", de="100 % sicher", ja="100 % 確実"),
+    40:   dict(en="40% Likely", fr="40% probable", de="40% wahrscheinlich", ja="40%の確率"),
+    50:   dict(en="50% Likely", fr="50% probable", de="50% wahrscheinlich", ja="50%の確率"),
+    60:   dict(en="60% Likely", fr="60% probable", de="60% wahrscheinlich", ja="60%の確率"),
+    100:  dict(en="100% Certain", fr="100% certain", de="100% sicher", ja="100% 確実"),
     None: dict(en='', fr='', de='', ja=''),
 }
 
@@ -504,33 +558,33 @@ SCENARIOS = [
     #  PREDICTIONS — 2 YEARS  (5 items)
     # ─────────────────────────────────────────────────────────
 
-    # Item 11 — Prediction / 2 years / Neutral  (Robertson 1039)
+    # Item 11 — Prediction / 3 months / Neutral  (Robertson 1029, was backup)
     dict(
-        id='p_2yr_neu', robertson_src=1039,
-        ftr_mode='prediction', temporal='two_years', modality='neutral', certainty=None,
+        id='p_3mo_neu_b', robertson_src=1029,
+        ftr_mode='prediction', temporal='three_months', modality='neutral', certainty=None,
         context_header=dict(
-            en="Elections",
-            fr="Élections",
-            de="Wahlen",
-            ja="選挙",
+            en="Winter Snow Forecast",
+            fr="Prévisions de neige hivernale",
+            de="Winterliche Schneeprognose",
+            ja="冬の降雪予報",
         ),
         context_prob=_PROB[None],
         text=dict(
             en="""
-<p><strong>Q:</strong> What do you think will happen in the elections in two years?</p>
-<p class='target'><strong>A:</strong> The opposition {{1}} <em>(lose)</em>.</p>
+<p><strong>In the autumn, a weather presenter:</strong> Good news for all you skiers out there...</p>
+<p class='target'>...we {{1}} <em>(see)</em> a lot of snow in the next few months.</p>
 """,
             fr="""
-<p><strong>Q :</strong> Que pensez-vous qu'il se passera aux élections dans deux ans ?</p>
-<p class='target'><strong>R :</strong> L'opposition {{1}} <em>(perdre)</em>.</p>
+<p><strong>En automne, un présentateur météo :</strong> Bonne nouvelle pour tous les amateurs de ski...</p>
+<p class='target'>...on {{1}} <em>(voir)</em> beaucoup de neige dans les prochains mois.</p>
 """,
             de="""
-<p><strong>F:</strong> Was glauben Sie, was bei den Wahlen in zwei Jahren passieren wird?</p>
-<p class='target'><strong>A:</strong> Die Opposition wird {{1}} <em>(verlieren)</em>.</p>
+<p><strong>Im Herbst, ein Wettermoderator:</strong> Gute Nachrichten für alle Skifahrer da draußen...</p>
+<p class='target'>...in den nächsten Monaten werden wir viel Schnee {{1}} <em>(sehen)</em>.</p>
 """,
             ja="""
-<p><strong>質問：</strong>2年後の選挙はどうなると思いますか？</p>
-<p class='target'><strong>回答：</strong>野党は{{1}}。<em>（負ける）</em></p>
+<p><strong>秋のこと。気象キャスター：</strong>スキー愛好家の皆さんに朗報です…</p>
+<p class='target'>…今後数ヶ月で、たくさんの雪が{{1}}でしょう。<em>（降る）</em></p>
 """,
         ),
     ),
@@ -601,33 +655,37 @@ SCENARIOS = [
         ),
     ),
 
-    # Item 14 — Prediction / 2 years / 60 %  (Robertson 1150)
+    # Item 14 — Prediction / 2 years / 40 %  (Robertson 1155, was backup)
     dict(
-        id='p_2yr_60', robertson_src=1150,
-        ftr_mode='prediction', temporal='two_years', modality='low_60', certainty=60,
+        id='p_2yr_40_b', robertson_src=1155,
+        ftr_mode='prediction', temporal='two_years', modality='low_40', certainty=40,
         context_header=dict(
-            en="Emerging Markets",
-            fr="Marchés émergents",
-            de="Schwellenländer",
-            ja="新興市場",
+            en="National Elections",
+            fr="Élections nationales",
+            de="Nationale Wahlen",
+            ja="国政選挙",
         ),
-        context_prob=_PROB[60],
+        context_prob=_PROB[40],
         text=dict(
             en="""
-<p><strong>A:</strong> Are you sure about investing in emerging markets? The next two years look unstable...</p>
-<p class='target'>...it {{1}} <em>(crash)</em>.</p>
+<p><strong>Q:</strong> What do you think will happen in the national elections in two years?</p>
+<p><strong>A:</strong> The incumbent has a strong base, but you never know...</p>
+<p class='target'>...the challenger {{1}} <em>(win)</em>.</p>
 """,
             fr="""
-<p><strong>A :</strong> Tu es sûr(e) de vouloir investir dans les marchés émergents ? Les deux prochaines années s'annoncent instables...</p>
-<p class='target'>...ça {{1}} <em>(s'effondrer)</em>.</p>
+<p><strong>Q :</strong> Que pensez-vous qu'il se passera aux élections nationales dans deux ans ?</p>
+<p><strong>R :</strong> Le sortant a une base solide, mais on ne sait jamais...</p>
+<p class='target'>...le candidat d'opposition {{1}} <em>(gagner)</em>.</p>
 """,
             de="""
-<p><strong>A:</strong> Bist du sicher mit der Investition in Schwellenmärkte? Die nächsten zwei Jahre sehen instabil aus...</p>
-<p class='target'>...es wird {{1}} <em>(zusammenbrechen)</em>.</p>
+<p><strong>F:</strong> Was glauben Sie, was bei den nationalen Wahlen in zwei Jahren passieren wird?</p>
+<p><strong>A:</strong> Der Amtsinhaber hat eine starke Basis, aber man weiß nie...</p>
+<p class='target'>...der Herausforderer wird {{1}} <em>(gewinnen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>新興市場に投資して本当に大丈夫？今後2年は不安定に見えるよ…</p>
-<p class='target'>…{{1}}と思う。<em>（崩壊する）</em></p>
+<p><strong>質問：</strong>2年後の国政選挙はどうなると思いますか？</p>
+<p><strong>回答：</strong>現職は強い支持基盤があるけど、何が起こるかわからない…</p>
+<p class='target'>…挑戦者が{{1}}かもしれない。<em>（勝つ）</em></p>
 """,
         ),
     ),
@@ -707,33 +765,37 @@ SCENARIOS = [
         ),
     ),
 
-    # Item 17 — Intention / Tomorrow / 100 %  (Robertson 1074)
+    # Item 17 — Intention / Tomorrow / 100 %  (adapted from Robertson 1074)
     dict(
         id='i_tmr_cer', robertson_src=1074,
         ftr_mode='intention', temporal='tomorrow', modality='certain', certainty=100,
         context_header=dict(
-            en="Spending Money",
-            fr="Dépenser de l'argent",
-            de="Geld ausgeben",
-            ja="お金の使い道",
+            en="Holiday Travel",
+            fr="Voyage de vacances",
+            de="Urlaubsreise",
+            ja="休暇旅行",
         ),
         context_prob=_PROB[100],
         text=dict(
             en="""
-<p><strong>Narrator:</strong> Jen's uncle sent her some money. She just loves skiing. When she gets it tomorrow...</p>
-<p class='target'>...she {{1}} <em>(buy)</em> a new pair of skis.</p>
+<p><strong>Q:</strong> Are you going on holiday this summer?</p>
+<p><strong>A:</strong> Yes, in a couple of months. My boyfriend doesn't want to, but...</p>
+<p class='target'>...we {{1}} <em>(travel)</em> to Georgia.</p>
 """,
             fr="""
-<p><strong>Narrateur :</strong> L'oncle de Jen lui a envoyé de l'argent. Elle adore le ski. Quand elle le recevra demain...</p>
-<p class='target'>...elle {{1}} <em>(acheter)</em> une nouvelle paire de skis.</p>
+<p><strong>Q :</strong> Tu pars en vacances cet été ?</p>
+<p><strong>R :</strong> Oui, dans quelques mois. Mon copain ne veut pas, mais...</p>
+<p class='target'>...on {{1}} <em>(voyager)</em> en Géorgie.</p>
 """,
             de="""
-<p><strong>Erzähler:</strong> Jens Onkel hat ihr Geld geschickt. Sie liebt Skifahren. Wenn sie es morgen bekommt...</p>
-<p class='target'>...wird sie ein neues Paar Ski {{1}} <em>(kaufen)</em>.</p>
+<p><strong>F:</strong> Fahren Sie diesen Sommer in den Urlaub?</p>
+<p><strong>A:</strong> Ja, in ein paar Monaten. Mein Freund will nicht, aber...</p>
+<p class='target'>...wir werden nach Georgien {{1}} <em>(reisen)</em>.</p>
 """,
             ja="""
-<p><strong>語り手：</strong>ジェンのおじさんが彼女にお金を送ってくれた。彼女はスキーが大好き。明日届いたら…</p>
-<p class='target'>…彼女はスキーの新しい板を{{1}}。<em>（買う）</em></p>
+<p><strong>質問：</strong>今年の夏は休暇に行きますか？</p>
+<p><strong>回答：</strong>うん、あと数ヶ月後にね。彼氏は行きたがらないんだけど…</p>
+<p class='target'>…ジョージアに{{1}}。<em>（旅行する）</em></p>
 """,
         ),
     ),
@@ -1034,22 +1096,22 @@ SCENARIOS = [
             en="""
 <p><strong>A:</strong> I heard the weather report on the radio this morning. There's a cold front coming through.</p>
 <p><strong>B:</strong> Really? That would explain the clouds...</p>
-<p class='target'>This is an attention check. Please simply enter the word <em>yes</em> for this question: {{1}}</p>
+<p class='target'>This is an attention check. Please simply enter the word <em>dance</em> for this question: {{1}}</p>
 """,
             fr="""
 <p><strong>A :</strong> J'ai entendu le bulletin météo à la radio ce matin. Un front froid approche.</p>
 <p><strong>B :</strong> Vraiment ? Cela expliquerait les nuages...</p>
-<p class='target'>Ceci est une question d'attention. Veuillez simplement entrer le mot <em>oui</em> pour cette question : {{1}}</p>
+<p class='target'>Ceci est une question d'attention. Veuillez simplement entrer le mot <em>danse</em> pour cette question : {{1}}</p>
 """,
             de="""
 <p><strong>A:</strong> Ich habe heute Morgen den Wetterbericht im Radio gehört. Eine Kaltfront kommt durch.</p>
 <p><strong>B:</strong> Wirklich? Das würde die Wolken erklären...</p>
-<p class='target'>Dies ist eine Aufmerksamkeitsfrage. Bitte geben Sie einfach das Wort <em>ja</em> für diese Frage ein: {{1}}</p>
+<p class='target'>Dies ist eine Aufmerksamkeitsfrage. Bitte geben Sie einfach das Wort <em>Tanz</em> für diese Frage ein: {{1}}</p>
 """,
             ja="""
 <p><strong>A：</strong>今朝ラジオで天気予報を聞いたよ。寒冷前線が来ているらしい。</p>
 <p><strong>B：</strong>本当に？それで曇っているのか…</p>
-<p class='target'>これは注意確認の質問です。この質問には <em>はい</em> とだけ入力してください：{{1}}</p>
+<p class='target'>これは注意確認の質問です。この質問には <em>ダンス</em> とだけ入力してください：{{1}}</p>
 """,
         ),
     ),
@@ -1069,22 +1131,22 @@ SCENARIOS = [
             en="""
 <p><strong>A:</strong> Have you heard anything about the office moving to the new building?</p>
 <p><strong>B:</strong> Yes, management sent an email about it last week...</p>
-<p class='target'>This is an attention check. Please simply enter the word <em>yes</em> for this question: {{1}}</p>
+<p class='target'>This is an attention check. Please simply enter the word <em>segue</em> for this question: {{1}}</p>
 """,
             fr="""
 <p><strong>A :</strong> Tu as des nouvelles concernant le déménagement du bureau dans le nouveau bâtiment ?</p>
 <p><strong>B :</strong> Oui, la direction a envoyé un e-mail à ce sujet la semaine dernière...</p>
-<p class='target'>Ceci est une question d'attention. Veuillez simplement entrer le mot <em>oui</em> pour cette question : {{1}}</p>
+<p class='target'>Ceci est une question d'attention. Veuillez simplement entrer le mot <em>transition</em> pour cette question : {{1}}</p>
 """,
             de="""
 <p><strong>A:</strong> Haben Sie etwas über den Büroumzug ins neue Gebäude gehört?</p>
 <p><strong>B:</strong> Ja, die Geschäftsführung hat letzte Woche eine E-Mail dazu geschickt...</p>
-<p class='target'>Dies ist eine Aufmerksamkeitsfrage. Bitte geben Sie einfach das Wort <em>ja</em> für diese Frage ein: {{1}}</p>
+<p class='target'>Dies ist eine Aufmerksamkeitsfrage. Bitte geben Sie einfach das Wort <em>Übergang</em> für diese Frage ein: {{1}}</p>
 """,
             ja="""
 <p><strong>A：</strong>オフィスが新しいビルに移転する件、何か聞いた？</p>
 <p><strong>B：</strong>うん、先週経営陣からメールが来たよ…</p>
-<p class='target'>これは注意確認の質問です。この質問には <em>はい</em> とだけ入力してください：{{1}}</p>
+<p class='target'>これは注意確認の質問です。この質問には <em>転換</em> とだけ入力してください：{{1}}</p>
 """,
         ),
     ),
@@ -1597,6 +1659,32 @@ def _get_scenario(lang, idx):
         text=s['text'].get(lang, s['text']['en']),
     )
 
+T2_PRACTICE_HTML = dict(
+    en="""
+<div class='ctx-header-practice'>Weekend Plans</div>
+<p><strong>Q:</strong> What are you doing this weekend?</p>
+<p><strong>A:</strong> I'm not sure yet, but I think I {{1}} <em>(visit)</em> my parents on Saturday.</p>
+<p>And on Sunday, the weather looks nice, so we {{2}} <em>(go)</em> hiking.</p>
+""",
+    fr="""
+<div class='ctx-header-practice'>Plans du week-end</div>
+<p><strong>Q :</strong> Qu'est-ce que tu fais ce week-end ?</p>
+<p><strong>R :</strong> Je ne sais pas encore, mais je pense que je {{1}} <em>(rendre visite)</em> \u00e0 mes parents samedi.</p>
+<p>Et dimanche, il fera beau, alors on {{2}} <em>(faire)</em> une randonn\u00e9e.</p>
+""",
+    de="""
+<div class='ctx-header-practice'>Wochenendpl\u00e4ne</div>
+<p><strong>F:</strong> Was machst du dieses Wochenende?</p>
+<p><strong>A:</strong> Ich bin mir noch nicht sicher, aber ich denke, ich werde am Samstag meine Eltern {{1}} <em>(besuchen)</em>.</p>
+<p>Und am Sonntag sieht das Wetter gut aus, also werden wir {{2}} <em>(wandern)</em>.</p>
+""",
+    ja="""
+<div class='ctx-header-practice'>\u9031\u672b\u306e\u4e88\u5b9a</div>
+<p><strong>\u8cea\u554f\uff1a</strong>\u9031\u672b\u306f\u4f55\u3092\u3057\u307e\u3059\u304b\uff1f</p>
+<p><strong>\u56de\u7b54\uff1a</strong>\u307e\u3060\u308f\u304b\u3089\u306a\u3044\u3051\u3069\u3001\u571f\u66dc\u65e5\u306b\u4e21\u89aa\u3092{{1}}\u3068\u601d\u3046\u3002<em>\uff08\u8a2a\u306d\u308b\uff09</em></p>
+<p>\u65e5\u66dc\u65e5\u306f\u5929\u6c17\u304c\u3088\u3055\u305d\u3046\u3060\u304b\u3089\u3001\u30cf\u30a4\u30ad\u30f3\u30b0\u306b{{2}}\u3002<em>\uff08\u884c\u304f\uff09</em></p>
+""",
+)
 
 # ═══════════════════════════════════════════════════════════
 # TASK 2.2 SENTENCES  (Perception / Subjective Probability)
@@ -1715,7 +1803,9 @@ class Task2Intro(Page):
     def vars_for_template(player):
         lang = player.session.config.get('language', 'en')
         player.language = lang
-        return _ctx(player, 50)
+        ctx = _ctx(player, 50)
+        ctx['t2_practice_html'] = T2_PRACTICE_HTML.get(lang, T2_PRACTICE_HTML['en'])
+        return ctx
 
 
 # ── Page layout ──────────────────────────────────────────
@@ -1731,7 +1821,11 @@ PRIMARY_CHUNKS = [
 BACKUP_CHUNK = list(range(27, 42))  # Page 4: backup items 28–42
 
 # Attention-check expected answers per language
-_AC_EXPECTED = dict(en='yes', fr='oui', de='ja', ja='はい')
+# Attention-check expected answers per language
+_AC_EXPECTED = dict(
+    ac_1=dict(en='dance', fr='danse', de='tanz', ja='ダンス'),
+    ac_2=dict(en='segue', fr='transition', de='übergang', ja='転換'),
+)
 
 
 class Task2Item(Page):
@@ -1753,22 +1847,21 @@ class Task2Item(Page):
     @staticmethod
     def before_next_page(player, timeout_happened):
         """Score attention checks after each page submission."""
-        lang = player.language
-        expected = _AC_EXPECTED.get(lang, 'yes')
         try:
             data = json.loads(player.t2_production_data or '{}')
         except (json.JSONDecodeError, TypeError):
             return
+        lang = player.language
         # Check AC1
         ac1 = data.get('ac_1', {})
         if ac1:
             answer = ac1.get('1', '').strip().lower()
-            player.t2_ac1_pass = (answer == expected.lower())
+            player.t2_ac1_pass = (answer == _AC_EXPECTED['ac_1'].get(lang, ''))
         # Check AC2
         ac2 = data.get('ac_2', {})
         if ac2:
             answer = ac2.get('1', '').strip().lower()
-            player.t2_ac2_pass = (answer == expected.lower())
+            player.t2_ac2_pass = (answer == _AC_EXPECTED['ac_2'].get(lang, ''))
 
 
 def _make_item_page(indices, progress, label):
@@ -1791,8 +1884,9 @@ for i, chunk in enumerate(PRIMARY_CHUNKS):
     _ITEM_PAGES.append(_make_item_page(chunk, _primary_progresses[i], label))
 
 # Build backup page (progress 90)
-_backup_label = f'{BACKUP_CHUNK[0] + 1}_{BACKUP_CHUNK[-1] + 1}'
-_ITEM_PAGES.append(_make_item_page(BACKUP_CHUNK, 90, _backup_label))
+# Backup page disabled for now
+# _backup_label = f'{BACKUP_CHUNK[0] + 1}_{BACKUP_CHUNK[-1] + 1}'
+# _ITEM_PAGES.append(_make_item_page(BACKUP_CHUNK, 90, _backup_label))
 
 
 class Task2Slider(Page):

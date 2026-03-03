@@ -155,10 +155,6 @@
 
         <div class="bisect-step-fade" id="comparison-area">
 
-            <div style="background:#f0f9ff; border-left:4px solid #0ea5e9; border-radius:6px; padding:12px 16px; margin-bottom:18px; font-size:0.9rem; color:#334155;">
-                {{ ui.la2_bonus_note|safe }}
-            </div>
-
             <div class="bisect-compare-row">
 
                 <!-- Option A: Safe Option -->
@@ -209,9 +205,6 @@
         </div>
 
         <!-- Static cards (non-clickable) -->
-        <div style="background:#f0f9ff; border-left:4px solid #0ea5e9; border-radius:6px; padding:12px 16px; margin-top:18px; margin-bottom:18px; font-size:0.9rem; color:#334155;">
-            {{ ui.la2_bonus_note|safe }}
-        </div>
         <div class="bisect-compare-row" style="margin-top:20px;">
 
             <div class="bisect-card bisect-card-a" style="cursor:default;">
@@ -236,6 +229,9 @@
 
         <!-- Slider -->
         <div style="margin: 20px 0;">
+            <label style="font-weight:600; font-size:0.9rem; display:block; margin-bottom:10px;">
+                {{ ui.la2_slider_label_lose }} {{ symbol }}___
+            </label>
 
             <div class="slider-value-display">
                 <div class="big-number" id="slider-big-display">—</div>
@@ -248,7 +244,7 @@
             </div>
 
             <input type="range" id="bisect-slider"
-                   min="{{ x_min }}" max="{{ x_max }}" step="{% if decimals == 0 %}1{% else %}0.01{% endif %}"
+                   min="{{ x_min }}" max="{{ x_max }}" step="0.1"
                    oninput="bisectUpdateSlider(this.value)">
 
             <div class="slider-labels">
@@ -369,13 +365,12 @@
         sp.classList.add('active');
 
         var slider = document.getElementById('bisect-slider');
-        var sliderStep = DEC === 0 ? 1 : 0.01;
-        var sLow  = Math.max(parseFloat(low.toFixed(DEC)),  X_MIN);
-        var sHigh = Math.min(parseFloat(high.toFixed(DEC)), X_MAX);
+        var sLow  = Math.max(parseFloat(low.toFixed(1)),  X_MIN);
+        var sHigh = Math.min(parseFloat(high.toFixed(1)), X_MAX);
         slider.min   = sLow;
         slider.max   = sHigh;
-        slider.step  = sliderStep;
-        slider.value = ((sLow + sHigh) / 2).toFixed(DEC);
+        slider.step  = 0.1;
+        slider.value = ((sLow + sHigh) / 2).toFixed(1);
         bisectUpdateSlider(slider.value);
 
         setTimeout(function() { sp.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 200);

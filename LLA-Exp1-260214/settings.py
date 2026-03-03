@@ -5,7 +5,7 @@ SESSION_CONFIGS = [
         name='study_ja',
         display_name="FTR Study — Japanese",
         app_sequence=['Task1','Task2','Task3'],
-        # app_sequence=['Task3'],
+        # app_sequence=['Task1'],
         num_demo_participants=3,
         language='ja',
     ),

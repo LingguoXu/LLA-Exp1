@@ -3,109 +3,76 @@
 
 {% block extra_css %}
 <style>
-    /* ── Instruction bar ── */
+    /* -- Instruction bar -- */
     .task-instructions {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 6px;
-        padding: 12px 16px;
-        margin-bottom: 24px;
-        font-size: 0.95rem;
-        color: #475569;
+        background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;
+        padding: 12px 16px; margin-bottom: 24px; font-size: 0.95rem; color: #475569;
     }
-
-    /* ── Per-scenario block ── */
+    /* -- Per-scenario block -- */
     .scenario-block {
-        margin-bottom: 28px;
-        padding-bottom: 24px;
-        border-bottom: 1px solid #e2e8f0;
+        margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid #e2e8f0;
     }
-    .scenario-block:last-of-type {
-        border-bottom: none;
-        margin-bottom: 8px;
-    }
-
-    /* ── Item counter badge ── */
+    .scenario-block:last-of-type { border-bottom: none; margin-bottom: 8px; }
+    /* -- Item counter badge -- */
     .item-counter {
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: #94a3b8;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        margin-bottom: 8px;
+        font-size: 0.75rem; font-weight: 700; color: #94a3b8;
+        text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
     }
-
-    /* ── Context header ── */
+    /* -- Context header -- */
     .ctx-header {
-        background: #f0f4f8;
-        border-left: 4px solid var(--primary);
-        padding: 10px 14px;
-        margin-bottom: 14px;
-        border-radius: 3px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
+        background: #f0f4f8; border-left: 4px solid var(--primary);
+        padding: 10px 14px; margin-bottom: 14px; border-radius: 3px;
+        display: flex; justify-content: flex-start; align-items: center; gap: 12px;
     }
     .ctx-title { font-weight: 600; color: var(--text); font-size: 0.95rem; }
     .ctx-prob {
-        background: var(--primary);
-        color: white;
-        padding: 3px 10px;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 0.82rem;
-        white-space: nowrap;
+        background: #7c3aed; color: white; padding: 4px 12px;
+        border-radius: 10px; font-weight: 600; font-size: 0.95rem; white-space: nowrap;
     }
-
-    /* ── Story / conversation ── */
+    /* -- Story / conversation -- */
     .conversation { font-size: 1.02rem; }
     .conversation p { margin-bottom: 10px; }
     .target {
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px dashed #cbd5e1;
-        font-weight: 500;
+        margin-top: 12px; padding-top: 12px;
+        border-top: 1px dashed #cbd5e1; font-weight: 500;
     }
-
-    /* ── Inline blank inputs ── */
-    input.blank {
-        display: inline-block;
-        width: 140px;
-        padding: 3px 8px;
-        border: 1px solid #94a3b8;
-        border-radius: 4px;
-        font-size: 1rem;
-        font-family: inherit;
-        background: #fff;
-        transition: border-color 0.15s, background 0.15s;
-        vertical-align: baseline;
+    /* -- Gap wrapper (matches Task 1) -- */
+    .gap-wrap {
+        display: inline-block; position: relative;
+        vertical-align: baseline; min-width: 80px;
     }
-    input.blank:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(99,102,241,0.15);
+    .gap-hint {
+        display: inline-block; padding: 2px 10px; min-width: 60px;
+        text-align: center; color: #3b82f6; font-weight: 600;
+        font-style: italic; font-size: 0.92em; background: #eff6ff;
+        border-bottom: 2px dashed #93c5fd; border-radius: 3px 3px 0 0;
+        cursor: pointer; transition: background 0.15s, color 0.15s;
+        user-select: none; -webkit-user-select: none; line-height: 1.6;
     }
-    input.blank.filled {
-        border-color: #22c55e;
-        background: #f0fdf4;
+    .gap-hint:hover { background: #dbeafe; color: #2563eb; }
+    .gap-wrap input.blank {
+        display: none; width: 130px; padding: 2px 8px; border: none;
+        border-bottom: 2px solid #6366f1; border-radius: 3px 3px 0 0;
+        font-size: 1rem; font-family: inherit; background: #eef2ff;
+        color: #1e293b; text-align: center; transition: border-color 0.15s, background 0.15s;
+        vertical-align: baseline; outline: none; line-height: 1.6;
     }
-    input.blank.error {
-        border-color: #ef4444;
-        background: #fef2f2;
+    .gap-wrap input.blank:focus { border-bottom-color: #4f46e5; background: #e0e7ff; }
+    .gap-wrap input.blank.filled { background: #ecfdf5; border-bottom-color: #22c55e; color: #065f46; }
+    .gap-wrap input.blank.active { display: inline-block; }
+    .gap-wrap input.blank.error { border-bottom-color: #ef4444; background: #fef2f2; }
+    @media (max-width: 500px) {
+        .gap-wrap input.blank { min-width: 80px; max-width: 140px; font-size: .88rem; }
+        .gap-hint { font-size: 0.84em; min-width: 50px; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="card">
-
     <p class="task-instructions">{{ ui.t2_instructions }}</p>
-
     <div id="allScenarios"></div>
-
     <div class="val-msg" id="valMsg">{{ ui.required_msg }}</div>
-
     <div class="foot">
         <button type="button" class="btn btn-primary" id="submitBtn">
             {{ ui.btn_next }} &rarr;
@@ -120,106 +87,159 @@
 
 {% block scripts %}
 (function(){
-    // scenarios: list of {id, context_header, context_prob, text, ...}
     var scenarioList = {{ scenarios|json }};
     var rawExisting  = {{ existing|json }};
 
-    var container = document.getElementById('allScenarios');
-    var field     = document.getElementById('field');
-    var valMsg    = document.getElementById('valMsg');
-    var submitBtn = document.getElementById('submitBtn');
+    var container = document.getElementById("allScenarios");
+    var field     = document.getElementById("field");
+    var valMsg    = document.getElementById("valMsg");
+    var submitBtn = document.getElementById("submitBtn");
 
-    // Initialise hidden field and parse existing answers
     field.value = rawExisting;
     var allData = {};
-    try { allData = JSON.parse(rawExisting || '{}'); } catch(e){}
+    try { allData = JSON.parse(rawExisting || "{}"); } catch(e){}
 
-    // ── Render each scenario block ──────────────────────────────────────
-    scenarioList.forEach(function(sc, idx){
-        var block = document.createElement('div');
-        block.className = 'scenario-block';
-        block.setAttribute('data-sc-id', sc.id);
+    /* -- helper: convert scenario HTML to gap-style -- */
+    function convertToGaps(html, scId, savedAnswers) {
+        /* Step 1: collect all <em> hints in order */
+        var emRegex = /<em>[\uff08\u0028]?([^)\uff09<]+)[\u0029\uff09]?<\/em>/g;
+        var hints = [];
+        var emMatch;
+        while ((emMatch = emRegex.exec(html)) !== null) {
+            hints.push(emMatch[1].trim());
+        }
 
-        // Counter label  e.g. "1 / 7"
-        var counterDiv = '<div class="item-counter">' + (idx + 1) + ' / ' + scenarioList.length + '</div>';
+        /* Step 2: remove all <em> tags */
+        html = html.replace(/\s*<em>[^<]*<\/em>/g, "");
 
-        // Context header (only show prob badge if non-empty)
-        // Badge wording follows Robertson (2023): "You are X% certain"
-        var probBadge = sc.context_prob
-            ? '<span class="ctx-prob">&#x1F4AC; ' + sc.context_prob + '</span>'
-            : '';
-        var header = '<div class="ctx-header">'
-            + '<span class="ctx-title">' + sc.context_header + '</span>'
-            + probBadge
-            + '</div>';
+        /* Step 3: replace N with gap elements */
+        html = html.replace(/\{\{(\d+)\}\}/g, function(m, num) {
+            var hint = hints[parseInt(num) - 1] || "\u2026";
+            var saved = (savedAnswers && savedAnswers[num]) || "";
+            var filledClass = saved ? " filled" : "";
+            var safeVal = saved.replace(/"/g, "&quot;");
 
-        // Replace (N) placeholders with inputs
-        var savedAnswers = allData[sc.id] || {};
-        var storyHtml = sc.text.replace(/\{\{(\d+)\}\}/g, function(match, num){
-            var saved = savedAnswers[num] || '';
-            var filled = saved ? ' filled' : '';
-            // Escape any double-quotes in saved value for the HTML attribute
-            var safeVal = saved.replace(/"/g, '&quot;');
-            return '<input type="text"'
-                + ' class="blank' + filled + '"'
-                + ' data-sc="' + sc.id + '"'
-                + ' data-n="' + num + '"'
-                + ' value="' + safeVal + '"'
-                + ' placeholder="..."'
-                + ' autocomplete="off" autocapitalize="off" spellcheck="false">';
+            if (saved) {
+                /* Already answered: show input directly */
+                return '<span class="gap-wrap">' +
+                    '<span class="gap-hint" data-hint="' + hint + '" style="display:none">' + hint + '</span>' +
+                    '<input type="text" class="blank active' + filledClass + '"' +
+                    ' data-sc="' + scId + '"' +
+                    ' data-n="' + num + '"' +
+                    ' value="' + safeVal + '"' +
+                    ' autocomplete="off" autocapitalize="off" spellcheck="false">' +
+                    '</span>';
+            }
+
+            return '<span class="gap-wrap">' +
+                '<span class="gap-hint" data-hint="' + hint + '">' + hint + '</span>' +
+                '<input type="text" class="blank"' +
+                ' data-sc="' + scId + '"' +
+                ' data-n="' + num + '"' +
+                ' autocomplete="off" autocapitalize="off" spellcheck="false">' +
+                '</span>';
         });
 
+        return html;
+    }
+
+    /* -- render each scenario -- */
+    scenarioList.forEach(function(sc, idx){
+        var block = document.createElement("div");
+        block.className = "scenario-block";
+        block.setAttribute("data-sc-id", sc.id);
+
+        var counterDiv = '<div class="item-counter">' + (idx + 1) + " / " + scenarioList.length + "</div>";
+
+        var probBadge = sc.context_prob
+            ? '<span class="ctx-prob">' + sc.context_prob.replace(/^~\s*/, "") + "</span>"
+            : "";
+        var header = '<div class="ctx-header">'
+            + '<span class="ctx-title">' + sc.context_header + "</span>"
+            + probBadge + "</div>";
+
+        var savedAnswers = allData[sc.id] || {};
+        var storyHtml = convertToGaps(sc.text, sc.id, savedAnswers);
+
         block.innerHTML = counterDiv + header
-            + '<div class="conversation">' + storyHtml + '</div>';
+            + '<div class="conversation">' + storyHtml + "</div>";
         container.appendChild(block);
     });
 
-    // ── Live blank colouring ────────────────────────────────────────────
-    container.addEventListener('input', function(e){
-        if(e.target.classList.contains('blank')){
-            var v = e.target.value.trim();
-            e.target.classList.toggle('filled', v.length > 0);
-            e.target.classList.remove('error');   // clear red on edit
+    /* -- click-to-fill interaction -- */
+    function activateGap(hintEl) {
+        var wrap  = hintEl.parentNode;
+        var input = wrap.querySelector("input.blank");
+        hintEl.style.display = "none";
+        input.classList.add("active");
+        input.focus();
+    }
+
+    function deactivateGap(input) {
+        if (input.value.trim().length > 0) {
+            input.classList.add("filled");
+            input.classList.remove("error");
+            return;
+        }
+        var hint = input.parentNode.querySelector(".gap-hint");
+        input.classList.remove("active");
+        if (hint) hint.style.display = "";
+    }
+
+    container.addEventListener("click", function(e) {
+        if (e.target.classList.contains("gap-hint")) activateGap(e.target);
+    });
+
+    container.addEventListener("focusout", function(e) {
+        if (e.target.classList.contains("blank")) deactivateGap(e.target);
+    });
+
+    container.addEventListener("input", function(e) {
+        if (e.target.classList.contains("blank")) {
+            var hasVal = e.target.value.trim().length > 0;
+            e.target.classList.toggle("filled", hasVal);
+            e.target.classList.remove("error");
         }
     });
 
-    // ── Submit ──────────────────────────────────────────────────────────
-    submitBtn.addEventListener('click', function(){
-        var inputs   = container.querySelectorAll('input.blank');
-        var ok       = true;
-        var firstBad = null;
+    /* -- submit -- */
+    submitBtn.addEventListener("click", function(){
+        var inputs = container.querySelectorAll("input.blank");
+        var ok = true, firstBad = null;
 
-        // Collect all values; mark empties red
         inputs.forEach(function(inp){
             var v    = inp.value.trim();
-            var scId = inp.getAttribute('data-sc');
-            var n    = inp.getAttribute('data-n');
-
+            var scId = inp.getAttribute("data-sc");
+            var n    = inp.getAttribute("data-n");
             if(!allData[scId]) allData[scId] = {};
             allData[scId][n] = v;
 
             if(!v){
                 ok = false;
-                inp.classList.add('error');
+                inp.classList.add("error");
+                /* Also reveal the input if hint is still showing */
+                var wrap = inp.parentNode;
+                var hint = wrap.querySelector(".gap-hint");
+                if (hint) hint.style.display = "none";
+                inp.classList.add("active");
                 if(!firstBad) firstBad = inp;
             } else {
-                inp.classList.remove('error');
+                inp.classList.remove("error");
             }
         });
 
         if(!ok){
-            valMsg.classList.add('show');
+            valMsg.classList.add("show");
             if(firstBad){
-                firstBad.scrollIntoView({behavior:'smooth', block:'center'});
+                firstBad.scrollIntoView({behavior:"smooth", block:"center"});
                 firstBad.focus();
             }
             return;
         }
 
-        valMsg.classList.remove('show');
+        valMsg.classList.remove("show");
         field.value = JSON.stringify(allData);
-        document.getElementById('form').submit();
+        document.getElementById("form").submit();
     });
-
 })();
 {% endblock %}

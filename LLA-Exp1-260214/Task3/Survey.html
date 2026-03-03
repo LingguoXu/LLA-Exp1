@@ -2,12 +2,37 @@
 {% load otree %}
 
 {% block content %}
-<div class="card">
-    <h2 style="margin-bottom:25px; text-align: center;">{{ ui.surv_title }}</h2>
+<div class="card" style="padding: 40px 20px;">
+    <h2 style="margin-bottom:35px; text-align: center;">{{ ui.surv_title }}</h2>
 
-    <div style="max-width: 500px; margin: 0 auto 30px;">
-        <div class="mb-4">
-            <label class="form-label fw-bold">{{ ui.q_industry }}</label>
+    <div style="max-width: 500px; margin: 0 auto;">
+
+        <!-- Gender -->
+        <div style="margin-bottom: 28px;">
+            <label class="form-label fw-bold" style="display:block; margin-bottom:8px;">{{ ui.q_gender }}</label>
+            <select name="gender" form="form" class="blank" required
+                    style="width: 100%; max-width: 350px; display: block; margin: 0 auto;">
+                <option value="" disabled selected>...</option>
+                <option value="Male">{{ ui.gen_1 }}</option>
+                <option value="Female">{{ ui.gen_2 }}</option>
+                <option value="Non-binary">{{ ui.gen_3 }}</option>
+                <option value="Prefer not to say">{{ ui.gen_4 }}</option>
+            </select>
+        </div>
+
+        <!-- Years in country -->
+        <div style="margin-bottom: 28px;">
+            <label class="form-label fw-bold" style="display:block; margin-bottom:8px;">{{ ui.q_years_in_country }}</label>
+            <input type="number" name="years_in_country" form="form" min="0" required
+                   style="width: 100%; max-width: 350px; display: block; margin: 0 auto;
+                          padding: 8px 12px; border: 2px solid #cbd5e1; border-radius: 6px;
+                          font-size: 1rem; outline: none; transition: border-color 0.2s;"
+                   onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#cbd5e1'">
+        </div>
+
+        <!-- Industry -->
+        <div style="margin-bottom: 28px;">
+            <label class="form-label fw-bold" style="display:block; margin-bottom:8px;">{{ ui.q_industry }}</label>
             <select name="employment_industry" form="form" class="blank" required
                     style="width: 100%; max-width: 350px; display: block; margin: 0 auto;">
                 <option value="" disabled selected>...</option>
@@ -22,8 +47,9 @@
             </select>
         </div>
 
-        <div class="mb-4">
-            <label class="form-label fw-bold">{{ ui.q_income }}</label>
+        <!-- Income -->
+        <div style="margin-bottom: 10px;">
+            <label class="form-label fw-bold" style="display:block; margin-bottom:8px;">{{ ui.q_income }}</label>
             <select name="income_level" form="form" class="blank" required
                     style="width: 100%; max-width: 350px; display: block; margin: 0 auto;">
                 <option value="" disabled selected>...</option>
@@ -35,12 +61,14 @@
                 <option value="Prefer not to say">{{ ui.inc_6 }}</option>
             </select>
         </div>
+
     </div>
 
-    <hr class="divider">
+    <hr style="border:none; border-top:1px solid #e2e8f0; margin:30px 0;">
 
-    <div class="mb-5">
-        <label class="form-label fw-bold mb-3 d-block text-center">{{ ui.q_risk }}</label>
+    <!-- Risk -->
+    <div style="margin-bottom: 36px; max-width: 600px; margin-left:auto; margin-right:auto;">
+        <label class="form-label fw-bold" style="display:block; text-align:center; margin-bottom:14px;">{{ ui.q_risk }}</label>
         <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.85rem; color:var(--muted); padding: 0 10px;">
             <span>{{ ui.risk_0 }}</span>
             <span>{{ ui.risk_10 }}</span>
@@ -56,8 +84,9 @@
         </div>
     </div>
 
-    <div class="mb-5">
-        <label class="form-label fw-bold mb-3 d-block text-center">{{ ui.q_pat }}</label>
+    <!-- Patience -->
+    <div style="margin-bottom: 10px; max-width: 600px; margin-left:auto; margin-right:auto;">
+        <label class="form-label fw-bold" style="display:block; text-align:center; margin-bottom:14px;">{{ ui.q_pat }}</label>
         <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.85rem; color:var(--muted); padding: 0 10px;">
             <span>{{ ui.pat_0 }}</span>
             <span>{{ ui.pat_10 }}</span>
@@ -71,6 +100,18 @@
                 </div>
             {% endfor %}
         </div>
+    </div>
+
+    <hr style="border:none; border-top:1px solid #e2e8f0; margin:30px 0;">
+
+    <!-- Feedback -->
+    <div style="max-width: 500px; margin: 0 auto 30px;">
+        <label class="form-label fw-bold" style="display:block; margin-bottom:10px;">{{ ui.q_feedback }}</label>
+        <textarea name="study_feedback" form="form" rows="4"
+                  style="width:100%; padding:10px 14px; border:2px solid #cbd5e1; border-radius:6px;
+                         font-size:1rem; font-family:inherit; outline:none; resize:vertical;
+                         transition:border-color 0.2s;"
+                  onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#cbd5e1'"></textarea>
     </div>
 
     <div class="foot" style="justify-content: center; padding-top: 10px;">

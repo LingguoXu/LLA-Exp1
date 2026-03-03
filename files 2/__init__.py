@@ -18,7 +18,7 @@ class C(BaseConstants):
     LOTTERIES = [dict(id=i, gain=10, loss=i) for i in range(1, 13)]
 
     # --- BISECTION (new method) ---
-    GAIN_BASE = 10  # base gain (×rate for currency)
+    GAIN_BASE = 10          # base gain (×rate for currency)
     X_MIN = 1.0
     X_MAX = 20.0
     BISECTION_STEPS = 5
@@ -37,7 +37,7 @@ class C(BaseConstants):
     LIKERT_RANGE = list(range(11))
 
     # ── Temporal Discounting MPL ──────────────────────────────────────────
-    TD_SOONER_BASE = 100  # base sooner amount (×rate for currency)
+    TD_SOONER_BASE = 100    # base sooner amount (×rate for currency)
 
     TD_HORIZONS = [
         dict(
@@ -53,7 +53,7 @@ class C(BaseConstants):
                 dict(row=7, sooner=100, later=200),  # k=12
             ],
             k_values=[0, 1, 2, 3, 4, 6, 12],
-            label=dict(en='1-Month Gap', fr='Écart de 1 mois', de='1 Monat Abstand', ja='1ヶ月の差'),
+            label=dict(en='1 Month', fr='1 mois', de='1 Monat', ja='1ヶ月'),
             sooner_label=dict(en='in 2 weeks', fr='dans 2 sem.', de='in 2 Wo.', ja='2週間後'),
             later_label=dict(en='in 6 weeks', fr='dans 6 sem.', de='in 6 Wo.', ja='6週間後'),
         ),
@@ -70,7 +70,7 @@ class C(BaseConstants):
                 dict(row=7, sooner=100, later=300),  # k=4
             ],
             k_values=[0, 0.5, 1, 1.5, 2, 3, 4],
-            label=dict(en='6-Month Gap', fr='Écart de 6 mois', de='6 Monate Abstand', ja='6ヶ月の差'),
+            label=dict(en='6 Months', fr='6 mois', de='6 Monate', ja='6ヶ月'),
             sooner_label=dict(en='in 2 weeks', fr='dans 2 sem.', de='in 2 Wo.', ja='2週間後'),
             later_label=dict(en='in ~6.5 months', fr='dans ~6,5 mo.', de='in ~6,5 Mon.', ja='約6.5ヶ月後'),
         ),
@@ -87,7 +87,7 @@ class C(BaseConstants):
                 dict(row=7, sooner=100, later=500),  # k=2.0
             ],
             k_values=[0, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0],
-            label=dict(en='2-Year Gap', fr='Écart de 2 ans', de='2 Jahre Abstand', ja='2年の差'),
+            label=dict(en='2 Years', fr='2 ans', de='2 Jahre', ja='2年'),
             sooner_label=dict(en='in 2 weeks', fr='dans 2 sem.', de='in 2 Wo.', ja='2週間後'),
             later_label=dict(en='in ~2 years', fr='dans ~2 ans', de='in ~2 Jahren', ja='約2年後'),
         ),
@@ -140,13 +140,10 @@ class Player(BasePlayer):
     td_choice = models.StringField(blank=True)
 
     # --- SURVEY FIELDS ---
-    gender = models.StringField()
-    years_in_country = models.IntegerField(min=0)
     employment_industry = models.StringField()
     income_level = models.StringField()
     risk_general = models.IntegerField(min=0, max=10)
     patience_general = models.IntegerField(min=0, max=10)
-    study_feedback = models.LongStringField(blank=True)
 
 
 # ══════════════════════════════════════════════════════════════
@@ -159,8 +156,8 @@ UI = dict(
                      ja='パート3: 意思決定'),
     intro_text=dict(
         en=(
-            'In this final part, you will make a series of choices involving potential gains and losses. You will have a chance to earn a bonus payment based on your decisions. '
-
+            'In this final part, you will make a series of choices involving potential gains and losses. '
+            
             '<br><br>'
             'To start, you will be given <strong>{symbol}{endowment}</strong>. '
             'You will then choose between a lottery and a safe option across several rounds. '
@@ -168,12 +165,12 @@ UI = dict(
             'If you chose the safe option on that round, you simply keep your {symbol}{endowment}. '
             'If you chose the lottery, a coin flip decides whether you win more or lose some. '
             '<br><br>'
-            '<strong>Payment:</strong> After the study is completed, 1 in 10 participants will be randomly selected to receive their task bonus as an <strong>Amazon gift card</strong>. '
+            '<strong>Payment:</strong> After the study is completed, <strong>1 in 10 participants will be randomly selected</strong> to receive their task bonus as an <strong>Amazon gift card</strong>. '
             'Your final balance will determine your bonus.'
         ),
         fr=(
-            'Dans cette dernière partie, vous ferez une série de choix impliquant des gains et des pertes potentiels. Vous aurez la possibilité de gagner un bonus basé sur vos décisions. '
-
+            'Dans cette dernière partie, vous ferez une série de choix impliquant des gains et des pertes potentiels. '
+            
             '<br><br>'
             'Pour commencer, vous recevrez <strong>{symbol}{endowment}</strong>. '
             'Vous choisirez ensuite entre une loterie et une option sûre sur plusieurs tours. '
@@ -181,12 +178,12 @@ UI = dict(
             'Si vous avez choisi l\'option sûre à ce tour, vous conservez simplement vos {symbol}{endowment}. '
             'Si vous avez choisi la loterie, un tirage au sort détermine si vous gagnez ou perdez. '
             '<br><br>'
-            '<strong>Paiement :</strong> Une fois l\'étude terminée, 1 participant sur 10 sera sélectionné au hasard pour recevoir son bonus sous forme de <strong>carte cadeau Amazon</strong>. '
+            '<strong>Paiement :</strong> Une fois l\'étude terminée, <strong>1 participant sur 10 sera sélectionné au hasard</strong> pour recevoir son bonus sous forme de <strong>carte cadeau Amazon</strong>. '
             'Votre solde final déterminera votre bonus.'
         ),
         de=(
-            'In diesem letzten Teil treffen Sie eine Reihe von Entscheidungen mit möglichen Gewinnen und Verlusten. Sie haben die Möglichkeit, basierend auf Ihren Entscheidungen einen Bonus zu verdienen. '
-
+            'In diesem letzten Teil treffen Sie eine Reihe von Entscheidungen mit möglichen Gewinnen und Verlusten. '
+            
             '<br><br>'
             'Zu Beginn erhalten Sie <strong>{symbol}{endowment}</strong>. '
             'Danach wählen Sie in mehreren Runden zwischen einer Lotterie und einer sicheren Option. '
@@ -194,12 +191,12 @@ UI = dict(
             'Wenn Sie in dieser Runde die sichere Option gewählt haben, behalten Sie einfach Ihre {symbol}{endowment}. '
             'Wenn Sie die Lotterie gewählt haben, entscheidet ein Münzwurf, ob Sie gewinnen oder verlieren. '
             '<br><br>'
-            '<strong>Auszahlung:</strong> Nach Abschluss der Studie wird 1 von 10 Teilnehmenden zufällig ausgewählt, um den Aufgabenbonus als <strong>Amazon-Gutschein</strong> zu erhalten. '
+            '<strong>Auszahlung:</strong> Nach Abschluss der Studie wird <strong>1 von 10 Teilnehmenden zufällig ausgewählt</strong>, um den Aufgabenbonus als <strong>Amazon-Gutschein</strong> zu erhalten. '
             'Ihr Endstand bestimmt Ihren Bonus.'
         ),
         ja=(
-            'この最終パートでは、利益と損失を含む一連の選択を行います。あなたの決定に基づいてボーナスを獲得するチャンスがあります。'
-
+            'この最終パートでは、利益と損失を含む一連の選択を行います。'
+            
             '<br><br>'
             'まず、<strong>{symbol}{endowment}</strong>が支給されます。'
             'その後、複数のラウンドでくじと安全な選択肢のどちらかを選びます。'
@@ -207,7 +204,7 @@ UI = dict(
             'そのラウンドで安全な選択肢を選んでいた場合、{symbol}{endowment}をそのまま受け取ります。'
             'くじを選んでいた場合、コイン投げで増えるか減るかが決まります。'
             '<br><br>'
-            '<strong>支払い：</strong>調査完了後、参加者の10人に1人がランダムに選ばれ、課題ボーナスが<strong>Amazonギフトカード</strong>として支払われます。'
+            '<strong>支払い：</strong>調査完了後、<strong>参加者の10人に1人がランダムに選ばれ</strong>、課題ボーナスが<strong>Amazonギフトカード</strong>として支払われます。'
             '最終残高がボーナスを決定します。'
         ),
     ),
@@ -269,12 +266,6 @@ UI = dict(
         de='Vergleich {current} von {total}',
         ja='比較 {current} / {total}'
     ),
-    la2_bonus_note=dict(
-        en='Your task bonus starts at <strong>{symbol}{endowment}</strong>. The amounts shown below reflect potential changes to this bonus.',
-        fr='Votre bonus de tâche commence à <strong>{symbol}{endowment}</strong>. Les montants ci-dessous reflètent les changements potentiels de ce bonus.',
-        de='Ihr Aufgabenbonus beginnt bei <strong>{symbol}{endowment}</strong>. Die unten angezeigten Beträge spiegeln mögliche Änderungen dieses Bonus wider.',
-        ja='課題のボーナスは<strong>{symbol}{endowment}</strong>から始まります。以下の金額は、このボーナスに対する変動を示しています。',
-    ),
     la2_question=dict(
         en='Which would you prefer?',
         fr='Que préféreriez-vous ?',
@@ -335,31 +326,6 @@ UI = dict(
     # --- Survey labels ---
     surv_title=dict(en='Final Survey', fr='Enquête finale', de='Abschlussumfrage', ja='最終アンケート'),
 
-    q_gender=dict(
-        en='What is your gender?',
-        fr='Quel est votre genre ?',
-        de='Was ist Ihr Geschlecht?',
-        ja='あなたの性別は？',
-    ),
-    gen_1=dict(en='Male', fr='Homme', de='Männlich', ja='男性'),
-    gen_2=dict(en='Female', fr='Femme', de='Weiblich', ja='女性'),
-    gen_3=dict(en='Non-binary / Third gender', fr='Non-binaire / Troisième genre', de='Nicht-binär / Drittes Geschlecht', ja='ノンバイナリー / 第三の性'),
-    gen_4=dict(en='Prefer not to say', fr='Je préfère ne pas répondre', de='Keine Angabe', ja='回答したくない'),
-
-    q_years_in_country=dict(
-        en='How many years have you lived in the United Kingdom? Enter 0 if you do not currently reside there.',
-        fr='Depuis combien d\'années vivez-vous en France ? Entrez 0 si vous n\'y résidez pas actuellement.',
-        de='Wie viele Jahre leben Sie in Deutschland? Geben Sie 0 ein, wenn Sie derzeit nicht dort wohnen.',
-        ja='日本に何年間住んでいますか？現在日本に住んでいない場合は0と入力してください。',
-    ),
-
-    q_feedback=dict(
-        en='Do you have any thoughts or comments about this study?',
-        fr='Avez-vous des remarques ou commentaires sur cette étude ?',
-        de='Haben Sie Anmerkungen oder Kommentare zu dieser Studie?',
-        ja='この調査についてご意見やコメントはありますか？',
-    ),
-
     q_industry=dict(
         en='What industry do you currently work in?',
         fr='Dans quel secteur travaillez-vous actuellement ?',
@@ -415,10 +381,10 @@ UI = dict(
         ja='支払い',
     ),
     payment_box_note=dict(
-        en='You start with {symbol}{endowment}. One of your choices will be played out for real. 1 in 10 participants will be randomly selected to receive their bonus as an Amazon gift card.',
-        fr='Vous commencez avec {symbol}{endowment}. Un de vos choix sera joué pour de vrai. 1 participant sur 10 sera sélectionné au hasard pour recevoir son bonus sous forme de carte cadeau Amazon.',
-        de='Sie starten mit {symbol}{endowment}. Eine Ihrer Entscheidungen wird tatsächlich ausgespielt. 1 von 10 Teilnehmenden wird zufällig ausgewählt, um den Bonus als Amazon-Gutschein zu erhalten.',
-        ja='{symbol}{endowment}からスタートします。あなたの選択の1つが実際に実行されます。10人に1人の参加者がランダムに選ばれ、Amazonギフトカードとしてボーナスが支払われます。',
+        en='You start with {symbol}{endowment}. One of your choices will be played out for real. <strong>1 in 10 participants</strong> will be randomly selected to receive their bonus as an Amazon gift card.',
+        fr='Vous commencez avec {symbol}{endowment}. Un de vos choix sera joué pour de vrai. <strong>1 participant sur 10</strong> sera sélectionné au hasard pour recevoir son bonus sous forme de carte cadeau Amazon.',
+        de='Sie starten mit {symbol}{endowment}. Eine Ihrer Entscheidungen wird tatsächlich ausgespielt. <strong>1 von 10 Teilnehmenden</strong> wird zufällig ausgewählt, um den Bonus als Amazon-Gutschein zu erhalten.',
+        ja='{symbol}{endowment}からスタートします。あなたの選択の1つが実際に実行されます。<strong>10人に1人の参加者</strong>がランダムに選ばれ、Amazonギフトカードとしてボーナスが支払われます。',
     ),
 
     td_title=dict(
@@ -478,12 +444,6 @@ UI = dict(
             'ある行で早期オプションを選ぶなら、それより上の全ての行でも早期を選ぶはずです。'
             '一度クリックして切り替えポイントを設定すると、テーブルが自動更新されます。'
         ),
-    ),
-    td_tracker_header=dict(
-        en='Waiting time between options:',
-        fr='Temps d\'attente entre les options :',
-        de='Wartezeit zwischen den Optionen:',
-        ja='選択肢間の待ち時間：',
     ),
     td_col_sooner=dict(en='Option A — Sooner', fr='Option A — Plus tôt', de='Option A — Früher', ja='選択肢A — 早く'),
     td_col_later=dict(en='Option B — Later', fr='Option B — Plus tard', de='Option B — Später', ja='選択肢B — 後で'),
@@ -673,8 +633,6 @@ class LossAversionBisection(Page):
         ui['la2_win_line_fmt'] = ui['la2_win_line'].format(symbol=symbol, gain=fmt(gain))
         ui['la2_lose_line_init'] = ui['la2_lose_line'].format(symbol=symbol, x=fmt(x_init))
         ui['la2_sure_line'] = ui['la2_sure_line'].format(symbol=symbol)
-        endowment_str = fmt(C.LA_ENDOWMENT_BASE * rate)
-        ui['la2_bonus_note'] = ui['la2_bonus_note'].format(symbol=symbol, endowment=endowment_str)
 
         return dict(
             lang=lang,
@@ -729,6 +687,7 @@ class LossAversionBisection(Page):
             player.la2_coin_flip = 'N/A'
             player.la2_bonus = round(endowment, 2)
 
+
         x_star = player.field_maybe_none('la2_indifference_x')
         if x_star is not None and x_star > 0:
             player.la2_lambda = round(gain / x_star, 4)
@@ -773,8 +732,7 @@ class LossAversionResult(Page):
 
         res_flip_win = ui['res_flip_win'].format(symbol=symbol, gain=fmt(gain))
         res_flip_loss = ui['res_flip_loss'].format(symbol=symbol, loss=fmt(selected_x))
-        res_final = ui['res_final'].format(symbol=symbol, endowment=fmt(endowment), sign=sign, outcome=fmt(outcome),
-                                           total=fmt(bonus))
+        res_final = ui['res_final'].format(symbol=symbol, endowment=fmt(endowment), sign=sign, outcome=fmt(outcome), total=fmt(bonus))
         res_final_a = ui['res_final_a'].format(symbol=symbol, total=fmt(bonus))
         ui['res_choice_a'] = ui['res_choice_a'].format(symbol=symbol)
 
@@ -850,17 +808,14 @@ class TemporalDiscounting(Page):
             '2yr': player.field_maybe_none('td_switching_2yr') or 8,
         }
         sp = sp_map[horizon['id']]
-        player.td_choice = 'later' if row['row'] >= sp else 'sooner'
+        player.td_choice = 'sooner' if row['row'] >= sp else 'later'
 
         def implied_k(switch_point, k_values):
-            # sp = first row where participant chooses 'later'
-            # sp=1 → always later (most patient, k≈0)
-            # sp>n → always sooner (most impatient, k=∞)
             n = len(k_values)
             if switch_point <= 1:
-                return 0.0
-            if switch_point > n:
                 return 999.0
+            if switch_point > n:
+                return 0.0
             k_low = k_values[switch_point - 2]
             k_high = k_values[switch_point - 1]
             return round((k_low + k_high) / 2, 4)
@@ -882,7 +837,7 @@ class TemporalDiscounting(Page):
 
 class Survey(Page):
     form_model = 'player'
-    form_fields = ['gender', 'years_in_country', 'employment_industry', 'income_level', 'risk_general', 'patience_general', 'study_feedback']
+    form_fields = ['employment_industry', 'income_level', 'risk_general', 'patience_general']
 
     @staticmethod
     def vars_for_template(player):

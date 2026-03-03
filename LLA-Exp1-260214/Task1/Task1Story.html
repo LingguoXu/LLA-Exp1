@@ -6,9 +6,73 @@
     display: flex; align-items: center; gap: 10px;
     margin-bottom: 18px;
 }
-/* on mobile, make blanks a bit wider for fat fingers */
+
+/* -- Gap wrapper -- */
+.gap-wrap {
+    display: inline-block;
+    position: relative;
+    vertical-align: baseline;
+    min-width: 80px;
+}
+
+/* -- Clickable hint word (blue, in the gap) -- */
+.gap-hint {
+    display: inline-block;
+    padding: 2px 10px;
+    min-width: 60px;
+    text-align: center;
+    color: #3b82f6;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 0.92em;
+    background: #eff6ff;
+    border-bottom: 2px dashed #93c5fd;
+    border-radius: 3px 3px 0 0;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+    line-height: 1.6;
+}
+.gap-hint:hover {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+/* -- Text input (hidden until activated) -- */
+.gap-wrap input.blank {
+    display: none;
+    width: 130px;
+    padding: 2px 8px;
+    border: none;
+    border-bottom: 2px solid #6366f1;
+    border-radius: 3px 3px 0 0;
+    font-size: 1rem;
+    font-family: inherit;
+    background: #eef2ff;
+    color: #1e293b;
+    text-align: center;
+    transition: border-color 0.15s, background 0.15s;
+    vertical-align: baseline;
+    outline: none;
+    line-height: 1.6;
+}
+.gap-wrap input.blank:focus {
+    border-bottom-color: #4f46e5;
+    background: #e0e7ff;
+}
+.gap-wrap input.blank.filled {
+    background: #ecfdf5;
+    border-bottom-color: #22c55e;
+    color: #065f46;
+}
+.gap-wrap input.blank.active {
+    display: inline-block;
+}
+
 @media (max-width: 500px) {
-    .blank { min-width: 90px; max-width: 140px; font-size: .88rem; }
+    .gap-wrap input.blank { min-width: 80px; max-width: 140px; font-size: .88rem; }
+    .gap-hint { font-size: 0.84em; min-width: 50px; }
 }
 {% endblock %}
 
@@ -46,11 +110,8 @@
 
 {% block scripts %}
 (function(){
-    /* ── data from server ──────────────────────────── */
-    var paras     = {{ story.paragraphs|json }};
-    var storyNum  = {{ story_num }};
-
-    // SAFE LOADING: Use otree's json filter to handle quotes correctly
+    var paras      = {{ story.paragraphs|json }};
+    var storyNum   = {{ story_num }};
     var rawExisting = {{ existing|json }};
 
     var body      = document.getElementById('storyBody');
@@ -59,103 +120,129 @@
     var foot      = document.getElementById('foot');
     var valMsg    = document.getElementById('valMsg');
     var submitBtn = document.getElementById('submitBtn');
+    var field     = document.getElementById('field');
+    field.value   = rawExisting;
 
-    // Populate the hidden field immediately using the safe variable
-    var field = document.getElementById('field');
-    field.value = rawExisting;
-
-    /* ── build paragraph DOM elements ──────────────── */
+    /* -- build paragraphs -- */
     var paraEls = [];
 
-    paras.forEach(function(txt, pIdx){
+    paras.forEach(function(txt){
         var div = document.createElement('div');
         div.className = 'story-para reveal';
 
-        /* Replace (N) markers with badge + input */
-        var html = txt.replace(/\*\*(\{[^}]+\})\*\*/g, '<strong>$1</strong>');
-        html = html.replace(/\{\{(\d+)\}\}/g, function(match, num){
-            return '<span class="blank-num">' + num + '</span>' +
-                   '<input type="text" class="blank" ' +
-                   'data-n="' + num + '" ' +
-                   'placeholder="(' + num + ')" ' +
-                   'autocomplete="off" autocapitalize="off" spellcheck="false">';
+        /* Combined: N **{HINT}** -> single gap */
+        var html = txt.replace(/\{\{(\d+)\}\}\s*\*\*\{([^}]+)\}\*\*/g, function(m, num, hint){
+            return '<span class="gap-wrap">' +
+                       '<span class="gap-hint" data-hint="' + hint + '">' + hint + '</span>' +
+                       '<input type="text" class="blank" data-n="' + num + '" ' +
+                           'autocomplete="off" autocapitalize="off" spellcheck="false">' +
+                   '</span>';
         });
+
+        /* Fallback: bare N */
+        html = html.replace(/\{\{(\d+)\}\}/g, function(m, num){
+            return '<span class="gap-wrap">' +
+                       '<span class="gap-hint" data-hint="\u2026">\u2026</span>' +
+                       '<input type="text" class="blank" data-n="' + num + '" ' +
+                           'autocomplete="off" autocapitalize="off" spellcheck="false">' +
+                   '</span>';
+        });
+
+        /* Clean stray bold markers */
+        html = html.replace(/\*\*\{[^}]+\}\*\*/g, '');
+
         div.innerHTML = html;
         body.appendChild(div);
         paraEls.push(div);
     });
 
-    /* ── progressive reveal ────────────────────────── */
-    var revealed = 0;
-
-function revealNext(){
-        // Reveal up to 3 paragraphs at once
-        var step = 3;
-        for(var i=0; i<step; i++) {
-            if(revealed >= paraEls.length) break;
-
-            var el = paraEls[revealed];
-            el.classList.add('show');
-            revealed++;
-        }
-
-        // If we just showed the last one, hide the button
-        if(revealed >= paraEls.length){
-            revealW.style.display = 'none';
-            foot.style.display = 'block';
-            setTimeout(function(){
-                foot.scrollIntoView({ behavior:'smooth', block:'end' });
-            }, 120);
-        } else {
-            // Otherwise, scroll to the last revealed chunk
-            // (Optional: scroll to the new bottom)
-             paraEls[revealed-1].scrollIntoView({ behavior:'smooth', block:'center' });
-        }
+    /* -- click-to-fill interaction -- */
+    function activateGap(hintEl) {
+        var wrap  = hintEl.parentNode;
+        var input = wrap.querySelector('input.blank');
+        hintEl.style.display = 'none';
+        input.classList.add('active');
+        input.focus();
     }
 
-    /* show first paragraph immediately */
-    requestAnimationFrame(revealNext);
+    function deactivateGap(input) {
+        if (input.value.trim().length > 0) {
+            input.classList.add('filled');
+            return;
+        }
+        var hint = input.parentNode.querySelector('.gap-hint');
+        input.classList.remove('active');
+        if (hint) hint.style.display = '';
+    }
 
-    revealBtn.addEventListener('click', revealNext);
+    body.addEventListener('click', function(e) {
+        if (e.target.classList.contains('gap-hint')) activateGap(e.target);
+    });
 
-    /* ── live colour on blanks ─────────────────────── */
-    body.addEventListener('input', function(e){
-        if(e.target.classList.contains('blank')){
+    body.addEventListener('focusout', function(e) {
+        if (e.target.classList.contains('blank')) deactivateGap(e.target);
+    });
+
+    body.addEventListener('input', function(e) {
+        if (e.target.classList.contains('blank')) {
             e.target.classList.toggle('filled', e.target.value.trim().length > 0);
         }
     });
 
-    /* ── submit ────────────────────────────────────── */
+    /* -- progressive reveal -- */
+    var revealed = 0;
+
+    function revealNext(){
+        var step = 3;
+        for (var i = 0; i < step; i++) {
+            if (revealed >= paraEls.length) break;
+            paraEls[revealed].classList.add('show');
+            revealed++;
+        }
+        if (revealed >= paraEls.length) {
+            revealW.style.display = 'none';
+            foot.style.display = 'block';
+            setTimeout(function(){ foot.scrollIntoView({ behavior:'smooth', block:'end' }); }, 120);
+        } else {
+            paraEls[revealed-1].scrollIntoView({ behavior:'smooth', block:'center' });
+        }
+    }
+
+    requestAnimationFrame(revealNext);
+    revealBtn.addEventListener('click', revealNext);
+
+    /* -- submit -- */
     submitBtn.addEventListener('click', function(){
-        var inputs   = body.querySelectorAll('.blank');
-        var answers  = {};
-        var ok       = true;
-        var firstBad = null;
+        var inputs = body.querySelectorAll('.blank');
+        var answers = {}, ok = true, firstBad = null;
 
         inputs.forEach(function(inp){
             var v = inp.value.trim();
             answers[inp.getAttribute('data-n')] = v;
-            if(!v){ ok = false; if(!firstBad) firstBad = inp; }
+            if (!v) { ok = false; if (!firstBad) firstBad = inp; }
         });
 
-        // ➤ DEBUG: UNCOMMENT THIS LINE TO DISABLE VALIDATION
+        // DEBUG: set ok = true to skip validation
         ok = true;
 
-        if(!ok){
+        if (!ok) {
             valMsg.classList.add('show');
-            firstBad.focus();
-            firstBad.scrollIntoView({ behavior:'smooth', block:'center' });
+            if (firstBad) {
+                var wrap = firstBad.parentNode;
+                var hint = wrap.querySelector('.gap-hint');
+                if (hint) hint.style.display = 'none';
+                firstBad.classList.add('active');
+                firstBad.focus();
+                firstBad.scrollIntoView({ behavior:'smooth', block:'center' });
+            }
             return;
         }
         valMsg.classList.remove('show');
 
-        /* merge with existing data from previous stories */
         var all;
         try { all = JSON.parse(field.value || '{}'); } catch(e){ all = {}; }
         all['story_' + storyNum] = answers;
         field.value = JSON.stringify(all);
-
-        // This works perfectly with your Base.html
         submitPage();
     });
 })();

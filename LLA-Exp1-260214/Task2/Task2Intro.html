@@ -1,18 +1,180 @@
 {% extends "global/Base.html" %}
 {% load otree %}
 
+{% block extra_css %}
+<style>
+    /* -- Gap wrapper (same as Task2Item) -- */
+    .gap-wrap {
+        display: inline-block; position: relative;
+        vertical-align: baseline; min-width: 80px;
+    }
+    .gap-hint {
+        display: inline-block; padding: 2px 10px; min-width: 60px;
+        text-align: center; color: #3b82f6; font-weight: 600;
+        font-style: italic; font-size: 0.92em; background: #eff6ff;
+        border-bottom: 2px dashed #93c5fd; border-radius: 3px 3px 0 0;
+        cursor: pointer; transition: background 0.15s, color 0.15s;
+        user-select: none; -webkit-user-select: none; line-height: 1.6;
+    }
+    .gap-hint:hover { background: #dbeafe; color: #2563eb; }
+    .gap-wrap input.blank {
+        display: none; width: 130px; padding: 2px 8px; border: none;
+        border-bottom: 2px solid #6366f1; border-radius: 3px 3px 0 0;
+        font-size: 1rem; font-family: inherit; background: #eef2ff;
+        color: #1e293b; text-align: center; transition: border-color 0.15s, background 0.15s;
+        vertical-align: baseline; outline: none; line-height: 1.6;
+    }
+    .gap-wrap input.blank:focus { border-bottom-color: #4f46e5; background: #e0e7ff; }
+    .gap-wrap input.blank.filled { background: #ecfdf5; border-bottom-color: #22c55e; color: #065f46; }
+    .gap-wrap input.blank.active { display: inline-block; }
+    @media (max-width: 500px) {
+        .gap-wrap input.blank { min-width: 80px; max-width: 140px; font-size: .88rem; }
+        .gap-hint { font-size: 0.84em; min-width: 50px; }
+    }
+    /* -- Instruction styling -- */
+    .instruction-step {
+        display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px;
+    }
+    .step-icon {
+        flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+        background: #eff6ff; color: #3b82f6;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 0.85rem;
+    }
+    .step-text { font-size: 0.95rem; line-height: 1.55; color: #334155; padding-top: 3px; }
+    /* -- Practice area -- */
+    .practice-box {
+        background: #fafbff; border: 1px solid #e2e8f0; border-radius: 10px;
+        padding: 20px 22px; margin: 20px 0;
+    }
+    .practice-label {
+        font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.06em; color: #3b82f6; margin-bottom: 12px;
+    }
+    .practice-scenario { font-size: 1.02rem; line-height: 1.85; }
+    .practice-scenario p { margin-bottom: 10px; }
+    .practice-scenario .target {
+        margin-top: 12px; padding-top: 12px;
+        border-top: 1px dashed #cbd5e1; font-weight: 500;
+    }
+    .ctx-header-practice {
+        background: #f0f4f8; border-left: 4px solid #6366f1;
+        padding: 10px 14px; margin-bottom: 14px; border-radius: 3px;
+        font-weight: 600; font-size: 0.95rem; color: #334155;
+    }
+    /* -- Guidelines -- */
+    .guidelines-box {
+        background: #f0fdf4; border-left: 4px solid #22c55e;
+        border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0 24px;
+    }
+    .guidelines-box p { margin: 0 0 6px; font-size: 0.92rem; color: #334155; line-height: 1.55; }
+    .guidelines-box p:last-child { margin-bottom: 0; }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="card" style="text-align:center; padding: 40px 20px;">
     <h1>{{ ui.intro_title }}</h1>
-
-    <p style="font-size:1.1rem; color: #64748b; margin-top: 15px; margin-bottom: 30px;">
+    <p style="font-size:1.1rem; color: #64748b; margin-top: 15px; margin-bottom: 10px;">
         {{ ui.intro_text }}
     </p>
+</div>
 
-    <div class="foot" style="justify-content:center;">
+<div class="card">
+    <h2 style="margin-bottom:16px;">{{ ui.t2_how_title }}</h2>
+
+    <div class="instruction-step">
+        <span class="step-icon">1</span>
+        <span class="step-text">{{ ui.t2_how_step1 }}</span>
+    </div>
+    <div class="instruction-step">
+        <span class="step-icon">2</span>
+        <span class="step-text">{{ ui.t2_how_step2 }}</span>
+    </div>
+    <div class="instruction-step">
+        <span class="step-icon">3</span>
+        <span class="step-text">{{ ui.t2_how_step3 }}</span>
+    </div>
+
+    <!-- Practice -->
+    <div class="practice-box">
+        <div class="practice-label">{{ ui.t2_practice_label }}</div>
+        <div id="practiceBody"></div>
+    </div>
+
+    <!-- Guidelines -->
+    <div class="guidelines-box">
+        <p><strong>{{ ui.t2_guidelines_title }}</strong></p>
+        <p>{{ ui.t2_guideline_1 }}</p>
+        <p>{{ ui.t2_guideline_2 }}</p>
+        <p>{{ ui.t2_guideline_3 }}</p>
+    </div>
+
+    <div style="text-align:center;">
         <button type="button" class="btn btn-primary" onclick="submitPage()">
             {{ ui.btn_next }} &rarr;
         </button>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+(function(){
+    var practiceHtml = {{ t2_practice_html|json }};
+    var practiceBody = document.getElementById("practiceBody");
+
+    /* Parse practice HTML: extract <em> hints then build gaps */
+    var emRegex = /<em>[\uff08\u0028]?([^)\uff09<]+)[\u0029\uff09]?<\/em>/g;
+    var hints = [];
+    var emMatch;
+    while ((emMatch = emRegex.exec(practiceHtml)) !== null) {
+        hints.push(emMatch[1].trim());
+    }
+
+    /* Remove <em> tags */
+    practiceHtml = practiceHtml.replace(/\s*<em>[^<]*<\/em>/g, "");
+
+    /* Replace N with gap elements */
+    practiceHtml = practiceHtml.replace(/\{\{(\d+)\}\}/g, function(m, num) {
+        var hint = hints[parseInt(num) - 1] || "\u2026";
+        return '<span class="gap-wrap">' +
+            '<span class="gap-hint" data-hint="' + hint + '">' + hint + '</span>' +
+            '<input type="text" class="blank" data-n="p' + num + '"' +
+            ' autocomplete="off" autocapitalize="off" spellcheck="false">' +
+            '</span>';
+    });
+
+    practiceBody.innerHTML = '<div class="practice-scenario">' + practiceHtml + "</div>";
+
+    /* Click-to-fill interaction */
+    function activateGap(hintEl) {
+        var wrap  = hintEl.parentNode;
+        var input = wrap.querySelector("input.blank");
+        hintEl.style.display = "none";
+        input.classList.add("active");
+        input.focus();
+    }
+
+    function deactivateGap(input) {
+        if (input.value.trim().length > 0) {
+            input.classList.add("filled");
+            return;
+        }
+        var hint = input.parentNode.querySelector(".gap-hint");
+        input.classList.remove("active");
+        if (hint) hint.style.display = "";
+    }
+
+    practiceBody.addEventListener("click", function(e) {
+        if (e.target.classList.contains("gap-hint")) activateGap(e.target);
+    });
+    practiceBody.addEventListener("focusout", function(e) {
+        if (e.target.classList.contains("blank")) deactivateGap(e.target);
+    });
+    practiceBody.addEventListener("input", function(e) {
+        if (e.target.classList.contains("blank")) {
+            e.target.classList.toggle("filled", e.target.value.trim().length > 0);
+        }
+    });
+})();
 {% endblock %}
