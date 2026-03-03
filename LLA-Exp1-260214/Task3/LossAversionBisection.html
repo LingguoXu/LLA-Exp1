@@ -30,9 +30,8 @@
     }
     .bisect-card {
         border: 2px solid var(--border); border-radius: 10px; padding: 20px;
-        cursor: pointer; transition: all 0.25s ease; background: #fff;
+        cursor: default; transition: all 0.25s ease; background: #fff;
     }
-    .bisect-card:hover { border-color: #a5b4fc; background: #f5f3ff; }
     .bisect-card.selected-a { border-color: var(--success); background: #ecfdf5; box-shadow: 0 0 0 1px var(--success); }
     .bisect-card.selected-b { border-color: var(--primary); background: #eef2ff; box-shadow: 0 0 0 1px var(--primary); }
 
@@ -76,6 +75,8 @@
 
     .phase-bisection, .phase-slider { display: none; }
     .phase-bisection.active, .phase-slider.active { display: block; }
+    /* Hide oTree's default Next button visually — still in DOM for programmatic click */
+    .otree-btn-next { visibility: hidden; position: absolute; pointer-events: none; }
 
     .slider-callout {
         background: #f0f9ff; border-left: 4px solid #0ea5e9;
@@ -112,11 +113,14 @@
 </style>
 {% endblock %}
 
-{% block content %}
 
-<!-- Hidden form fields — names must match Player field names in __init__.py -->
+{% block hidden_fields %}
 <input type="hidden" name="la2_indifference_x" id="field_indiff_loss" value="">
 <input type="hidden" name="la2_bisection_data" id="field_bisection_data" value="">
+{% endblock %}
+
+
+{% block content %}
 
 <div class="card">
     <h2 style="text-align:center;">{{ ui.la2_title }}</h2>
@@ -127,10 +131,10 @@
 
     <div class="alert-custom">
         <strong>{{ ui.la_alert_head }}</strong>
-        {% if lang == 'en' %}There are no right or wrong answers — we are simply trying to find the loss amount that makes the lottery equally attractive as the sure option <em>for you personally</em>.
-        {% elif lang == 'fr' %}Il n'y a pas de bonnes ou de mauvaises réponses — nous cherchons simplement le montant de perte qui rend la loterie aussi attrayante que l'option certaine <em>pour vous personnellement</em>.
-        {% elif lang == 'de' %}Es gibt keine richtigen oder falschen Antworten — wir versuchen, den Verlustbetrag zu finden, bei dem die Lotterie für <em>Sie persönlich</em> genauso attraktiv ist wie die sichere Option.
-        {% elif lang == 'ja' %}正解や不正解はありません — <em>あなた個人にとって</em>、くじを確実な選択肢と同じくらい魅力的にする損失額を見つけようとしています。{% endif %}
+        {% if lang == 'en' %}There are no right or wrong answers — we are simply trying to find the loss amount that makes the lottery and the safe option feel equally appealing <em>for you personally</em>.
+        {% elif lang == 'fr' %}Il n'y a pas de bonnes ou de mauvaises réponses — nous cherchons simplement le montant de perte où la loterie et l'option sûre vous semblent aussi attractives l'une que l'autre <em>pour vous personnellement</em>.
+        {% elif lang == 'de' %}Es gibt keine richtigen oder falschen Antworten — wir versuchen, den Verlustbetrag zu finden, bei dem die Lotterie und die sichere Option für <em>Sie persönlich</em> gleich attraktiv erscheinen.
+        {% elif lang == 'ja' %}正解や不正解はありません — <em>あなた個人にとって</em>、くじと安全な選択肢が同じくらい魅力的に感じる損失額を見つけようとしています。{% endif %}
     </div>
 
 
@@ -154,7 +158,7 @@
             <div class="bisect-compare-row">
 
                 <!-- Option A: Sure 0 ECU -->
-                <div class="bisect-card bisect-card-a" id="card-a" onclick="bisectChoose('A')">
+                <div class="bisect-card bisect-card-a" id="card-a">
                     <span class="bisect-card-label">A</span>
                     <div class="bisect-card-title">{{ ui.la2_sure_label }}</div>
                     <div class="bisect-outcome">{{ ui.la2_sure_line }}</div>
@@ -163,7 +167,7 @@
                 <div class="bisect-vs">VS</div>
 
                 <!-- Option B: Lottery (loss varies each step) -->
-                <div class="bisect-card bisect-card-b" id="card-b" onclick="bisectChoose('B')">
+                <div class="bisect-card bisect-card-b" id="card-b">
                     <span class="bisect-card-label">B</span>
                     <div class="bisect-card-title">{{ ui.la2_lottery_label }}</div>
                     <div class="bisect-outcome">
@@ -283,6 +287,9 @@
     window.bisectChoose = function(choice) {
         choices.push({ step: step + 1, x_shown: +(currentX.toFixed(2)), choice: choice });
 
+        // Sync data to form after every choice (safety net)
+        document.getElementById('field_bisection_data').value = JSON.stringify(choices);
+
         if (choice === 'A') high = currentX;  // sure preferred → loss too high
         else                low  = currentX;  // lottery preferred → loss too low
 
@@ -368,6 +375,9 @@
         var x = parseFloat(val);
         currentX = x;
 
+        // Sync to form field on every slider move
+        document.getElementById('field_indiff_loss').value = x.toFixed(2);
+
         setLoseLine('slider-lose-text', x);
 
         var big = document.getElementById('slider-big-display');
@@ -394,7 +404,8 @@
     window.bisectConfirm = function() {
         document.getElementById('field_indiff_loss').value    = currentX.toFixed(2);
         document.getElementById('field_bisection_data').value = JSON.stringify(choices);
-        submitPage();
+
+        document.getElementById('form').submit();
     };
 
 })();

@@ -1,0 +1,75 @@
+{% extends "global/Base.html" %}
+{% load otree static %}
+
+{% block content %}
+<div class="card" style="padding: 40px 20px; max-width: 700px; margin: auto;">
+    <h2 style="text-align:center;">{{ ui.res_title }}</h2>
+
+    <div style="font-size:1.1rem; color: #334155; margin-top: 25px; line-height: 1.6;">
+        <p>{{ res_selected_formatted|safe }}</p>
+
+        {% if selected_choice == 'A' %}
+            <p>{{ ui.res_choice_a|safe }}</p>
+            <p>{{ res_final_a_formatted|safe }}</p>
+        {% else %}
+            <p>{{ ui.res_choice_b|safe }}</p>
+
+            {% if coin_flip == 'Win' %}
+                <p>{{ res_flip_win_formatted|safe }}</p>
+            {% else %}
+                <p>{{ res_flip_loss_formatted|safe }}</p>
+            {% endif %}
+
+            <p>{{ res_final_formatted|safe }}</p>
+        {% endif %}
+    </div>
+
+    <div style="background:#f0fdf4; border-left:4px solid #22c55e; border-radius:6px; padding:20px; margin-top:30px;">
+        <div style="font-size:0.9rem; font-weight:700; text-transform:uppercase; color:#166534; margin-bottom:10px;">
+            {% if lang == 'en' %}Your Task Bonus (if selected){% elif lang == 'fr' %}Votre bonus de tâche (si sélectionné){% elif lang == 'de' %}Ihr Aufgabenbonus (falls ausgewählt){% elif lang == 'ja' %}課題のボーナス（選ばれた場合）{% endif %}
+        </div>
+        <div style="font-size:1.5rem; font-weight:700; color:#14532d;">
+            {{ bonus_ecu|to0 }} ECU
+            <span style="font-size:1rem; color:#166534; font-weight:normal; margin-left:10px;">
+                (≈ {{ symbol }}{{ bonus_real|to2 }})
+            </span>
+        </div>
+        <div style="font-size:0.85rem; color:#475569; margin-top:10px; line-height:1.5;">
+            {% if lang == 'en' %}After the study, 1 in 10 participants will be randomly selected to receive this bonus as an Amazon gift card.
+            {% elif lang == 'fr' %}Après l'étude, 1 participant sur 10 sera sélectionné au hasard pour recevoir ce bonus sous forme de carte cadeau Amazon.
+            {% elif lang == 'de' %}Nach der Studie wird 1 von 10 Teilnehmenden zufällig ausgewählt, um diesen Bonus als Amazon-Gutschein zu erhalten.
+            {% elif lang == 'ja' %}調査終了後、10人に1人の参加者がランダムに選ばれ、このボーナスがAmazonギフトカードとして支払われます。{% endif %}
+        </div>
+    </div>
+
+    <!-- Email for gift card delivery -->
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:20px; margin-top:24px;">
+        <label for="id_bonus_contact_email" style="display:block; font-size:0.95rem; color:#334155; line-height:1.5; margin-bottom:10px;">
+            {{ ui.res_email_label }}
+        </label>
+        <input type="email" name="bonus_contact_email" id="id_bonus_contact_email"
+               placeholder="{{ ui.res_email_placeholder }}" required
+               style="width:100%; max-width:400px; padding:10px 14px; border:2px solid #cbd5e1; border-radius:6px;
+                      font-size:1rem; outline:none; transition:border-color 0.2s;"
+               onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#cbd5e1'">
+    </div>
+
+    <div class="foot" style="justify-content:center; margin-top:40px;">
+        <button type="button" class="btn btn-primary" onclick="submitPage()">
+            {{ ui.btn_next }} &rarr;
+        </button>
+    </div>
+</div>
+
+<script>
+    function submitPage() {
+        var emailField = document.getElementById('id_bonus_contact_email');
+        if (!emailField.value || !emailField.value.includes('@')) {
+            emailField.style.borderColor = '#ef4444';
+            emailField.focus();
+            return;
+        }
+        document.getElementById('form').submit();
+    }
+</script>
+{% endblock %}

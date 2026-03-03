@@ -5,9 +5,9 @@
 <div class="card" style="text-align:center; padding: 40px 20px;">
     <h1>{{ ui.intro_title }}</h1>
 
-    <p style="font-size:1.1rem; color: #64748b; margin-top: 15px; margin-bottom: 24px;">
-        {{ ui.intro_text }}
-    </p>
+    <div style="font-size:1.05rem; color: #475569; margin-top: 15px; margin-bottom: 24px; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.7;">
+        {{ ui.intro_text|safe }}
+    </div>
 
     <!-- ECU exchange rate callout box -->
     <div style="display:inline-block; text-align:left; background:#f0f9ff; border-left:4px solid #0ea5e9;
@@ -17,7 +17,7 @@
         <div style="font-size:1.05rem; font-weight:700; color:#0c4a6e; margin-bottom:6px;">
             {{ ecu_example }}
         </div>
-        <div style="font-size:0.88rem; color:#475569;">{{ ui.ecu_box_note }}</div>
+        <div style="font-size:0.88rem; color:#475569;">{{ ui.ecu_box_note|safe }}</div>
     </div>
 
     <div class="foot" style="justify-content:center;">

@@ -7,21 +7,27 @@ Design based on Robertson et al. (2023).
 Languages: English (en), French (fr), German (de), Japanese (ja).
 
 Task 2.1 Design (SCENARIOS):
-  - 27 Prediction items: 3 items × 3 modality (uncertain/neutral/certain) × 3 temporal distance
-                         (tomorrow / six months / two years)
-  - 3  Scheduling controls: 1 item × 3 temporal distances (neutral modality only)
-  - 3  Intention controls:  1 item × 3 temporal distances (neutral modality only)
-  Total: 33 items, each presented as an individual page.
+  PRIMARY (25 items, 3 pages of ~8–9):
+    15 Predictions: full 3×5 factorial
+       3 temporal distances  (tomorrow / 3 months / 2 years)
+     × 5 certainty levels    (neutral / 40 % / 50 % / 60 % / 100 %)
+     5 Intentions: one per certainty, time randomly assigned
+     5 Scheduling:  one per certainty, time randomly assigned
 
-  Modality conditions follow Robertson (2023):
-    uncertain = ~40–60 % (low certainty, epistemic hedging expected)
-    neutral   = no certainty cue (participant's default FTR encoding)
-    certain   = 100 % (high certainty, strong assertion expected)
+  BACKUP (15 items, 1 page):
+    15 additional Predictions: same 3×5 factorial (alternate items)
 
-  Item sources:
-    - Robertson (2023) Table A.5 FTR-elicitation questionnaire
-    - Uploaded pilot item bank (Lin / Lumi)
-    - New items adapted from both sources with temporal distance adjusted
+  Total: 40 items + 2 attention checks across 4 pages.
+
+  Attention checks (2):
+    Disguised as normal scenarios but instruct participant to type a
+    specific word.  Buried mid-page in Pages 1 and 3.
+    Used for data-quality screening.
+
+  All items sourced from Robertson (2023) Table A.5, adapted for:
+    - temporal distances (tomorrow / 3 months / 2 years)
+    - cross-linguistic validity (culturally specific references generalised)
+    - no {BE} or {DO} cloze verbs in questioner/context
 
 Key linguistic note for German:
   Target sentences are structured so the verb blank falls at the END of the clause,
@@ -67,12 +73,6 @@ UI = dict(
         ja='調査の第2パートに移ります。下のボタンをクリックして進んでください。',
     ),
     # ── Task 2.1 Instructions ──
-    # Wording follows Robertson et al. (2023, p.14–15):
-    #   "There are no correct answers."
-    #   Respond "as though you were speaking to a close friend."
-    #   The certainty badge means: "This indicates how certain you are about
-    #   what you are saying — please imagine you are this certain and write
-    #   down what you would say."
     t2_instructions = dict(
         en=(
             "There are no correct answers. "
@@ -104,12 +104,6 @@ UI = dict(
         ),
     ),
     # ── Task 2.2 Slider ──
-    # Wording follows Robertson et al. (2023, p.18):
-    #   "You will be asked to indicate how much certainty each statement
-    #    expresses in YOUR eyes."
-    #   "Indicate how much certainty YOU would be expressing in the
-    #    following statement."
-    #   Scale: "uncertain" (0) → "certain" (100).
     slider_title = dict(
         en='Part 2: Certainty Ratings',
         fr='Partie 2 : Évaluation de la certitude',
@@ -138,7 +132,6 @@ UI = dict(
             "（0 = 不確か、100 = 確実）。"
         ),
     ),
-    # Slider endpoint labels: "uncertain" → "certain" (following Robertson 2023)
     impossible = dict(en='Uncertain', fr='Incertain(e)', de='Unsicher', ja='不確か'),
     certain    = dict(en='Certain',   fr='Certain(e)',   de='Sicher',   ja='確実'),
 )
@@ -151,16 +144,16 @@ def ui_dict(lang):
 # ═══════════════════════════════════════════════════════════
 # TASK 2.1 SCENARIOS  (Production / FTR elicitation)
 #
-# Structure: single master list; each scenario dict has multilingual
-# sub-dicts for context_header, context_prob, and text.
-# _get_scenario() extracts the language-specific version at runtime.
+# All items sourced from Robertson (2023) Table A.5.
+# Adapted for temporal distances and cross-linguistic use.
 #
 # Field glossary:
 #   id            – unique slug (used as data key)
 #   ftr_mode      – 'prediction' | 'scheduling' | 'intention'
-#   temporal      – 'tomorrow' | 'six_months' | 'two_years'
-#   modality      – 'uncertain' | 'neutral' | 'certain'
+#   temporal      – 'tomorrow' | 'three_months' | 'two_years'
+#   modality      – 'low_40' | 'low_50' | 'low_60' | 'neutral' | 'certain'
 #   certainty     – numeric seed (40/50/60/100) or None for neutral
+#   robertson_src – Robertson Table A.5 item number
 #   context_header – displayed title box (per language)
 #   context_prob  – displayed badge (empty string for neutral)
 #   text          – HTML snippet; {{N}} → input blank; verb hint in <em>
@@ -169,633 +162,479 @@ def ui_dict(lang):
 #   Präsens (finite verb) and Futur I (werden + Infinitiv) are
 #   grammatically natural without separable-verb word-order issues.
 # ═══════════════════════════════════════════════════════════
+
+# ── Probability badge templates ──
+_PROB = {
+    40:   dict(en="~40 % Likely", fr="~40 % probable", de="~40 % wahrscheinlich", ja="約40 %の確率"),
+    50:   dict(en="~50 % Likely", fr="~50 % probable", de="~50 % wahrscheinlich", ja="約50 %の確率"),
+    60:   dict(en="~60 % Likely", fr="~60 % probable", de="~60 % wahrscheinlich", ja="約60 %の確率"),
+    100:  dict(en="100 % Certain", fr="100 % certain", de="100 % sicher", ja="100 % 確実"),
+    None: dict(en='', fr='', de='', ja=''),
+}
+
 SCENARIOS = [
 
-    # ══════════════════════════════════════════════════════
-    # PREDICTIONS — TOMORROW
-    # ══════════════════════════════════════════════════════
+    # ══════════════════════════════════════════════════════════
+    #  PRIMARY ITEMS  (25)
+    # ══════════════════════════════════════════════════════════
 
-    # P-T1  Tomorrow / Uncertain ~50 %
-    dict(
-        id='p_tmr_unc_1',
-        ftr_mode='prediction', temporal='tomorrow', modality='uncertain', certainty=50,
-        context_header=dict(
-            en="Exam Tomorrow",
-            fr="Examen demain",
-            de="Prüfung morgen",
-            ja="明日の試験",
-        ),
-        context_prob=dict(
-            en="~50 % Likely",
-            fr="~50 % probable",
-            de="~50 % wahrscheinlich",
-            ja="約50 %の確率",
-        ),
-        text=dict(
-            en="""
-<p><strong>A:</strong> Do you think the exam tomorrow will be hard? We've studied so much...</p>
-<p><strong>B:</strong> Maybe, but I never know with Professor Johnson...</p>
-<p class='target'>...so I think we {{1}} <em>(pass)</em>.</p>
-""",
-            fr="""
-<p><strong>A :</strong> Tu penses que l'examen demain va être difficile ? On a beaucoup révisé...</p>
-<p><strong>B :</strong> Peut-être, mais avec le professeur Martin, on ne sait jamais...</p>
-<p class='target'>...alors je pense qu'on {{1}} <em>(réussir)</em>.</p>
-""",
-            de="""
-<p><strong>A:</strong> Glaubst du, die Prüfung morgen wird schwer? Wir haben so viel gelernt...</p>
-<p><strong>B:</strong> Vielleicht, aber bei Professor Müller weiß man nie...</p>
-<p class='target'>...Ich denke, wir werden morgen {{1}} <em>(bestehen)</em>.</p>
-""",
-            ja="""
-<p><strong>A：</strong>明日の試験は難しいと思う？すごく勉強したんだけど…</p>
-<p><strong>B：</strong>どうかな。ジョンソン先生のことだから何とも言えないけど…</p>
-<p class='target'>…だから、私たちは{{1}}と思う。<em>（合格する）</em></p>
-""",
-        ),
-    ),
+    # ─────────────────────────────────────────────────────────
+    #  PREDICTIONS — TOMORROW  (5 items: neutral, 40, 50, 60, 100)
+    # ─────────────────────────────────────────────────────────
 
-    # P-T2  Tomorrow / Uncertain ~40 %
+    # Item 1 — Prediction / Tomorrow / Neutral  (Robertson 1022)
     dict(
-        id='p_tmr_unc_2',
-        ftr_mode='prediction', temporal='tomorrow', modality='uncertain', certainty=40,
-        context_header=dict(
-            en="Today's Weather",
-            fr="La météo aujourd'hui",
-            de="Wetter heute",
-            ja="今日の天気",
-        ),
-        context_prob=dict(
-            en="~40 % Likely",
-            fr="~40 % probable",
-            de="~40 % wahrscheinlich",
-            ja="約40 %の確率",
-        ),
-        text=dict(
-            en="""
-<p><strong>A:</strong> Should I bring an extra warm jacket for later? The sky looks odd.</p>
-<p><strong>B:</strong> It's hard to say — the forecast is unclear today...</p>
-<p class='target'>...it {{1}} <em>(snow)</em> this afternoon.</p>
-""",
-            fr="""
-<p><strong>A :</strong> Est-ce que je devrais prendre un manteau chaud pour plus tard ? Le ciel a l'air bizarre.</p>
-<p><strong>B :</strong> C'est difficile à dire — la météo n'est pas très claire aujourd'hui...</p>
-<p class='target'>...il {{1}} <em>(neiger)</em> cet après-midi.</p>
-""",
-            de="""
-<p><strong>A:</strong> Soll ich für später eine wärmere Jacke mitnehmen? Der Himmel sieht seltsam aus.</p>
-<p><strong>B:</strong> Schwer zu sagen — die Vorhersage ist heute nicht klar...</p>
-<p class='target'>...heute Nachmittag könnte es {{1}} <em>(schneien)</em>.</p>
-""",
-            ja="""
-<p><strong>A：</strong>後で厚手のジャケットを持っていった方がいい？空が変な感じ。</p>
-<p><strong>B：</strong>なんとも言えないね。今日の天気予報がはっきりしないから…</p>
-<p class='target'>…今日の午後{{1}}かもしれないよ。<em>（雪が降る）</em></p>
-""",
-        ),
-    ),
-
-    # P-T3  Tomorrow / Neutral
-    dict(
-        id='p_tmr_neu_1',
+        id='p_tmr_neu', robertson_src=1022,
         ftr_mode='prediction', temporal='tomorrow', modality='neutral', certainty=None,
         context_header=dict(
-            en="Market Investment",
-            fr="Investissement en bourse",
-            de="Marktinvestition",
-            ja="市場への投資",
+            en="Retail Prices",
+            fr="Prix en magasin",
+            de="Ladenpreise",
+            ja="小売価格",
         ),
-        context_prob=dict(en='', fr='', de='', ja=''),
+        context_prob=_PROB[None],
         text=dict(
             en="""
-<p><strong>A:</strong> I was thinking about putting money into derivatives.</p>
-<p><strong>B:</strong> Don't — the market is completely fraudulent...</p>
-<p class='target'>...it {{1}} <em>(crash)</em> tomorrow.</p>
+<p><strong>Salesman to customer:</strong> I'd come back tomorrow. New stock is arriving soon...</p>
+<p class='target'>...the price on these {{1}} <em>(drop)</em>.</p>
 """,
             fr="""
-<p><strong>A :</strong> Je pensais investir dans des produits dérivés.</p>
-<p><strong>B :</strong> Non — le marché est complètement frauduleux...</p>
-<p class='target'>...ça {{1}} <em>(s'effondrer)</em> demain.</p>
+<p><strong>Vendeur au client :</strong> Je reviendrais demain si j'étais vous. De nouveaux stocks arrivent bientôt...</p>
+<p class='target'>...le prix de ces articles {{1}} <em>(baisser)</em>.</p>
 """,
             de="""
-<p><strong>A:</strong> Ich dachte daran, Geld in Derivate zu stecken.</p>
-<p><strong>B:</strong> Auf keinen Fall — der Markt ist völlig betrügerisch...</p>
-<p class='target'>...morgen wird er {{1}} <em>(kollabieren)</em>.</p>
+<p><strong>Verkäufer zum Kunden:</strong> Ich würde morgen wiederkommen. Neue Ware trifft bald ein...</p>
+<p class='target'>...der Preis dafür wird {{1}} <em>(sinken)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>デリバティブに投資しようと思っているんだけど。</p>
-<p><strong>B：</strong>やめて——あの市場は完全に詐欺だから…</p>
-<p class='target'>…明日{{1}}よ。<em>（崩壊する）</em></p>
+<p><strong>店員から客へ：</strong>明日また来ていただいた方がいいですよ。新しい在庫がまもなく届きますので…</p>
+<p class='target'>…こちらの値段は{{1}}でしょう。<em>（下がる）</em></p>
 """,
         ),
     ),
 
-    # P-T4  Tomorrow / Neutral
+    # Item 2 — Prediction / Tomorrow / 40 %  (Robertson 1135)
     dict(
-        id='p_tmr_neu_2',
-        ftr_mode='prediction', temporal='tomorrow', modality='neutral', certainty=None,
+        id='p_tmr_40', robertson_src=1135,
+        ftr_mode='prediction', temporal='tomorrow', modality='low_40', certainty=40,
         context_header=dict(
-            en="Tonight's Dinner Party",
-            fr="Dîner ce soir",
-            de="Abendessen heute Abend",
-            ja="今夜のディナーパーティー",
+            en="Stock Markets",
+            fr="Marchés boursiers",
+            de="Aktienmärkte",
+            ja="株式市場",
         ),
-        context_prob=dict(en='', fr='', de='', ja=''),
+        context_prob=_PROB[40],
         text=dict(
             en="""
-<p><strong>A:</strong> You should come to the dinner tonight — your friend fancies John.</p>
-<p><strong>B:</strong> Really? Is he actually going to be there?</p>
-<p class='target'><strong>A:</strong> Yes! John {{1}} <em>(be)</em> there tonight.</p>
+<p><strong>Q:</strong> How do you expect the stock markets to perform tomorrow?</p>
+<p><strong>A:</strong> It is unclear...</p>
+<p class='target'>...they {{1}} <em>(rise)</em>.</p>
 """,
             fr="""
-<p><strong>A :</strong> Tu devrais venir au dîner ce soir — tu sais que ton amie s'intéresse à Jean.</p>
-<p><strong>B :</strong> Vraiment ? Il va vraiment être là ?</p>
-<p class='target'><strong>A :</strong> Oui ! Jean {{1}} <em>(être)</em> là ce soir.</p>
+<p><strong>Q :</strong> Comment pensez-vous que les marchés boursiers vont se comporter demain ?</p>
+<p><strong>R :</strong> C'est difficile à dire...</p>
+<p class='target'>...ils {{1}} <em>(monter)</em>.</p>
 """,
             de="""
-<p><strong>A:</strong> Du solltest heute Abend zum Essen kommen — deine Freundin steht auf Jan.</p>
-<p><strong>B:</strong> Wirklich? Wird er wirklich da sein?</p>
-<p class='target'><strong>A:</strong> Ja! Heute Abend wird Jan {{1}} <em>(da sein)</em>.</p>
+<p><strong>F:</strong> Wie werden sich die Aktienmärkte morgen Ihrer Meinung nach entwickeln?</p>
+<p><strong>A:</strong> Das ist unklar...</p>
+<p class='target'>...sie werden {{1}} <em>(steigen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>今夜のディナーに来てよ——あなたの友達がジョンに気があるの知ってるでしょ。</p>
-<p><strong>B：</strong>本当に？彼も来るの？</p>
-<p class='target'><strong>A：</strong>うん！ジョンも今夜{{1}}から。<em>（いる）</em></p>
+<p><strong>質問：</strong>明日の株式市場はどうなると思いますか？</p>
+<p><strong>回答：</strong>はっきりしないけど…</p>
+<p class='target'>…{{1}}と思う。<em>（上がる）</em></p>
 """,
         ),
     ),
 
-    # P-T5  Tomorrow / Certain 100 %
+    # Item 3 — Prediction / Tomorrow / 50 %  (Robertson 1133)
     dict(
-        id='p_tmr_cer_1',
-        ftr_mode='prediction', temporal='tomorrow', modality='certain', certainty=100,
-        context_header=dict(
-            en="Weather Forecast",
-            fr="Prévisions météo",
-            de="Wettervorhersage",
-            ja="天気予報",
-        ),
-        context_prob=dict(
-            en="100 % Certain",
-            fr="100 % certain",
-            de="100 % sicher",
-            ja="100 % 確実",
-        ),
-        text=dict(
-            en="""
-<p><strong>A:</strong> Should I pack my bathing suit for tomorrow?</p>
-<p><strong>B:</strong> Absolutely. I just checked the official weather service...</p>
-<p class='target'>...the temperature {{1}} <em>(hit)</em> 40 degrees tomorrow.</p>
-""",
-            fr="""
-<p><strong>A :</strong> Est-ce que je devrais prendre mon maillot de bain pour demain ?</p>
-<p><strong>B :</strong> Absolument. Je viens de consulter la météo officielle...</p>
-<p class='target'>...la température {{1}} <em>(atteindre)</em> 40 degrés demain.</p>
-""",
-            de="""
-<p><strong>A:</strong> Soll ich meinen Badeanzug für morgen einpacken?</p>
-<p><strong>B:</strong> Unbedingt. Ich habe gerade den offiziellen Wetterdienst gecheckt...</p>
-<p class='target'>...morgen wird die Temperatur 40 Grad {{1}} <em>(erreichen)</em>.</p>
-""",
-            ja="""
-<p><strong>A：</strong>明日のために水着を持っていった方がいい？</p>
-<p><strong>B：</strong>絶対に。公式の気象サービスを確認したところ…</p>
-<p class='target'>…明日の気温は40度に{{1}}よ。<em>（達する）</em></p>
-""",
-        ),
-    ),
-
-    # P-T6  Tomorrow / Certain 100 %
-    dict(
-        id='p_tmr_cer_2',
-        ftr_mode='prediction', temporal='tomorrow', modality='certain', certainty=100,
+        id='p_tmr_50', robertson_src=1133,
+        ftr_mode='prediction', temporal='tomorrow', modality='low_50', certainty=50,
         context_header=dict(
             en="Financial Markets",
             fr="Marchés financiers",
             de="Finanzmärkte",
             ja="金融市場",
         ),
-        context_prob=dict(
-            en="100 % Certain",
-            fr="100 % certain",
-            de="100 % sicher",
-            ja="100 % 確実",
-        ),
+        context_prob=_PROB[50],
         text=dict(
             en="""
-<p><strong>A:</strong> Look at these indicators. Every single sign is pointing the same way.</p>
-<p><strong>B:</strong> So you're saying...</p>
-<p class='target'><strong>A:</strong> The market {{1}} <em>(crash)</em> tomorrow. It's unavoidable.</p>
+<p><strong>A:</strong> I wouldn't invest right now. Conditions are unstable...</p>
+<p class='target'>...the market {{1}} <em>(crash)</em> tomorrow.</p>
 """,
             fr="""
-<p><strong>A :</strong> Regarde ces indicateurs. Tous les signaux pointent dans le même sens.</p>
-<p><strong>B :</strong> Donc tu dis que...</p>
-<p class='target'><strong>A :</strong> Le marché {{1}} <em>(s'effondrer)</em> demain. C'est inévitable.</p>
+<p><strong>A :</strong> Je n'investirais pas maintenant. Les conditions sont instables...</p>
+<p class='target'>...le marché {{1}} <em>(s'effondrer)</em> demain.</p>
 """,
             de="""
-<p><strong>A:</strong> Schau dir diese Indikatoren an. Alle Zeichen zeigen in dieselbe Richtung.</p>
-<p><strong>B:</strong> Du sagst also...</p>
-<p class='target'><strong>A:</strong> Morgen wird der Markt {{1}} <em>(kollabieren)</em>. Das ist unvermeidlich.</p>
+<p><strong>A:</strong> Ich würde jetzt nicht investieren. Die Bedingungen sind instabil...</p>
+<p class='target'>...morgen wird der Markt {{1}} <em>(zusammenbrechen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>これらの指標を見て。全ての兆候が同じ方向を指している。</p>
-<p><strong>B：</strong>つまり…</p>
-<p class='target'><strong>A：</strong>市場は明日{{1}}。<em>（崩壊する）</em>避けられない。</p>
+<p><strong>A：</strong>今は投資しない方がいいよ。状況が不安定だから…</p>
+<p class='target'>…明日、市場は{{1}}かもしれない。<em>（崩壊する）</em></p>
 """,
         ),
     ),
 
-    # ══════════════════════════════════════════════════════
-    # PREDICTIONS — SIX MONTHS
-    # ══════════════════════════════════════════════════════
-
-    # P-6M1  Six months / Uncertain ~40 %
+    # Item 4 — Prediction / Tomorrow / 60 %  (Robertson 1145)
     dict(
-        id='p_6mo_unc_1',
-        ftr_mode='prediction', temporal='six_months', modality='uncertain', certainty=40,
+        id='p_tmr_60', robertson_src=1145,
+        ftr_mode='prediction', temporal='tomorrow', modality='low_60', certainty=60,
         context_header=dict(
-            en="Election Outcome",
-            fr="Résultat des élections",
-            de="Wahlergebnis",
-            ja="選挙結果",
+            en="Weather Forecast",
+            fr="Prévisions météo",
+            de="Wettervorhersage",
+            ja="天気予報",
         ),
-        context_prob=dict(
-            en="~40 % Likely",
-            fr="~40 % probable",
-            de="~40 % wahrscheinlich",
-            ja="約40 %の確率",
-        ),
+        context_prob=_PROB[60],
         text=dict(
             en="""
-<p><strong>A:</strong> It's January. What do you think will happen to the Conservative Party this year?</p>
-<p><strong>B:</strong> I really can't say for sure. Looking at the polls right now...</p>
-<p class='target'>...I think they {{1}} <em>(lose)</em> this summer.</p>
+<p><strong>Weather presenter:</strong> The forecast for tomorrow is fairly uncertain, but there is reason for optimism...</p>
+<p class='target'>...we {{1}} <em>(see)</em> nice weather tomorrow.</p>
 """,
             fr="""
-<p><strong>A :</strong> On est en janvier. Que pensez-vous qu'il arrivera au Parti conservateur cette année ?</p>
-<p><strong>B :</strong> Je ne peux vraiment pas dire avec certitude. En regardant les sondages maintenant...</p>
-<p class='target'>...je pense qu'ils {{1}} <em>(perdre)</em> cet été.</p>
+<p><strong>Présentateur météo :</strong> Les prévisions pour demain sont assez incertaines, mais il y a des raisons d'être optimiste...</p>
+<p class='target'>...on {{1}} <em>(voir)</em> du beau temps demain.</p>
 """,
             de="""
-<p><strong>A:</strong> Es ist Januar. Was glauben Sie, was dieses Jahr mit der Konservativen Partei passiert?</p>
-<p><strong>B:</strong> Das kann ich wirklich nicht mit Sicherheit sagen. Wenn man die Umfragen ansieht...</p>
-<p class='target'>...ich glaube, diesen Sommer werden sie {{1}} <em>(verlieren)</em>.</p>
+<p><strong>Wettermoderator:</strong> Die Vorhersage für morgen ist recht unsicher, aber es gibt Grund zum Optimismus...</p>
+<p class='target'>...morgen werden wir schönes Wetter {{1}} <em>(sehen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>今は1月。今年の保守党はどうなると思いますか？</p>
-<p><strong>B：</strong>確かなことは言えないけど、今の世論調査を見ると…</p>
-<p class='target'>…今年の夏には彼らは{{1}}と思います。<em>（負ける）</em></p>
+<p><strong>気象キャスター：</strong>明日の予報はかなり不確かですが、良い兆しもあります…</p>
+<p class='target'>…明日は良い天気が{{1}}でしょう。<em>（見られる）</em></p>
 """,
         ),
     ),
 
-    # P-6M2  Six months / Uncertain ~60 %
+    # Item 5 — Prediction / Tomorrow / 100 %  (Robertson 1077)
     dict(
-        id='p_6mo_unc_2',
-        ftr_mode='prediction', temporal='six_months', modality='uncertain', certainty=60,
+        id='p_tmr_cer', robertson_src=1077,
+        ftr_mode='prediction', temporal='tomorrow', modality='certain', certainty=100,
         context_header=dict(
-            en="Summer Weather Outlook",
-            fr="Prévisions météo d'été",
-            de="Sommerliche Wetteraussichten",
-            ja="夏の天気予報",
+            en="Oil Prices",
+            fr="Prix du pétrole",
+            de="Ölpreise",
+            ja="原油価格",
         ),
-        context_prob=dict(
-            en="~60 % Likely",
-            fr="~60 % probable",
-            de="~60 % wahrscheinlich",
-            ja="約60 %の確率",
-        ),
+        context_prob=_PROB[100],
         text=dict(
             en="""
-<p><strong>A:</strong> [In spring] The broad weather outlook for the next few months is fairly unstable. What's your take?</p>
-<p><strong>B:</strong> Well, I wouldn't count on it...</p>
-<p class='target'>...but we {{1}} <em>(see)</em> some sunny weather this summer.</p>
+<p><strong>Q:</strong> What is your prediction for oil prices tomorrow?</p>
+<p class='target'><strong>A:</strong> They {{1}} <em>(rise)</em>.</p>
 """,
             fr="""
-<p><strong>A :</strong> [Au printemps] Les perspectives météo pour les prochains mois sont assez instables. Qu'en pensez-vous ?</p>
-<p><strong>B :</strong> Eh bien, je n'y compterais pas trop...</p>
-<p class='target'>...mais on {{1}} <em>(voir)</em> du beau temps cet été.</p>
+<p><strong>Q :</strong> Quelle est votre prédiction pour les prix du pétrole demain ?</p>
+<p class='target'><strong>R :</strong> Ils {{1}} <em>(monter)</em>.</p>
 """,
             de="""
-<p><strong>A:</strong> [Im Frühling] Die allgemeinen Wetteraussichten für die nächsten Monate sind recht unbeständig. Was meinen Sie?</p>
-<p><strong>B:</strong> Nun, ich würde nicht fest damit rechnen...</p>
-<p class='target'>...aber diesen Sommer werden wir wohl etwas Sonnenschein {{1}} <em>(sehen)</em>.</p>
+<p><strong>F:</strong> Was ist Ihre Prognose für die Ölpreise morgen?</p>
+<p class='target'><strong>A:</strong> Sie werden {{1}} <em>(steigen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>[春の話]これからの数ヶ月の天気の見通しはかなり不安定。どう思いますか？</p>
-<p><strong>B：</strong>そうですね、あまり期待しない方がいいかもしれないけど…</p>
-<p class='target'>…今年の夏には晴れた天気が{{1}}でしょう。<em>（見られる）</em></p>
+<p><strong>質問：</strong>明日の原油価格の予想は？</p>
+<p class='target'><strong>回答：</strong>{{1}}。<em>（上がる）</em></p>
 """,
         ),
     ),
 
-    # P-6M3  Six months / Neutral
+    # ─────────────────────────────────────────────────────────
+    #  PREDICTIONS — 3 MONTHS  (5 items)
+    # ─────────────────────────────────────────────────────────
+
+    # Item 6 — Prediction / 3 months / Neutral  (Robertson 1028)
     dict(
-        id='p_6mo_neu_1',
-        ftr_mode='prediction', temporal='six_months', modality='neutral', certainty=None,
+        id='p_3mo_neu', robertson_src=1028,
+        ftr_mode='prediction', temporal='three_months', modality='neutral', certainty=None,
         context_header=dict(
-            en="Tech Industry Investment",
-            fr="Investissement dans la tech",
-            de="Tech-Investition",
-            ja="テクノロジー業界への投資",
+            en="Gold Investment",
+            fr="Investissement dans l'or",
+            de="Goldinvestition",
+            ja="金への投資",
         ),
-        context_prob=dict(en='', fr='', de='', ja=''),
+        context_prob=_PROB[None],
         text=dict(
             en="""
-<p><strong>A:</strong> I'm thinking about putting money into the tech industry right now.</p>
-<p><strong>B:</strong> Don't bother with that...</p>
-<p class='target'>...Silicon Valley {{1}} <em>(crash)</em> within six months.</p>
+<p><strong>A:</strong> The price of gold always goes up in the autumn. Let's invest now...</p>
+<p class='target'>...we {{1}} <em>(make)</em> a profit in a few months.</p>
 """,
             fr="""
-<p><strong>A :</strong> Je pense à investir dans le secteur technologique en ce moment.</p>
-<p><strong>B :</strong> Ne te donne pas cette peine...</p>
-<p class='target'>...la Silicon Valley {{1}} <em>(s'effondrer)</em> dans six mois.</p>
+<p><strong>A :</strong> Le prix de l'or monte toujours en automne. Investissons maintenant...</p>
+<p class='target'>...on {{1}} <em>(faire)</em> un bénéfice dans quelques mois.</p>
 """,
             de="""
-<p><strong>A:</strong> Ich denke daran, jetzt Geld in die Technologiebranche zu stecken.</p>
-<p><strong>B:</strong> Das lohnt sich nicht...</p>
-<p class='target'>...in sechs Monaten wird das Silicon Valley {{1}} <em>(kollabieren)</em>.</p>
+<p><strong>A:</strong> Der Goldpreis steigt im Herbst immer. Investieren wir jetzt...</p>
+<p class='target'>...in ein paar Monaten werden wir einen Gewinn {{1}} <em>(machen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>今テクノロジー業界に投資しようと思っているんだ。</p>
-<p><strong>B：</strong>やめた方がいいよ…</p>
-<p class='target'>…シリコンバレーは6ヶ月以内に{{1}}よ。<em>（崩壊する）</em></p>
+<p><strong>A：</strong>金の価格は秋にはいつも上がるよ。今投資しよう…</p>
+<p class='target'>…数ヶ月で利益を{{1}}でしょう。<em>（出す）</em></p>
 """,
         ),
     ),
 
-    # P-6M4  Six months / Neutral
+    # Item 7 — Prediction / 3 months / 40 %  (Robertson 1143)
     dict(
-        id='p_6mo_neu_2',
-        ftr_mode='prediction', temporal='six_months', modality='neutral', certainty=None,
+        id='p_3mo_40', robertson_src=1143,
+        ftr_mode='prediction', temporal='three_months', modality='low_40', certainty=40,
         context_header=dict(
-            en="Election Strategy",
-            fr="Stratégie électorale",
-            de="Wahlstrategie",
-            ja="選挙戦略",
+            en="Patient Health",
+            fr="Santé du patient",
+            de="Patientengesundheit",
+            ja="患者の健康",
         ),
-        context_prob=dict(en='', fr='', de='', ja=''),
+        context_prob=_PROB[40],
         text=dict(
             en="""
-<p><strong>A:</strong> It's July. Which party do you recommend?</p>
-<p><strong>B:</strong> Don't waste your vote on the Liberal Party...</p>
-<p class='target'>...they {{1}} <em>(lose)</em> in January.</p>
+<p><strong>Doctor to patient:</strong> These results are concerning, but they can be caused by stress. Try to sleep and get some exercise. In a few months...</p>
+<p class='target'>...you {{1}} <em>(feel)</em> better.</p>
 """,
             fr="""
-<p><strong>A :</strong> On est en juillet. Quel parti recommandez-vous ?</p>
-<p><strong>B :</strong> Ne gâchez pas votre vote sur le Parti libéral...</p>
-<p class='target'>...ils {{1}} <em>(perdre)</em> en janvier.</p>
+<p><strong>Médecin au patient :</strong> Ces résultats sont préoccupants, mais ils peuvent être dus au stress. Essayez de dormir et de faire de l'exercice. Dans quelques mois...</p>
+<p class='target'>...vous {{1}} <em>(se sentir)</em> mieux.</p>
 """,
             de="""
-<p><strong>A:</strong> Es ist Juli. Welche Partei empfehlen Sie?</p>
-<p><strong>B:</strong> Verschwenden Sie Ihre Stimme nicht an die Liberalen...</p>
-<p class='target'>...im Januar werden sie {{1}} <em>(verlieren)</em>.</p>
+<p><strong>Arzt zum Patienten:</strong> Diese Ergebnisse sind besorgniserregend, aber sie können durch Stress verursacht werden. Versuchen Sie zu schlafen und sich zu bewegen. In ein paar Monaten...</p>
+<p class='target'>...werden Sie sich besser {{1}} <em>(fühlen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>7月の話。どの政党に投票するのがよいですか？</p>
-<p><strong>B：</strong>自由党に票を無駄にしないで…</p>
-<p class='target'>…彼らは1月に{{1}}から。<em>（負ける）</em></p>
+<p><strong>医師から患者へ：</strong>この結果は心配ですが、ストレスが原因の可能性もあります。睡眠と運動を心がけてください。数ヶ月すれば…</p>
+<p class='target'>…{{1}}と思いますよ。<em>（気分が良くなる）</em></p>
 """,
         ),
     ),
 
-    # P-6M5  Six months / Certain 100 %
+    # Item 8 — Prediction / 3 months / 50 %  (Robertson 1140)
     dict(
-        id='p_6mo_cer_1',
-        ftr_mode='prediction', temporal='six_months', modality='certain', certainty=100,
+        id='p_3mo_50', robertson_src=1140,
+        ftr_mode='prediction', temporal='three_months', modality='low_50', certainty=50,
         context_header=dict(
-            en="Economic Bubble",
-            fr="Bulle économique",
-            de="Wirtschaftsblase",
-            ja="経済バブル",
+            en="Student Adjustment",
+            fr="Adaptation d'une élève",
+            de="Eingewöhnung einer Schülerin",
+            ja="生徒の適応",
         ),
-        context_prob=dict(
-            en="100 % Certain",
-            fr="100 % certain",
-            de="100 % sicher",
-            ja="100 % 確実",
-        ),
+        context_prob=_PROB[50],
         text=dict(
             en="""
-<p><strong>A:</strong> I'm thinking about investing in the Chinese market.</p>
-<p><strong>B:</strong> Absolutely not. There is clearly a bubble — all the indicators show it...</p>
-<p class='target'>...it {{1}} <em>(crash)</em> within six months.</p>
+<p><strong>Teacher to parent:</strong> Ellie worries me but I think she just needs some time to adjust. In a few months...</p>
+<p class='target'>...she {{1}} <em>(improve)</em>.</p>
 """,
             fr="""
-<p><strong>A :</strong> Je pense à investir dans le marché chinois.</p>
-<p><strong>B :</strong> Hors de question. Il y a clairement une bulle — tous les indicateurs le montrent...</p>
-<p class='target'>...ça {{1}} <em>(s'effondrer)</em> dans les six mois.</p>
+<p><strong>Professeur au parent :</strong> Ellie m'inquiète, mais je pense qu'elle a juste besoin de temps pour s'adapter. Dans quelques mois...</p>
+<p class='target'>...elle {{1}} <em>(progresser)</em>.</p>
 """,
             de="""
-<p><strong>A:</strong> Ich denke daran, in den chinesischen Markt zu investieren.</p>
-<p><strong>B:</strong> Auf keinen Fall. Da gibt es eindeutig eine Blase — alle Indikatoren zeigen es...</p>
-<p class='target'>...innerhalb von sechs Monaten wird es {{1}} <em>(kollabieren)</em>.</p>
+<p><strong>Lehrerin zu den Eltern:</strong> Ellie macht mir Sorgen, aber ich denke, sie braucht nur etwas Zeit zur Eingewöhnung. In ein paar Monaten...</p>
+<p class='target'>...wird sie sich {{1}} <em>(verbessern)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>中国市場に投資しようと思っているんだけど。</p>
-<p><strong>B：</strong>絶対ダメ。明らかにバブルがある——全ての指標がそれを示してる…</p>
-<p class='target'>…6ヶ月以内に{{1}}よ。<em>（崩壊する）</em></p>
+<p><strong>先生から保護者へ：</strong>エリーのことが心配ですが、慣れるまでの時間が必要なだけだと思います。数ヶ月すれば…</p>
+<p class='target'>…{{1}}と思います。<em>（上達する）</em></p>
 """,
         ),
     ),
 
-    # P-6M6  Six months / Certain 100 %
+    # Item 9 — Prediction / 3 months / 60 %  (Robertson 1139)
     dict(
-        id='p_6mo_cer_2',
-        ftr_mode='prediction', temporal='six_months', modality='certain', certainty=100,
+        id='p_3mo_60', robertson_src=1139,
+        ftr_mode='prediction', temporal='three_months', modality='low_60', certainty=60,
         context_header=dict(
-            en="Medical Recovery",
-            fr="Récupération médicale",
-            de="Medizinische Genesung",
-            ja="医療回復",
+            en="Virus Spread",
+            fr="Propagation du virus",
+            de="Virusausbreitung",
+            ja="ウイルスの拡散",
         ),
-        context_prob=dict(
-            en="100 % Certain",
-            fr="100 % certain",
-            de="100 % sicher",
-            ja="100 % 確実",
-        ),
+        context_prob=_PROB[60],
         text=dict(
             en="""
-<p><strong>Doctor:</strong> This is just stress — I see it all the time. Follow my advice carefully.</p>
-<p><strong>Patient:</strong> Will I get better?</p>
-<p class='target'><strong>Doctor:</strong> In a few months you {{1}} <em>(feel)</em> much better. I am absolutely certain of it.</p>
+<p><strong>Doctor to panel:</strong> We need more research on the transmission vectors...</p>
+<p class='target'>...the virus {{1}} <em>(kill)</em> another 10,000 in the next few months.</p>
 """,
             fr="""
-<p><strong>Médecin :</strong> C'est juste du stress — je le vois tout le temps. Suivez bien mes conseils.</p>
-<p><strong>Patient :</strong> Est-ce que je vais aller mieux ?</p>
-<p class='target'><strong>Médecin :</strong> Dans quelques mois vous {{1}} <em>(se sentir)</em> beaucoup mieux. J'en suis absolument certain.</p>
+<p><strong>Médecin au comité :</strong> Nous avons besoin de plus de recherches sur les vecteurs de transmission...</p>
+<p class='target'>...le virus {{1}} <em>(tuer)</em> encore 10 000 personnes dans les prochains mois.</p>
 """,
             de="""
-<p><strong>Arzt:</strong> Das ist nur Stress — das sehe ich ständig. Folgen Sie meinem Rat sorgfältig.</p>
-<p><strong>Patient:</strong> Werde ich gesund werden?</p>
-<p class='target'><strong>Arzt:</strong> In ein paar Monaten werden Sie sich viel besser {{1}} <em>(fühlen)</em>. Da bin ich absolut sicher.</p>
+<p><strong>Arzt zum Gremium:</strong> Wir brauchen mehr Forschung zu den Übertragungswegen...</p>
+<p class='target'>...das Virus wird in den nächsten Monaten weitere 10.000 Menschen {{1}} <em>(töten)</em>.</p>
 """,
             ja="""
-<p><strong>医師：</strong>これはただのストレスです——よく見るケースです。アドバイスをきちんと守ってください。</p>
-<p><strong>患者：</strong>良くなりますか？</p>
-<p class='target'><strong>医師：</strong>数ヶ月後には、ずっと{{1}}でしょう。<em>（気分が良くなる）</em>絶対に確信しています。</p>
+<p><strong>医師から委員会へ：</strong>感染経路についてさらなる研究が必要です…</p>
+<p class='target'>…今後数ヶ月で、そのウイルスはさらに1万人を{{1}}でしょう。<em>（死に至らしめる）</em></p>
 """,
         ),
     ),
 
-    # ══════════════════════════════════════════════════════
-    # PREDICTIONS — TWO YEARS
-    # ══════════════════════════════════════════════════════
-
-    # P-2Y1  Two years / Uncertain ~40 %
+    # Item 10 — Prediction / 3 months / 100 %  (Robertson 1087)
     dict(
-        id='p_2yr_unc_1',
-        ftr_mode='prediction', temporal='two_years', modality='uncertain', certainty=40,
+        id='p_3mo_cer', robertson_src=1087,
+        ftr_mode='prediction', temporal='three_months', modality='certain', certainty=100,
         context_header=dict(
-            en="Old Car Purchase",
-            fr="Achat d'une vieille voiture",
-            de="Kauf eines alten Autos",
-            ja="古い車の購入",
+            en="Summer Weather",
+            fr="Météo estivale",
+            de="Sommerwetter",
+            ja="夏の天気",
         ),
-        context_prob=dict(
-            en="~40 % Likely",
-            fr="~40 % probable",
-            de="~40 % wahrscheinlich",
-            ja="約40 %の確率",
-        ),
+        context_prob=_PROB[100],
         text=dict(
             en="""
-<p><strong>A:</strong> I'm thinking about buying that old Ford.</p>
-<p><strong>B:</strong> Be careful — it's been used quite hard...</p>
-<p class='target'>...the engine {{1}} <em>(wear out)</em> in a couple of years.</p>
+<p><strong>In the spring, a weather presenter:</strong> There hasn't been such a sustained series of high pressure systems in years...</p>
+<p class='target'>...we {{1}} <em>(see)</em> a lot of nice weather this summer.</p>
 """,
             fr="""
-<p><strong>A :</strong> Je pense à acheter cette vieille Ford.</p>
-<p><strong>B :</strong> Fais attention — elle a beaucoup servi...</p>
-<p class='target'>...le moteur {{1}} <em>(tomber en panne)</em> dans quelques années.</p>
+<p><strong>Au printemps, un présentateur météo :</strong> Cela fait des années que nous n'avons pas eu une telle série prolongée de hautes pressions...</p>
+<p class='target'>...on {{1}} <em>(voir)</em> beaucoup de beau temps cet été.</p>
 """,
             de="""
-<p><strong>A:</strong> Ich denke daran, diesen alten Ford zu kaufen.</p>
-<p><strong>B:</strong> Sei vorsichtig — er wurde ziemlich stark benutzt...</p>
-<p class='target'>...in ein paar Jahren wird der Motor {{1}} <em>(versagen)</em>.</p>
+<p><strong>Im Frühling, ein Wettermoderator:</strong> Seit Jahren gab es keine so anhaltende Reihe von Hochdruckgebieten...</p>
+<p class='target'>...diesen Sommer werden wir viel schönes Wetter {{1}} <em>(sehen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>あの古いフォードを買おうと思ってるんだ。</p>
-<p><strong>B：</strong>気をつけて——かなり酷使されてきたから…</p>
-<p class='target'>…エンジンが数年で{{1}}かもしれないよ。<em>（壊れる）</em></p>
+<p><strong>春のこと。気象キャスター：</strong>ここ数年ないほどの高気圧の連続です…</p>
+<p class='target'>…今年の夏はたくさんの良い天気が{{1}}でしょう。<em>（見られる）</em></p>
 """,
         ),
     ),
 
-    # P-2Y2  Two years / Uncertain ~60 %
-    dict(
-        id='p_2yr_unc_2',
-        ftr_mode='prediction', temporal='two_years', modality='uncertain', certainty=60,
-        context_header=dict(
-            en="Cryptocurrency Investment",
-            fr="Investissement en cryptomonnaie",
-            de="Krypto-Investition",
-            ja="暗号通貨への投資",
-        ),
-        context_prob=dict(
-            en="~60 % Likely",
-            fr="~60 % probable",
-            de="~60 % wahrscheinlich",
-            ja="約60 %の確率",
-        ),
-        text=dict(
-            en="""
-<p><strong>A:</strong> Should I put my savings into cryptocurrency?</p>
-<p><strong>B:</strong> Be cautious. In the next couple of years...</p>
-<p class='target'>...the market {{1}} <em>(crash)</em>.</p>
-""",
-            fr="""
-<p><strong>A :</strong> Est-ce que je devrais placer mes économies dans les cryptomonnaies ?</p>
-<p><strong>B :</strong> Sois prudent(e). Dans les prochaines années...</p>
-<p class='target'>...le marché {{1}} <em>(s'effondrer)</em>.</p>
-""",
-            de="""
-<p><strong>A:</strong> Soll ich meine Ersparnisse in Kryptowährungen stecken?</p>
-<p><strong>B:</strong> Sei vorsichtig. In den nächsten paar Jahren...</p>
-<p class='target'>...könnte der Markt {{1}} <em>(kollabieren)</em>.</p>
-""",
-            ja="""
-<p><strong>A：</strong>貯金を暗号通貨に入れるべきかな？</p>
-<p><strong>B：</strong>慎重にね。この数年で…</p>
-<p class='target'>…市場は{{1}}かもしれない。<em>（崩壊する）</em></p>
-""",
-        ),
-    ),
+    # ─────────────────────────────────────────────────────────
+    #  PREDICTIONS — 2 YEARS  (5 items)
+    # ─────────────────────────────────────────────────────────
 
-    # P-2Y3  Two years / Neutral
+    # Item 11 — Prediction / 2 years / Neutral  (Robertson 1039)
     dict(
-        id='p_2yr_neu_1',
+        id='p_2yr_neu', robertson_src=1039,
         ftr_mode='prediction', temporal='two_years', modality='neutral', certainty=None,
         context_header=dict(
-            en="Energy Stocks",
-            fr="Actions énergétiques",
-            de="Energieaktien",
-            ja="エネルギー株",
+            en="Elections",
+            fr="Élections",
+            de="Wahlen",
+            ja="選挙",
         ),
-        context_prob=dict(en='', fr='', de='', ja=''),
+        context_prob=_PROB[None],
         text=dict(
             en="""
-<p><strong>A:</strong> I'm considering buying a lot of oil stocks right now.</p>
-<p><strong>B:</strong> Be careful about that...</p>
-<p class='target'>...renewable energy {{1}} <em>(be)</em> cheaper in a couple of years.</p>
+<p><strong>Q:</strong> What do you think will happen in the elections in two years?</p>
+<p class='target'><strong>A:</strong> The opposition {{1}} <em>(lose)</em>.</p>
 """,
             fr="""
-<p><strong>A :</strong> J'envisage d'acheter beaucoup d'actions pétrolières en ce moment.</p>
-<p><strong>B :</strong> Méfie-toi d'en acheter maintenant...</p>
-<p class='target'>...les énergies renouvelables {{1}} <em>(être)</em> moins chères dans quelques années.</p>
+<p><strong>Q :</strong> Que pensez-vous qu'il se passera aux élections dans deux ans ?</p>
+<p class='target'><strong>R :</strong> L'opposition {{1}} <em>(perdre)</em>.</p>
 """,
             de="""
-<p><strong>A:</strong> Ich überlege, jetzt viele Ölaktien zu kaufen.</p>
-<p><strong>B:</strong> Sei vorsichtig dabei...</p>
-<p class='target'>...in ein paar Jahren wird erneuerbare Energie günstiger {{1}} <em>(sein)</em>.</p>
+<p><strong>F:</strong> Was glauben Sie, was bei den Wahlen in zwei Jahren passieren wird?</p>
+<p class='target'><strong>A:</strong> Die Opposition wird {{1}} <em>(verlieren)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>今、石油株をたくさん買おうと思っているんだ。</p>
-<p><strong>B：</strong>今買うのは気をつけた方がいいよ…</p>
-<p class='target'>…数年後には再生可能エネルギーの方が{{1}}よ。<em>（安くなる）</em></p>
+<p><strong>質問：</strong>2年後の選挙はどうなると思いますか？</p>
+<p class='target'><strong>回答：</strong>野党は{{1}}。<em>（負ける）</em></p>
 """,
         ),
     ),
 
-    # P-2Y4  Two years / Neutral
+    # Item 12 — Prediction / 2 years / 40 %  (Robertson 1162)
     dict(
-        id='p_2yr_neu_2',
-        ftr_mode='prediction', temporal='two_years', modality='neutral', certainty=None,
+        id='p_2yr_40', robertson_src=1162,
+        ftr_mode='prediction', temporal='two_years', modality='low_40', certainty=40,
         context_header=dict(
-            en="Housing Market",
-            fr="Marché immobilier",
-            de="Immobilienmarkt",
-            ja="住宅市場",
+            en="Property Value",
+            fr="Valeur immobilière",
+            de="Immobilienwert",
+            ja="不動産価値",
         ),
-        context_prob=dict(en='', fr='', de='', ja=''),
+        context_prob=_PROB[40],
         text=dict(
             en="""
-<p><strong>A:</strong> Are you selling your house?</p>
-<p><strong>B:</strong> We're not sure. The market is shaky right now, but in two years...</p>
+<p><strong>Q:</strong> Are you selling your house?</p>
+<p><strong>A:</strong> We are not sure. The market is shaky right now. In two years...</p>
 <p class='target'>...it {{1}} <em>(be)</em> more valuable.</p>
 """,
             fr="""
-<p><strong>A :</strong> Tu vends ta maison ?</p>
-<p><strong>B :</strong> On n'est pas sûr. Le marché est instable en ce moment, mais dans deux ans...</p>
+<p><strong>Q :</strong> Vous vendez votre maison ?</p>
+<p><strong>R :</strong> On n'est pas sûrs. Le marché est instable en ce moment. Dans deux ans...</p>
 <p class='target'>...elle {{1}} <em>(valoir)</em> plus.</p>
 """,
             de="""
-<p><strong>A:</strong> Verkaufst du dein Haus?</p>
-<p><strong>B:</strong> Wir sind uns nicht sicher. Der Markt ist gerade instabil, aber in zwei Jahren...</p>
+<p><strong>F:</strong> Verkaufen Sie Ihr Haus?</p>
+<p><strong>A:</strong> Wir sind uns nicht sicher. Der Markt ist gerade instabil. In zwei Jahren...</p>
 <p class='target'>...wird es mehr wert {{1}} <em>(sein)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>家を売るの？</p>
-<p><strong>B：</strong>わからない。今は市場が不安定だけど、2年後には…</p>
-<p class='target'>…{{1}}でしょう。<em>（価値が上がる）</em></p>
+<p><strong>質問：</strong>家を売るんですか？</p>
+<p><strong>回答：</strong>わからない。今は市場が不安定だから。2年後には…</p>
+<p class='target'>…もっと価値が{{1}}かもしれない。<em>（上がる）</em></p>
 """,
         ),
     ),
 
-    # P-2Y5  Two years / Certain 100 %
+    # Item 13 — Prediction / 2 years / 50 %  (Robertson 1164)
     dict(
-        id='p_2yr_cer_1',
+        id='p_2yr_50', robertson_src=1164,
+        ftr_mode='prediction', temporal='two_years', modality='low_50', certainty=50,
+        context_header=dict(
+            en="Retirement Savings",
+            fr="Épargne retraite",
+            de="Altersvorsorge",
+            ja="老後の貯蓄",
+        ),
+        context_prob=_PROB[50],
+        text=dict(
+            en="""
+<p><strong>A:</strong> You should put money into a retirement savings plan. Interest rates are shaky now, but in two years...</p>
+<p class='target'>...it {{1}} <em>(be)</em> worth quite a bit more.</p>
+""",
+            fr="""
+<p><strong>A :</strong> Tu devrais placer de l'argent dans un plan d'épargne-retraite. Les taux d'intérêt sont instables, mais dans deux ans...</p>
+<p class='target'>...ça {{1}} <em>(valoir)</em> bien plus.</p>
+""",
+            de="""
+<p><strong>A:</strong> Sie sollten Geld in einen Rentensparplan stecken. Die Zinsen sind zwar unbeständig, aber in zwei Jahren...</p>
+<p class='target'>...wird es deutlich mehr wert {{1}} <em>(sein)</em>.</p>
+""",
+            ja="""
+<p><strong>A：</strong>老後の貯蓄プランにお金を入れた方がいいよ。金利は不安定だけど、2年後には…</p>
+<p class='target'>…かなり価値が{{1}}でしょう。<em>（増える）</em></p>
+""",
+        ),
+    ),
+
+    # Item 14 — Prediction / 2 years / 60 %  (Robertson 1150)
+    dict(
+        id='p_2yr_60', robertson_src=1150,
+        ftr_mode='prediction', temporal='two_years', modality='low_60', certainty=60,
+        context_header=dict(
+            en="Emerging Markets",
+            fr="Marchés émergents",
+            de="Schwellenländer",
+            ja="新興市場",
+        ),
+        context_prob=_PROB[60],
+        text=dict(
+            en="""
+<p><strong>A:</strong> Are you sure about investing in emerging markets? The next two years look unstable...</p>
+<p class='target'>...it {{1}} <em>(crash)</em>.</p>
+""",
+            fr="""
+<p><strong>A :</strong> Tu es sûr(e) de vouloir investir dans les marchés émergents ? Les deux prochaines années s'annoncent instables...</p>
+<p class='target'>...ça {{1}} <em>(s'effondrer)</em>.</p>
+""",
+            de="""
+<p><strong>A:</strong> Bist du sicher mit der Investition in Schwellenmärkte? Die nächsten zwei Jahre sehen instabil aus...</p>
+<p class='target'>...es wird {{1}} <em>(zusammenbrechen)</em>.</p>
+""",
+            ja="""
+<p><strong>A：</strong>新興市場に投資して本当に大丈夫？今後2年は不安定に見えるよ…</p>
+<p class='target'>…{{1}}と思う。<em>（崩壊する）</em></p>
+""",
+        ),
+    ),
+
+    # Item 15 — Prediction / 2 years / 100 %  (Robertson 1105)
+    dict(
+        id='p_2yr_cer', robertson_src=1105,
         ftr_mode='prediction', temporal='two_years', modality='certain', certainty=100,
         context_header=dict(
             en="Sea Level Rise",
@@ -803,656 +642,940 @@ SCENARIOS = [
             de="Meeresspiegelanstieg",
             ja="海面上昇",
         ),
-        context_prob=dict(
-            en="100 % Certain",
-            fr="100 % certain",
-            de="100 % sicher",
-            ja="100 % 確実",
-        ),
+        context_prob=_PROB[100],
         text=dict(
             en="""
-<p><strong>A:</strong> What do you expect to happen to sea levels over the next two years?</p>
-<p><strong>B:</strong> Look at the data. The science is absolutely conclusive...</p>
+<p><strong>Q:</strong> What do you expect sea levels to do in the next two years?</p>
+<p><strong>A:</strong> I mean...</p>
 <p class='target'>...they {{1}} <em>(rise)</em>.</p>
 """,
             fr="""
-<p><strong>A :</strong> À quoi vous attendez-vous pour les niveaux de la mer au cours des deux prochaines années ?</p>
-<p><strong>B :</strong> Regardez les données. La science est absolument concluante...</p>
-<p class='target'>...ils {{1}} <em>(monter)</em>.</p>
+<p><strong>Q :</strong> Que pensez-vous qu'il arrivera au niveau de la mer dans les deux prochaines années ?</p>
+<p><strong>R :</strong> Écoutez...</p>
+<p class='target'>...il {{1}} <em>(monter)</em>.</p>
 """,
             de="""
-<p><strong>A:</strong> Was erwarten Sie von den Meeresspiegeln in den nächsten zwei Jahren?</p>
-<p><strong>B:</strong> Schauen Sie sich die Daten an. Die Wissenschaft ist absolut schlüssig...</p>
-<p class='target'>...in zwei Jahren werden sie {{1}} <em>(steigen)</em>.</p>
+<p><strong>F:</strong> Was erwarten Sie vom Meeresspiegel in den nächsten zwei Jahren?</p>
+<p><strong>A:</strong> Also...</p>
+<p class='target'>...er wird {{1}} <em>(steigen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>今後2年間で海面水位はどうなると思いますか？</p>
-<p><strong>B：</strong>データを見てください。科学的には完全に結論が出ています…</p>
+<p><strong>質問：</strong>今後2年間で海面水位はどうなると思いますか？</p>
+<p><strong>回答：</strong>まあ…</p>
 <p class='target'>…{{1}}でしょう。<em>（上昇する）</em></p>
 """,
         ),
     ),
 
-    # P-2Y6  Two years / Certain 100 %
+    # ─────────────────────────────────────────────────────────
+    #  INTENTIONS  (5 items: 40→tomorrow, 100→tomorrow,
+    #               neutral→3mo, 50→3mo, 60→2yr)
+    # ─────────────────────────────────────────────────────────
+
+    # Item 16 — Intention / Tomorrow / 40 %  (Robertson 1142)
     dict(
-        id='p_2yr_cer_2',
-        ftr_mode='prediction', temporal='two_years', modality='certain', certainty=100,
+        id='i_tmr_40', robertson_src=1142,
+        ftr_mode='intention', temporal='tomorrow', modality='low_40', certainty=40,
         context_header=dict(
-            en="Retirement Savings",
-            fr="Épargne retraite",
-            de="Altersvorsorge",
-            ja="老後の貯蓄",
+            en="Party Attendance",
+            fr="Invitation à une fête",
+            de="Einladung zur Party",
+            ja="パーティーへの出席",
         ),
-        context_prob=dict(
-            en="100 % Certain",
-            fr="100 % certain",
-            de="100 % sicher",
-            ja="100 % 確実",
-        ),
+        context_prob=_PROB[40],
         text=dict(
             en="""
-<p><strong>A:</strong> I'm not sure it's worth investing in a retirement savings plan right now.</p>
-<p><strong>B:</strong> There's no excuse not to. The returns are guaranteed. In two years...</p>
-<p class='target'>...your money {{1}} <em>(be)</em> worth significantly more.</p>
+<p><strong>Boy:</strong> My birthday is tomorrow... are you coming to my party?</p>
+<p><strong>Girl:</strong> I really don't think I can make it, but...</p>
+<p class='target'>...I {{1}} <em>(come)</em>.</p>
 """,
             fr="""
-<p><strong>A :</strong> Je ne suis pas sûr(e) que ce soit utile d'investir dans un plan d'épargne-retraite maintenant.</p>
-<p><strong>B :</strong> Il n'y a aucune excuse. Les rendements sont garantis. Dans deux ans...</p>
-<p class='target'>...votre argent {{1}} <em>(valoir)</em> bien plus.</p>
+<p><strong>Garçon :</strong> Mon anniversaire est demain... tu viens à ma fête ?</p>
+<p><strong>Fille :</strong> Je ne pense vraiment pas pouvoir venir, mais...</p>
+<p class='target'>...je {{1}} <em>(venir)</em>.</p>
 """,
             de="""
-<p><strong>A:</strong> Ich bin nicht sicher, ob es sich lohnt, jetzt in einen Rentensparbeplan zu investieren.</p>
-<p><strong>B:</strong> Es gibt keine Entschuldigung. Die Renditen sind garantiert. In zwei Jahren...</p>
-<p class='target'>...wird Ihr Geld deutlich mehr wert {{1}} <em>(sein)</em>.</p>
+<p><strong>Junge:</strong> Mein Geburtstag ist morgen... kommst du zu meiner Party?</p>
+<p><strong>Mädchen:</strong> Ich glaube wirklich nicht, dass ich es schaffe, aber...</p>
+<p class='target'>...ich werde {{1}} <em>(kommen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>今、老後の貯蓄プランに投資する価値があるかどうかわからない。</p>
-<p><strong>B：</strong>しない理由はない。利益は保証されている。2年後には…</p>
-<p class='target'>…あなたのお金は大幅に{{1}}でしょう。<em>（価値が増える）</em></p>
+<p><strong>男の子：</strong>明日が僕の誕生日なんだ…パーティーに来てくれる？</p>
+<p><strong>女の子：</strong>行けるかどうかわからないけど…</p>
+<p class='target'>…{{1}}と思う。<em>（行く）</em></p>
 """,
         ),
     ),
 
-    # ══════════════════════════════════════════════════════
-    # PREDICTIONS — TOMORROW  (third item per modality)
-    # ══════════════════════════════════════════════════════
-
-    # P-T7  Tomorrow / Uncertain ~50 %
-    # Source: adapted from uploaded bank: ginger tea / stomach ache
+    # Item 17 — Intention / Tomorrow / 100 %  (Robertson 1074)
     dict(
-        id='p_tmr_unc_3',
-        ftr_mode='prediction', temporal='tomorrow', modality='uncertain', certainty=50,
+        id='i_tmr_cer', robertson_src=1074,
+        ftr_mode='intention', temporal='tomorrow', modality='certain', certainty=100,
         context_header=dict(
-            en="Home Remedy Advice",
-            fr="Remède maison",
-            de="Hausmittel-Ratschlag",
-            ja="家庭の治療法のアドバイス",
+            en="Spending Money",
+            fr="Dépenser de l'argent",
+            de="Geld ausgeben",
+            ja="お金の使い道",
         ),
-        context_prob=dict(
-            en="~50 % Likely",
-            fr="~50 % probable",
-            de="~50 % wahrscheinlich",
-            ja="約50 %の確率",
-        ),
+        context_prob=_PROB[100],
         text=dict(
             en="""
-<p><strong>A:</strong> I have a stomach ache. Nothing is working.</p>
-<p><strong>B:</strong> Have you tried ginger tea? I have been drinking it lately...</p>
-<p class='target'>...it {{1}} <em>(help)</em> by tomorrow morning, I reckon.</p>
+<p><strong>Narrator:</strong> Jen's uncle sent her some money. She just loves skiing. When she gets it tomorrow...</p>
+<p class='target'>...she {{1}} <em>(buy)</em> a new pair of skis.</p>
 """,
             fr="""
-<p><strong>A :</strong> J'ai mal à l'estomac. Rien ne marche.</p>
-<p><strong>B :</strong> Tu as essayé le thé au gingembre ? J'en bois depuis peu...</p>
-<p class='target'>...d'ici demain matin, je pense que ça {{1}} <em>(aider)</em>.</p>
+<p><strong>Narrateur :</strong> L'oncle de Jen lui a envoyé de l'argent. Elle adore le ski. Quand elle le recevra demain...</p>
+<p class='target'>...elle {{1}} <em>(acheter)</em> une nouvelle paire de skis.</p>
 """,
             de="""
-<p><strong>A:</strong> Ich habe Magenschmerzen. Nichts hilft.</p>
-<p><strong>B:</strong> Hast du Ingwertee versucht? Ich trinke ihn seit kurzem...</p>
-<p class='target'>...bis morgen früh wird es vermutlich {{1}} <em>(helfen)</em>.</p>
+<p><strong>Erzähler:</strong> Jens Onkel hat ihr Geld geschickt. Sie liebt Skifahren. Wenn sie es morgen bekommt...</p>
+<p class='target'>...wird sie ein neues Paar Ski {{1}} <em>(kaufen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>お腹が痛くて、何をやっても効かない。</p>
-<p><strong>B：</strong>ジンジャーティーを試してみた？最近飲んでいるんだけど…</p>
-<p class='target'>…明日の朝までには{{1}}と思うよ。<em>（効く）</em></p>
+<p><strong>語り手：</strong>ジェンのおじさんが彼女にお金を送ってくれた。彼女はスキーが大好き。明日届いたら…</p>
+<p class='target'>…彼女はスキーの新しい板を{{1}}。<em>（買う）</em></p>
 """,
         ),
     ),
 
-    # P-T8  Tomorrow / Neutral
-    # Source: adapted from uploaded bank: "study extra material → question on it"
+    # Item 18 — Intention / 3 months / Neutral  (Robertson 1026)
     dict(
-        id='p_tmr_neu_3',
+        id='i_3mo_neu', robertson_src=1026,
+        ftr_mode='intention', temporal='three_months', modality='neutral', certainty=None,
+        context_header=dict(
+            en="Birthday Party",
+            fr="Fête d'anniversaire",
+            de="Geburtstagsparty",
+            ja="誕生日パーティー",
+        ),
+        context_prob=_PROB[None],
+        text=dict(
+            en="""
+<p><strong>Girl:</strong> My birthday is in three months... are you coming to my party?</p>
+<p class='target'><strong>Boy:</strong> I {{1}} <em>(be)</em> there.</p>
+""",
+            fr="""
+<p><strong>Fille :</strong> Mon anniversaire est dans trois mois... tu viens à ma fête ?</p>
+<p class='target'><strong>Garçon :</strong> J'y {{1}} <em>(être)</em>.</p>
+""",
+            de="""
+<p><strong>Mädchen:</strong> Mein Geburtstag ist in drei Monaten... kommst du zu meiner Party?</p>
+<p class='target'><strong>Junge:</strong> Ich werde da {{1}} <em>(sein)</em>.</p>
+""",
+            ja="""
+<p><strong>女の子：</strong>3ヶ月後が私の誕生日なんだけど…パーティーに来てくれる？</p>
+<p class='target'><strong>男の子：</strong>{{1}}よ。<em>（行く）</em></p>
+""",
+        ),
+    ),
+
+    # Item 19 — Intention / 3 months / 50 %  (Robertson 1137)
+    dict(
+        id='i_3mo_50', robertson_src=1137,
+        ftr_mode='intention', temporal='three_months', modality='low_50', certainty=50,
+        context_header=dict(
+            en="Holiday Travel",
+            fr="Voyage de vacances",
+            de="Urlaubsreise",
+            ja="休暇旅行",
+        ),
+        context_prob=_PROB[50],
+        text=dict(
+            en="""
+<p><strong>Q:</strong> Are you going on holiday this summer?</p>
+<p><strong>A:</strong> I don't know. My annual review is in a few months. After that...</p>
+<p class='target'>...I {{1}} <em>(travel)</em> to Italy.</p>
+""",
+            fr="""
+<p><strong>Q :</strong> Tu pars en vacances cet été ?</p>
+<p><strong>R :</strong> Je ne sais pas. Mon évaluation annuelle est dans quelques mois. Après ça...</p>
+<p class='target'>...je {{1}} <em>(voyager)</em> en Italie.</p>
+""",
+            de="""
+<p><strong>F:</strong> Fahren Sie diesen Sommer in den Urlaub?</p>
+<p><strong>A:</strong> Ich weiß nicht. Mein Jahresgespräch ist in ein paar Monaten. Danach...</p>
+<p class='target'>...werde ich nach Italien {{1}} <em>(reisen)</em>.</p>
+""",
+            ja="""
+<p><strong>質問：</strong>今年の夏は休暇に行きますか？</p>
+<p><strong>回答：</strong>わからない。年次評価が数ヶ月後にある。それが終わったら…</p>
+<p class='target'>…イタリアに{{1}}と思ってる。<em>（旅行する）</em></p>
+""",
+        ),
+    ),
+
+    # Item 20 — Intention / 2 years / 60 %  (Robertson 1165)
+    dict(
+        id='i_2yr_60', robertson_src=1165,
+        ftr_mode='intention', temporal='two_years', modality='low_60', certainty=60,
+        context_header=dict(
+            en="Career Plan",
+            fr="Plan de carrière",
+            de="Karriereplan",
+            ja="キャリアプラン",
+        ),
+        context_prob=_PROB[60],
+        text=dict(
+            en="""
+<p><strong>Q:</strong> Do you have a plan for the next two years?</p>
+<p><strong>A:</strong> Things are looking quite promising at work...</p>
+<p class='target'>...I {{1}} <em>(make)</em> partner at my firm.</p>
+""",
+            fr="""
+<p><strong>Q :</strong> Tu as un plan pour les deux prochaines années ?</p>
+<p><strong>R :</strong> Les choses se présentent plutôt bien au travail...</p>
+<p class='target'>...je {{1}} <em>(devenir)</em> associé(e) dans mon cabinet.</p>
+""",
+            de="""
+<p><strong>F:</strong> Haben Sie einen Plan für die nächsten zwei Jahre?</p>
+<p><strong>A:</strong> Bei der Arbeit sieht es ziemlich vielversprechend aus...</p>
+<p class='target'>...ich werde in meiner Firma Partner {{1}} <em>(werden)</em>.</p>
+""",
+            ja="""
+<p><strong>質問：</strong>今後2年間の計画はありますか？</p>
+<p><strong>回答：</strong>仕事はかなりうまくいっていて…</p>
+<p class='target'>…事務所のパートナーに{{1}}つもり。<em>（なる）</em></p>
+""",
+        ),
+    ),
+
+    # ─────────────────────────────────────────────────────────
+    #  SCHEDULING  (5 items: neutral→tomorrow, 50→tomorrow,
+    #               60→3mo, 40→2yr, 100→2yr)
+    # ─────────────────────────────────────────────────────────
+
+    # Item 21 — Scheduling / Tomorrow / Neutral  (Robertson 1020)
+    dict(
+        id='s_tmr_neu', robertson_src=1020,
+        ftr_mode='scheduling', temporal='tomorrow', modality='neutral', certainty=None,
+        context_header=dict(
+            en="Flight Departure",
+            fr="Départ du vol",
+            de="Flugabflug",
+            ja="フライトの出発",
+        ),
+        context_prob=_PROB[None],
+        text=dict(
+            en="""
+<p><strong>Q:</strong> When do you fly out?</p>
+<p class='target'><strong>A:</strong> My flight {{1}} <em>(leave)</em> tomorrow!</p>
+""",
+            fr="""
+<p><strong>Q :</strong> Quand est-ce que tu prends l'avion ?</p>
+<p class='target'><strong>R :</strong> Mon vol {{1}} <em>(partir)</em> demain !</p>
+""",
+            de="""
+<p><strong>F:</strong> Wann fliegst du ab?</p>
+<p class='target'><strong>A:</strong> Mein Flug wird morgen {{1}} <em>(starten)</em>!</p>
+""",
+            ja="""
+<p><strong>質問：</strong>いつ飛行機に乗るの？</p>
+<p class='target'><strong>回答：</strong>私の便は明日{{1}}！<em>（出発する）</em></p>
+""",
+        ),
+    ),
+
+    # Item 22 — Scheduling / Tomorrow / 50 %  (Robertson 1141)
+    dict(
+        id='s_tmr_50', robertson_src=1141,
+        ftr_mode='scheduling', temporal='tomorrow', modality='low_50', certainty=50,
+        context_header=dict(
+            en="Concert Date",
+            fr="Date du concert",
+            de="Konzerttermin",
+            ja="コンサートの日程",
+        ),
+        context_prob=_PROB[50],
+        text=dict(
+            en="""
+<p><strong>Q:</strong> When is the concert?</p>
+<p><strong>A:</strong> I think...</p>
+<p class='target'>...they {{1}} <em>(play)</em> tomorrow.</p>
+""",
+            fr="""
+<p><strong>Q :</strong> C'est quand le concert ?</p>
+<p><strong>R :</strong> Je crois que...</p>
+<p class='target'>...ils {{1}} <em>(jouer)</em> demain.</p>
+""",
+            de="""
+<p><strong>F:</strong> Wann ist das Konzert?</p>
+<p><strong>A:</strong> Ich glaube...</p>
+<p class='target'>...sie werden morgen {{1}} <em>(spielen)</em>.</p>
+""",
+            ja="""
+<p><strong>質問：</strong>コンサートはいつ？</p>
+<p><strong>回答：</strong>たしか…</p>
+<p class='target'>…明日{{1}}と思う。<em>（演奏する）</em></p>
+""",
+        ),
+    ),
+
+    # Item 23 — Scheduling / 3 months / 60 %  (Robertson 1146)
+    dict(
+        id='s_3mo_60', robertson_src=1146,
+        ftr_mode='scheduling', temporal='three_months', modality='low_60', certainty=60,
+        context_header=dict(
+            en="Thesis Defense",
+            fr="Soutenance de thèse",
+            de="Verteidigung der Dissertation",
+            ja="論文審査",
+        ),
+        context_prob=_PROB[60],
+        text=dict(
+            en="""
+<p><strong>Student:</strong> When exactly do I defend?</p>
+<p><strong>Supervisor:</strong> I'm fairly confident it has been set...</p>
+<p class='target'>...your viva {{1}} <em>(be)</em> in three months.</p>
+""",
+            fr="""
+<p><strong>Étudiant :</strong> Quand est-ce que je soutiens exactement ?</p>
+<p><strong>Directeur :</strong> Je suis assez confiant(e) que c'est fixé...</p>
+<p class='target'>...votre soutenance {{1}} <em>(être)</em> dans trois mois.</p>
+""",
+            de="""
+<p><strong>Student:</strong> Wann genau verteidige ich?</p>
+<p><strong>Betreuer:</strong> Ich bin ziemlich sicher, dass es festgelegt wurde...</p>
+<p class='target'>...Ihre Prüfung wird in drei Monaten {{1}} <em>(sein)</em>.</p>
+""",
+            ja="""
+<p><strong>学生：</strong>具体的にいつ口頭試問ですか？</p>
+<p><strong>指導教員：</strong>決まっていると思いますが…</p>
+<p class='target'>…口頭試問は3ヶ月後に{{1}}はずです。<em>（ある）</em></p>
+""",
+        ),
+    ),
+
+    # Item 24 — Scheduling / 2 years / 40 %  (Robertson 1156)
+    dict(
+        id='s_2yr_40', robertson_src=1156,
+        ftr_mode='scheduling', temporal='two_years', modality='low_40', certainty=40,
+        context_header=dict(
+            en="Contract Expiry",
+            fr="Expiration du contrat",
+            de="Vertragsablauf",
+            ja="契約の満了",
+        ),
+        context_prob=_PROB[40],
+        text=dict(
+            en="""
+<p><strong>Q:</strong> How long do you have on your contract?</p>
+<p><strong>A:</strong> I really need to check, it's been a while...</p>
+<p class='target'>...it {{1}} <em>(expire)</em> in two years.</p>
+""",
+            fr="""
+<p><strong>Q :</strong> Il te reste combien de temps sur ton contrat ?</p>
+<p><strong>R :</strong> Il faut vraiment que je vérifie, ça fait un moment...</p>
+<p class='target'>...il {{1}} <em>(expirer)</em> dans deux ans.</p>
+""",
+            de="""
+<p><strong>F:</strong> Wie lange läuft Ihr Vertrag noch?</p>
+<p><strong>A:</strong> Ich müsste wirklich nachschauen, es ist schon eine Weile her...</p>
+<p class='target'>...in zwei Jahren wird er {{1}} <em>(auslaufen)</em>.</p>
+""",
+            ja="""
+<p><strong>質問：</strong>契約はあとどのくらいですか？</p>
+<p><strong>回答：</strong>確認しないといけないんですが、しばらく見てなくて…</p>
+<p class='target'>…2年後に{{1}}と思います。<em>（満了する）</em></p>
+""",
+        ),
+    ),
+
+    # Item 25 — Scheduling / 2 years / 100 %  (Robertson 1108)
+    dict(
+        id='s_2yr_cer', robertson_src=1108,
+        ftr_mode='scheduling', temporal='two_years', modality='certain', certainty=100,
+        context_header=dict(
+            en="Bond Maturity",
+            fr="Échéance de l'obligation",
+            de="Fälligkeit der Anleihe",
+            ja="債券の満期",
+        ),
+        context_prob=_PROB[100],
+        text=dict(
+            en="""
+<p><strong>Father to son:</strong> I have just checked...</p>
+<p class='target'>...your bond {{1}} <em>(mature)</em> in two years.</p>
+""",
+            fr="""
+<p><strong>Père à son fils :</strong> Je viens de vérifier...</p>
+<p class='target'>...ton obligation {{1}} <em>(arriver à échéance)</em> dans deux ans.</p>
+""",
+            de="""
+<p><strong>Vater zum Sohn:</strong> Ich habe gerade nachgesehen...</p>
+<p class='target'>...deine Anleihe wird in zwei Jahren {{1}} <em>(fällig werden)</em>.</p>
+""",
+            ja="""
+<p><strong>父から息子へ：</strong>今確認したところ…</p>
+<p class='target'>…お前の債券は2年後に{{1}}。<em>（満期になる）</em></p>
+""",
+        ),
+    ),
+
+
+    # ══════════════════════════════════════════════════════════
+    #  ATTENTION CHECKS  (2)
+    #  Disguised as normal scenarios; embedded instruction asks
+    #  participant to type "yes". Buried mid-page on Pages 1 & 3.
+    #  IDs: ac_1, ac_2  (indices 25, 26)
+    # ══════════════════════════════════════════════════════════
+
+    # AC 1 — Looks like a prediction / tomorrow item (placed in Page 1)
+    dict(
+        id='ac_1', robertson_src=None,
+        ftr_mode='attention_check', temporal='tomorrow', modality='neutral', certainty=None,
+        context_header=dict(
+            en="Local Weather",
+            fr="Météo locale",
+            de="Lokales Wetter",
+            ja="地元の天気",
+        ),
+        context_prob=_PROB[None],
+        text=dict(
+            en="""
+<p><strong>A:</strong> I heard the weather report on the radio this morning. There's a cold front coming through.</p>
+<p><strong>B:</strong> Really? That would explain the clouds...</p>
+<p class='target'>This is an attention check. Please simply enter the word <em>yes</em> for this question: {{1}}</p>
+""",
+            fr="""
+<p><strong>A :</strong> J'ai entendu le bulletin météo à la radio ce matin. Un front froid approche.</p>
+<p><strong>B :</strong> Vraiment ? Cela expliquerait les nuages...</p>
+<p class='target'>Ceci est une question d'attention. Veuillez simplement entrer le mot <em>oui</em> pour cette question : {{1}}</p>
+""",
+            de="""
+<p><strong>A:</strong> Ich habe heute Morgen den Wetterbericht im Radio gehört. Eine Kaltfront kommt durch.</p>
+<p><strong>B:</strong> Wirklich? Das würde die Wolken erklären...</p>
+<p class='target'>Dies ist eine Aufmerksamkeitsfrage. Bitte geben Sie einfach das Wort <em>ja</em> für diese Frage ein: {{1}}</p>
+""",
+            ja="""
+<p><strong>A：</strong>今朝ラジオで天気予報を聞いたよ。寒冷前線が来ているらしい。</p>
+<p><strong>B：</strong>本当に？それで曇っているのか…</p>
+<p class='target'>これは注意確認の質問です。この質問には <em>はい</em> とだけ入力してください：{{1}}</p>
+""",
+        ),
+    ),
+
+    # AC 2 — Looks like a scheduling / 3-month item (placed in Page 3)
+    dict(
+        id='ac_2', robertson_src=None,
+        ftr_mode='attention_check', temporal='three_months', modality='neutral', certainty=None,
+        context_header=dict(
+            en="Office Relocation",
+            fr="Déménagement du bureau",
+            de="Büroumzug",
+            ja="オフィスの移転",
+        ),
+        context_prob=_PROB[None],
+        text=dict(
+            en="""
+<p><strong>A:</strong> Have you heard anything about the office moving to the new building?</p>
+<p><strong>B:</strong> Yes, management sent an email about it last week...</p>
+<p class='target'>This is an attention check. Please simply enter the word <em>yes</em> for this question: {{1}}</p>
+""",
+            fr="""
+<p><strong>A :</strong> Tu as des nouvelles concernant le déménagement du bureau dans le nouveau bâtiment ?</p>
+<p><strong>B :</strong> Oui, la direction a envoyé un e-mail à ce sujet la semaine dernière...</p>
+<p class='target'>Ceci est une question d'attention. Veuillez simplement entrer le mot <em>oui</em> pour cette question : {{1}}</p>
+""",
+            de="""
+<p><strong>A:</strong> Haben Sie etwas über den Büroumzug ins neue Gebäude gehört?</p>
+<p><strong>B:</strong> Ja, die Geschäftsführung hat letzte Woche eine E-Mail dazu geschickt...</p>
+<p class='target'>Dies ist eine Aufmerksamkeitsfrage. Bitte geben Sie einfach das Wort <em>ja</em> für diese Frage ein: {{1}}</p>
+""",
+            ja="""
+<p><strong>A：</strong>オフィスが新しいビルに移転する件、何か聞いた？</p>
+<p><strong>B：</strong>うん、先週経営陣からメールが来たよ…</p>
+<p class='target'>これは注意確認の質問です。この質問には <em>はい</em> とだけ入力してください：{{1}}</p>
+""",
+        ),
+    ),
+
+
+    # ══════════════════════════════════════════════════════════
+    #  BACKUP PREDICTION ITEMS  (15)
+    #  Same 3×5 factorial, alternate items from Robertson A.5
+    # ══════════════════════════════════════════════════════════
+
+    # ─────────────────────────────────────────────────────────
+    #  BACKUP PREDICTIONS — TOMORROW
+    # ─────────────────────────────────────────────────────────
+
+    # Item 26 — Backup / Tomorrow / Neutral  (Robertson 1024)
+    dict(
+        id='bp_tmr_neu', robertson_src=1024,
         ftr_mode='prediction', temporal='tomorrow', modality='neutral', certainty=None,
         context_header=dict(
-            en="Exam Preparation",
-            fr="Préparation à l'examen",
-            de="Prüfungsvorbereitung",
-            ja="試験の準備",
+            en="Student Progress",
+            fr="Progrès d'un élève",
+            de="Fortschritte eines Schülers",
+            ja="生徒の進歩",
         ),
-        context_prob=dict(en='', fr='', de='', ja=''),
+        context_prob=_PROB[None],
         text=dict(
             en="""
-<p><strong>A:</strong> Do you think we even need to study the extra material for tomorrow?</p>
-<p><strong>B:</strong> Absolutely. Knowing Professor Lee...</p>
-<p class='target'>...there {{1}} <em>(be)</em> a question on it tomorrow.</p>
+<p><strong>Teacher to parent:</strong> It can take some time for kids to adjust to a new school. Even by tomorrow...</p>
+<p class='target'>...Johnny {{1}} <em>(improve)</em>.</p>
 """,
             fr="""
-<p><strong>A :</strong> Tu crois qu'on a vraiment besoin d'étudier le matériel supplémentaire pour demain ?</p>
-<p><strong>B :</strong> Absolument. Connaissant le professeur Leroy...</p>
-<p class='target'>...il {{1}} <em>(avoir)</em> une question là-dessus demain.</p>
+<p><strong>Professeur au parent :</strong> Les enfants ont parfois besoin de temps pour s'adapter à une nouvelle école. Même d'ici demain...</p>
+<p class='target'>...Johnny {{1}} <em>(progresser)</em>.</p>
 """,
             de="""
-<p><strong>A:</strong> Glaubst du, wir müssen das zusätzliche Material für morgen wirklich lernen?</p>
-<p><strong>B:</strong> Auf jeden Fall. Professor Lehmann ist so...</p>
-<p class='target'>...morgen wird es dazu eine Frage {{1}} <em>(geben)</em>.</p>
+<p><strong>Lehrerin zu den Eltern:</strong> Kinder brauchen manchmal Zeit, um sich an eine neue Schule zu gewöhnen. Schon morgen...</p>
+<p class='target'>...wird Johnny sich {{1}} <em>(verbessern)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>明日のために追加資料まで勉強する必要があると思う？</p>
-<p><strong>B：</strong>絶対。李先生のことを考えると…</p>
-<p class='target'>…明日の試験にそこから{{1}}でしょうね。<em>（問題が出る）</em></p>
+<p><strong>先生から保護者へ：</strong>新しい学校に慣れるには時間がかかることもあります。明日にはもう…</p>
+<p class='target'>…ジョニーは{{1}}でしょう。<em>（上達する）</em></p>
 """,
         ),
     ),
 
-    # P-T9  Tomorrow / Certain 100 %
-    # Source: adapted from uploaded bank: "anti-inflammatories → help wrist"
+    # Item 27 — Backup / Tomorrow / 40 %  (Robertson 1138)
     dict(
-        id='p_tmr_cer_3',
-        ftr_mode='prediction', temporal='tomorrow', modality='certain', certainty=100,
+        id='bp_tmr_40', robertson_src=1138,
+        ftr_mode='prediction', temporal='tomorrow', modality='low_40', certainty=40,
         context_header=dict(
-            en="Medical Advice",
-            fr="Conseil médical",
-            de="Medizinischer Rat",
-            ja="医療アドバイス",
+            en="Retail Price Drop",
+            fr="Baisse des prix en magasin",
+            de="Preissenkung im Handel",
+            ja="小売価格の下落",
         ),
-        context_prob=dict(
-            en="100 % Certain",
-            fr="100 % certain",
-            de="100 % sicher",
-            ja="100 % 確実",
-        ),
+        context_prob=_PROB[40],
         text=dict(
             en="""
-<p><strong>A:</strong> My wrist has been in pain for days. Should I take anti-inflammatories?</p>
-<p><strong>B:</strong> Yes — I'm a pharmacist, trust me on this. Take them now...</p>
-<p class='target'>...they {{1}} <em>(help)</em> it heal faster. You'll feel a difference by tomorrow.</p>
+<p><strong>Salesman to customer:</strong> I'd try coming back tomorrow. People aren't buying too many...</p>
+<p class='target'>...the price {{1}} <em>(drop)</em>.</p>
 """,
             fr="""
-<p><strong>A :</strong> Mon poignet est douloureux depuis plusieurs jours. Je devrais prendre des anti-inflammatoires ?</p>
-<p><strong>B :</strong> Oui — je suis pharmacien(ne), faites-moi confiance. Prenez-en maintenant...</p>
-<p class='target'>...ils {{1}} <em>(aider)</em> à guérir plus vite. Vous sentirez la différence d'ici demain.</p>
+<p><strong>Vendeur au client :</strong> Je reviendrais demain si j'étais vous. Les gens n'en achètent pas beaucoup...</p>
+<p class='target'>...le prix {{1}} <em>(baisser)</em>.</p>
 """,
             de="""
-<p><strong>A:</strong> Mein Handgelenk schmerzt seit Tagen. Soll ich Entzündungshemmer nehmen?</p>
-<p><strong>B:</strong> Ja — ich bin Apotheker(in), vertrauen Sie mir. Nehmen Sie sie jetzt...</p>
-<p class='target'>...sie werden der Heilung {{1}} <em>(helfen)</em>. Morgen werden Sie den Unterschied spüren.</p>
+<p><strong>Verkäufer zum Kunden:</strong> Versuchen Sie morgen wiederzukommen. Die Leute kaufen nicht viele davon...</p>
+<p class='target'>...der Preis wird {{1}} <em>(sinken)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>何日も手首が痛くて。抗炎症薬を飲んだ方がいい？</p>
-<p><strong>B：</strong>はい——私は薬剤師です、信じてください。今すぐ飲んでください…</p>
-<p class='target'>…それが早く治るのに{{1}}でしょう。<em>（役立つ）</em>明日には違いを感じるはずです。</p>
+<p><strong>店員から客へ：</strong>明日またお越しになってみてください。あまり売れていないので…</p>
+<p class='target'>…価格は{{1}}かもしれません。<em>（下がる）</em></p>
 """,
         ),
     ),
 
-    # ══════════════════════════════════════════════════════
-    # PREDICTIONS — SIX MONTHS  (third item per modality)
-    # ══════════════════════════════════════════════════════
-
-    # P-6M7  Six months / Uncertain ~50 %
-    # Source: Robertson Table A.5 item 1144: gold market / skittish
+    # Item 28 — Backup / Tomorrow / 50 %  (Robertson 1144)
     dict(
-        id='p_6mo_unc_3',
-        ftr_mode='prediction', temporal='six_months', modality='uncertain', certainty=50,
+        id='bp_tmr_50', robertson_src=1144,
+        ftr_mode='prediction', temporal='tomorrow', modality='low_50', certainty=50,
         context_header=dict(
             en="Gold Investment",
-            fr="Investissement en or",
+            fr="Investissement dans l'or",
             de="Goldinvestition",
             ja="金への投資",
         ),
-        context_prob=dict(
-            en="~50 % Likely",
-            fr="~50 % probable",
-            de="~50 % wahrscheinlich",
-            ja="約50 %の確率",
-        ),
+        context_prob=_PROB[50],
         text=dict(
             en="""
-<p><strong>A:</strong> The markets are really skittish right now. Should we invest in gold?</p>
-<p><strong>B:</strong> Gold usually goes up when markets are nervous. Don't worry...</p>
-<p class='target'>...we {{1}} <em>(start)</em> to make money in a few months.</p>
+<p><strong>A:</strong> Gold usually goes up when markets are nervous. Don't worry...</p>
+<p class='target'>...we {{1}} <em>(start)</em> to make money by tomorrow.</p>
 """,
             fr="""
-<p><strong>A :</strong> Les marchés sont vraiment nerveux en ce moment. On devrait investir dans l'or ?</p>
-<p><strong>B :</strong> L'or monte généralement quand les marchés sont agités. Ne t'inquiète pas...</p>
-<p class='target'>...on {{1}} <em>(commencer)</em> à gagner de l'argent dans quelques mois.</p>
+<p><strong>A :</strong> L'or monte généralement quand les marchés sont agités. Ne t'inquiète pas...</p>
+<p class='target'>...on {{1}} <em>(commencer)</em> à gagner de l'argent d'ici demain.</p>
 """,
             de="""
-<p><strong>A:</strong> Die Märkte sind gerade wirklich nervös. Sollten wir in Gold investieren?</p>
-<p><strong>B:</strong> Gold steigt normalerweise, wenn die Märkte nervös sind. Keine Sorge...</p>
-<p class='target'>...in ein paar Monaten werden wir {{1}} <em>(anfangen)</em>, Geld zu verdienen.</p>
+<p><strong>A:</strong> Gold steigt normalerweise, wenn die Märkte nervös sind. Keine Sorge...</p>
+<p class='target'>...bis morgen werden wir {{1}} <em>(anfangen)</em>, Geld zu verdienen.</p>
 """,
             ja="""
-<p><strong>A：</strong>今、市場が本当に神経質な状態です。金に投資すべきかな？</p>
-<p><strong>B：</strong>市場が不安定な時は金が上がることが多い。心配しないで…</p>
-<p class='target'>…数ヶ月後には稼ぎ{{1}}でしょう。<em>（始める）</em></p>
+<p><strong>A：</strong>市場が不安定なときは金が上がることが多い。心配しないで…</p>
+<p class='target'>…明日には利益が{{1}}でしょう。<em>（出始める）</em></p>
 """,
         ),
     ),
 
-    # P-6M8  Six months / Neutral
-    # Source: Robertson Table A.5 item 1024/1140: teacher → student improving
+    # Item 29 — Backup / Tomorrow / 60 %  (Robertson 1134)
     dict(
-        id='p_6mo_neu_3',
-        ftr_mode='prediction', temporal='six_months', modality='neutral', certainty=None,
+        id='bp_tmr_60', robertson_src=1134,
+        ftr_mode='prediction', temporal='tomorrow', modality='low_60', certainty=60,
         context_header=dict(
-            en="Child at New School",
-            fr="Enfant dans une nouvelle école",
-            de="Kind in neuer Schule",
-            ja="新しい学校の子供",
+            en="Collectible Value",
+            fr="Valeur d'un objet de collection",
+            de="Sammlerwert",
+            ja="コレクターズアイテムの価値",
         ),
-        context_prob=dict(en='', fr='', de='', ja=''),
+        context_prob=_PROB[60],
         text=dict(
             en="""
-<p><strong>Teacher:</strong> Ellie worries me a little, but I think she just needs time to adjust.</p>
-<p><strong>Parent:</strong> Will she be OK?</p>
-<p class='target'><strong>Teacher:</strong> In a couple of months she {{1}} <em>(improve)</em>. I see it every year.</p>
+<p><strong>Father to son:</strong> Don't throw out that action figure. We are going to the comic convention tomorrow...</p>
+<p class='target'>...it {{1}} <em>(be)</em> worth something there.</p>
 """,
             fr="""
-<p><strong>Professeur :</strong> Ellie m'inquiète un peu, mais je pense qu'elle a juste besoin de temps pour s'adapter.</p>
-<p><strong>Parent :</strong> Elle va s'en sortir ?</p>
-<p class='target'><strong>Professeur :</strong> Dans quelques mois elle {{1}} <em>(progresser)</em>. Je le vois chaque année.</p>
+<p><strong>Père à son fils :</strong> Ne jette pas cette figurine. On va au salon de la BD demain...</p>
+<p class='target'>...elle {{1}} <em>(valoir)</em> quelque chose là-bas.</p>
 """,
             de="""
-<p><strong>Lehrerin:</strong> Ellie macht mir ein bisschen Sorgen, aber ich glaube, sie braucht nur Zeit zum Eingewöhnen.</p>
-<p><strong>Elternteil:</strong> Wird sie sich erholen?</p>
-<p class='target'><strong>Lehrerin:</strong> In ein paar Monaten wird sie {{1}} <em>(Fortschritte machen)</em>. Das sehe ich jedes Jahr.</p>
+<p><strong>Vater zum Sohn:</strong> Wirf die Actionfigur nicht weg. Wir gehen morgen zur Comic-Messe...</p>
+<p class='target'>...sie wird dort etwas wert {{1}} <em>(sein)</em>.</p>
 """,
             ja="""
-<p><strong>先生：</strong>エリーのことが少し心配ですが、ただ慣れるまでの時間が必要なだけだと思います。</p>
-<p><strong>保護者：</strong>大丈夫でしょうか？</p>
-<p class='target'><strong>先生：</strong>数ヶ月で{{1}}でしょう。<em>（上達する）</em>毎年見てきています。</p>
+<p><strong>父から息子へ：</strong>そのフィギュアを捨てるな。明日コミックコンベンションに行くだろう…</p>
+<p class='target'>…あそこでなら価値が{{1}}はず。<em>（ある）</em></p>
 """,
         ),
     ),
 
-    # P-6M9  Six months / Certain 100 %
-    # Source: adapted from uploaded bank: Africa investment → crash
+    # Item 30 — Backup / Tomorrow / 100 %  (Robertson 1075)
     dict(
-        id='p_6mo_cer_3',
-        ftr_mode='prediction', temporal='six_months', modality='certain', certainty=100,
+        id='bp_tmr_cer', robertson_src=1075,
+        ftr_mode='prediction', temporal='tomorrow', modality='certain', certainty=100,
         context_header=dict(
-            en="Emerging Market Warning",
-            fr="Avertissement sur les marchés émergents",
-            de="Warnung vor Schwellenländern",
-            ja="新興市場への警告",
+            en="Commodities Crash",
+            fr="Effondrement des matières premières",
+            de="Rohstoff-Crash",
+            ja="商品市場の崩壊",
         ),
-        context_prob=dict(
-            en="100 % Certain",
-            fr="100 % certain",
-            de="100 % sicher",
-            ja="100 % 確実",
-        ),
+        context_prob=_PROB[100],
         text=dict(
             en="""
-<p><strong>A:</strong> I was thinking of putting my savings into African emerging markets.</p>
-<p><strong>B:</strong> Are you sure? The next six months look very unstable — every analyst agrees...</p>
-<p class='target'>...it {{1}} <em>(crash)</em>. Don't do it.</p>
+<p><strong>A:</strong> Don't invest in commodities right now. The market is very shaky...</p>
+<p class='target'>...it {{1}} <em>(crash)</em> by tomorrow.</p>
 """,
             fr="""
-<p><strong>A :</strong> Je pensais placer mes économies dans les marchés émergents africains.</p>
-<p><strong>B :</strong> Tu es sûr(e) ? Les six prochains mois s'annoncent très instables — tous les analystes sont d'accord...</p>
-<p class='target'>...ça {{1}} <em>(s'effondrer)</em>. Ne le fais pas.</p>
+<p><strong>A :</strong> N'investissez pas dans les matières premières maintenant. Le marché est très fragile...</p>
+<p class='target'>...il {{1}} <em>(s'effondrer)</em> d'ici demain.</p>
 """,
             de="""
-<p><strong>A:</strong> Ich dachte daran, meine Ersparnisse in afrikanische Schwellenmärkte zu stecken.</p>
-<p><strong>B:</strong> Bist du sicher? Die nächsten sechs Monate sehen sehr instabil aus — alle Analysten sind sich einig...</p>
-<p class='target'>...in sechs Monaten wird es {{1}} <em>(kollabieren)</em>. Tu es nicht.</p>
+<p><strong>A:</strong> Investieren Sie jetzt nicht in Rohstoffe. Der Markt ist sehr wackelig...</p>
+<p class='target'>...bis morgen wird er {{1}} <em>(zusammenbrechen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>貯金をアフリカの新興市場に投資しようと思っているんだ。</p>
-<p><strong>B：</strong>本当に？これから6ヶ月はとても不安定になる——全てのアナリストが同意している…</p>
-<p class='target'>…{{1}}よ。<em>（崩壊する）</em>やめた方がいい。</p>
+<p><strong>A：</strong>今は商品市場に投資しないで。市場がとても不安定だから…</p>
+<p class='target'>…明日までに{{1}}よ。<em>（崩壊する）</em></p>
 """,
         ),
     ),
 
-    # ══════════════════════════════════════════════════════
-    # PREDICTIONS — TWO YEARS  (third item per modality)
-    # ══════════════════════════════════════════════════════
+    # ─────────────────────────────────────────────────────────
+    #  BACKUP PREDICTIONS — 3 MONTHS
+    # ─────────────────────────────────────────────────────────
 
-    # P-2Y7  Two years / Uncertain ~60 %
-    # Source: adapted from uploaded bank: sea levels (unclear science)
+    # Item 31 — Backup / 3 months / Neutral  (Robertson 1029)
     dict(
-        id='p_2yr_unc_3',
-        ftr_mode='prediction', temporal='two_years', modality='uncertain', certainty=60,
+        id='bp_3mo_neu', robertson_src=1029,
+        ftr_mode='prediction', temporal='three_months', modality='neutral', certainty=None,
         context_header=dict(
-            en="Climate Policy Debate",
-            fr="Débat sur la politique climatique",
-            de="Klimapolitische Debatte",
-            ja="気候政策の議論",
+            en="Winter Snow Forecast",
+            fr="Prévisions de neige hivernale",
+            de="Winterliche Schneeprognose",
+            ja="冬の降雪予報",
         ),
-        context_prob=dict(
-            en="~60 % Likely",
-            fr="~60 % probable",
-            de="~60 % wahrscheinlich",
-            ja="約60 %の確率",
-        ),
+        context_prob=_PROB[None],
         text=dict(
             en="""
-<p><strong>A:</strong> What do you think will happen to sea levels in the next two years?</p>
-<p><strong>B:</strong> The science is still debated, but the trend is fairly clear...</p>
-<p class='target'>...I think they {{1}} <em>(rise)</em>.</p>
+<p><strong>In the autumn, a weather presenter:</strong> Good news for all you skiers out there...</p>
+<p class='target'>...we {{1}} <em>(see)</em> a lot of snow in the next few months.</p>
 """,
             fr="""
-<p><strong>A :</strong> Que pensez-vous qu'il arrivera aux niveaux de la mer dans les deux prochaines années ?</p>
-<p><strong>B :</strong> La science fait encore débat, mais la tendance est assez claire...</p>
-<p class='target'>...je pense qu'ils {{1}} <em>(monter)</em>.</p>
+<p><strong>En automne, un présentateur météo :</strong> Bonne nouvelle pour tous les amateurs de ski...</p>
+<p class='target'>...on {{1}} <em>(voir)</em> beaucoup de neige dans les prochains mois.</p>
 """,
             de="""
-<p><strong>A:</strong> Was denken Sie, was in den nächsten zwei Jahren mit den Meeresspiegeln passiert?</p>
-<p><strong>B:</strong> Die Wissenschaft ist noch umstritten, aber der Trend ist ziemlich klar...</p>
-<p class='target'>...ich glaube, in zwei Jahren werden sie {{1}} <em>(steigen)</em>.</p>
+<p><strong>Im Herbst, ein Wettermoderator:</strong> Gute Nachrichten für alle Skifahrer da draußen...</p>
+<p class='target'>...in den nächsten Monaten werden wir viel Schnee {{1}} <em>(sehen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>今後2年間で海面水位はどうなると思いますか？</p>
-<p><strong>B：</strong>科学的にはまだ議論がありますが、傾向はかなり明確で…</p>
-<p class='target'>…{{1}}と思います。<em>（上昇する）</em></p>
+<p><strong>秋のこと。気象キャスター：</strong>スキー愛好家の皆さんに朗報です…</p>
+<p class='target'>…今後数ヶ月で、たくさんの雪が{{1}}でしょう。<em>（降る）</em></p>
 """,
         ),
     ),
 
-    # P-2Y8  Two years / Neutral
-    # Source: Robertson Table A.5 item 1164: retirement savings / shaky rates
+    # Item 32 — Backup / 3 months / 40 %  (Robertson 1149)
     dict(
-        id='p_2yr_neu_3',
+        id='bp_3mo_40', robertson_src=1149,
+        ftr_mode='prediction', temporal='three_months', modality='low_40', certainty=40,
+        context_header=dict(
+            en="Upcoming Elections",
+            fr="Prochaines élections",
+            de="Bevorstehende Wahlen",
+            ja="次の選挙",
+        ),
+        context_prob=_PROB[40],
+        text=dict(
+            en="""
+<p><strong>Q:</strong> What do you think will happen to the ruling party?</p>
+<p class='target'><strong>A:</strong> They {{1}} <em>(lose)</em> in a few months.</p>
+""",
+            fr="""
+<p><strong>Q :</strong> Que pensez-vous qu'il arrivera au parti au pouvoir ?</p>
+<p class='target'><strong>R :</strong> Ils {{1}} <em>(perdre)</em> dans quelques mois.</p>
+""",
+            de="""
+<p><strong>F:</strong> Was glauben Sie, was mit der Regierungspartei passieren wird?</p>
+<p class='target'><strong>A:</strong> In ein paar Monaten werden sie {{1}} <em>(verlieren)</em>.</p>
+""",
+            ja="""
+<p><strong>質問：</strong>与党はどうなると思いますか？</p>
+<p class='target'><strong>回答：</strong>数ヶ月後に{{1}}と思います。<em>（負ける）</em></p>
+""",
+        ),
+    ),
+
+    # Item 33 — Backup / 3 months / 50 %  (Robertson 1023)
+    dict(
+        id='bp_3mo_50', robertson_src=1023,
+        ftr_mode='prediction', temporal='three_months', modality='low_50', certainty=50,
+        context_header=dict(
+            en="Epidemic Spread",
+            fr="Propagation de l'épidémie",
+            de="Epidemieausbreitung",
+            ja="疫病の拡大",
+        ),
+        context_prob=_PROB[50],
+        text=dict(
+            en="""
+<p><strong>Doctor to panel:</strong> At current infection rates...</p>
+<p class='target'>...the epidemic {{1}} <em>(kill)</em> another 10,000 in the next few months.</p>
+""",
+            fr="""
+<p><strong>Médecin au comité :</strong> Au rythme actuel des infections...</p>
+<p class='target'>...l'épidémie {{1}} <em>(tuer)</em> encore 10 000 personnes dans les prochains mois.</p>
+""",
+            de="""
+<p><strong>Arzt zum Gremium:</strong> Bei den aktuellen Infektionsraten...</p>
+<p class='target'>...wird die Epidemie in den nächsten Monaten weitere 10.000 Menschen {{1}} <em>(töten)</em>.</p>
+""",
+            ja="""
+<p><strong>医師から委員会へ：</strong>現在の感染率では…</p>
+<p class='target'>…この疫病は今後数ヶ月でさらに1万人を{{1}}でしょう。<em>（死に至らしめる）</em></p>
+""",
+        ),
+    ),
+
+    # Item 34 — Backup / 3 months / 60 %  (Robertson 1082)
+    dict(
+        id='bp_3mo_60', robertson_src=1082,
+        ftr_mode='prediction', temporal='three_months', modality='low_60', certainty=60,
+        context_header=dict(
+            en="Student Settling In",
+            fr="Adaptation d'un élève",
+            de="Eingewöhnung eines Schülers",
+            ja="生徒の適応",
+        ),
+        context_prob=_PROB[60],
+        text=dict(
+            en="""
+<p><strong>Teacher to parent:</strong> Peter just needs time to settle in. In a few months...</p>
+<p class='target'>...he {{1}} <em>(improve)</em>.</p>
+""",
+            fr="""
+<p><strong>Professeur au parent :</strong> Peter a juste besoin de temps pour s'adapter. Dans quelques mois...</p>
+<p class='target'>...il {{1}} <em>(progresser)</em>.</p>
+""",
+            de="""
+<p><strong>Lehrerin zu den Eltern:</strong> Peter braucht nur Zeit zur Eingewöhnung. In ein paar Monaten...</p>
+<p class='target'>...wird er sich {{1}} <em>(verbessern)</em>.</p>
+""",
+            ja="""
+<p><strong>先生から保護者へ：</strong>ピーターは慣れるまでに時間が必要なだけです。数ヶ月すれば…</p>
+<p class='target'>…{{1}}でしょう。<em>（上達する）</em></p>
+""",
+        ),
+    ),
+
+    # Item 35 — Backup / 3 months / 100 %  (Robertson 1086)
+    dict(
+        id='bp_3mo_cer', robertson_src=1086,
+        ftr_mode='prediction', temporal='three_months', modality='certain', certainty=100,
+        context_header=dict(
+            en="Oil Investment",
+            fr="Investissement dans le pétrole",
+            de="Öl-Investition",
+            ja="石油投資",
+        ),
+        context_prob=_PROB[100],
+        text=dict(
+            en="""
+<p><strong>A:</strong> The price of oil always goes up in the summer. Let's invest now...</p>
+<p class='target'>...we {{1}} <em>(make)</em> a profit in a few months.</p>
+""",
+            fr="""
+<p><strong>A :</strong> Le prix du pétrole monte toujours en été. Investissons maintenant...</p>
+<p class='target'>...on {{1}} <em>(faire)</em> un bénéfice dans quelques mois.</p>
+""",
+            de="""
+<p><strong>A:</strong> Der Ölpreis steigt im Sommer immer. Investieren wir jetzt...</p>
+<p class='target'>...in ein paar Monaten werden wir einen Gewinn {{1}} <em>(machen)</em>.</p>
+""",
+            ja="""
+<p><strong>A：</strong>石油の価格は夏にはいつも上がる。今投資しよう…</p>
+<p class='target'>…数ヶ月で利益を{{1}}。<em>（出す）</em></p>
+""",
+        ),
+    ),
+
+    # ─────────────────────────────────────────────────────────
+    #  BACKUP PREDICTIONS — 2 YEARS
+    # ─────────────────────────────────────────────────────────
+
+    # Item 36 — Backup / 2 years / Neutral  (Robertson 1034)
+    dict(
+        id='bp_2yr_neu', robertson_src=1034,
         ftr_mode='prediction', temporal='two_years', modality='neutral', certainty=None,
         context_header=dict(
-            en="Retirement Planning",
-            fr="Planification de la retraite",
-            de="Altersplanung",
-            ja="退職後の計画",
+            en="Tech Industry",
+            fr="Industrie technologique",
+            de="Technologiebranche",
+            ja="テクノロジー業界",
         ),
-        context_prob=dict(en='', fr='', de='', ja=''),
+        context_prob=_PROB[None],
         text=dict(
             en="""
-<p><strong>A:</strong> Is it really worth putting money into a retirement savings plan right now? Interest rates are so shaky.</p>
-<p><strong>B:</strong> Trust the long term. In two years...</p>
-<p class='target'>...it {{1}} <em>(be)</em> worth quite a bit more.</p>
+<p><strong>A:</strong> Don't bother investing in the tech industry...</p>
+<p class='target'>...it {{1}} <em>(crash)</em> within two years.</p>
 """,
             fr="""
-<p><strong>A :</strong> Est-ce que ça vaut vraiment la peine de mettre de l'argent dans un plan d'épargne-retraite maintenant ? Les taux d'intérêt sont si instables.</p>
-<p><strong>B :</strong> Faites confiance au long terme. Dans deux ans...</p>
-<p class='target'>...ça {{1}} <em>(valoir)</em> bien plus.</p>
+<p><strong>A :</strong> Ne vous donnez pas la peine d'investir dans le secteur technologique...</p>
+<p class='target'>...il {{1}} <em>(s'effondrer)</em> d'ici deux ans.</p>
 """,
             de="""
-<p><strong>A:</strong> Lohnt es sich wirklich, jetzt Geld in einen Rentensparbeplan zu stecken? Die Zinsen sind so unbeständig.</p>
-<p><strong>B:</strong> Vertrauen Sie dem langen Atem. In zwei Jahren...</p>
-<p class='target'>...wird es deutlich mehr wert {{1}} <em>(sein)</em>.</p>
+<p><strong>A:</strong> Investieren Sie nicht in die Technologiebranche...</p>
+<p class='target'>...sie wird innerhalb von zwei Jahren {{1}} <em>(zusammenbrechen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>今、老後の積立プランにお金を入れる価値は本当にありますか？金利が不安定で。</p>
-<p><strong>B：</strong>長期的に信じてください。2年後には…</p>
-<p class='target'>…かなり{{1}}でしょう。<em>（価値が増える）</em></p>
+<p><strong>A：</strong>テクノロジー業界に投資しても無駄だよ…</p>
+<p class='target'>…2年以内に{{1}}から。<em>（崩壊する）</em></p>
 """,
         ),
     ),
 
-    # P-2Y9  Two years / Certain 100 %
-    # Source: adapted from uploaded bank: "saving £100 every paycheque → worth £30,000"
+    # Item 37 — Backup / 2 years / 40 %  (Robertson 1155)
     dict(
-        id='p_2yr_cer_3',
-        ftr_mode='prediction', temporal='two_years', modality='certain', certainty=100,
+        id='bp_2yr_40', robertson_src=1155,
+        ftr_mode='prediction', temporal='two_years', modality='low_40', certainty=40,
+        context_header=dict(
+            en="National Elections",
+            fr="Élections nationales",
+            de="Nationale Wahlen",
+            ja="国政選挙",
+        ),
+        context_prob=_PROB[40],
+        text=dict(
+            en="""
+<p><strong>Q:</strong> What do you think will happen in the national elections in two years?</p>
+<p><strong>A:</strong> The incumbent has a strong base, but you never know...</p>
+<p class='target'>...the challenger {{1}} <em>(win)</em>.</p>
+""",
+            fr="""
+<p><strong>Q :</strong> Que pensez-vous qu'il se passera aux élections nationales dans deux ans ?</p>
+<p><strong>R :</strong> Le sortant a une base solide, mais on ne sait jamais...</p>
+<p class='target'>...le candidat d'opposition {{1}} <em>(gagner)</em>.</p>
+""",
+            de="""
+<p><strong>F:</strong> Was glauben Sie, was bei den nationalen Wahlen in zwei Jahren passieren wird?</p>
+<p><strong>A:</strong> Der Amtsinhaber hat eine starke Basis, aber man weiß nie...</p>
+<p class='target'>...der Herausforderer wird {{1}} <em>(gewinnen)</em>.</p>
+""",
+            ja="""
+<p><strong>質問：</strong>2年後の国政選挙はどうなると思いますか？</p>
+<p><strong>回答：</strong>現職は強い支持基盤があるけど、何が起こるかわからない…</p>
+<p class='target'>…挑戦者が{{1}}かもしれない。<em>（勝つ）</em></p>
+""",
+        ),
+    ),
+
+    # Item 38 — Backup / 2 years / 50 %  (Robertson 1048)
+    dict(
+        id='bp_2yr_50', robertson_src=1048,
+        ftr_mode='prediction', temporal='two_years', modality='low_50', certainty=50,
         context_header=dict(
             en="Savings Growth",
             fr="Croissance de l'épargne",
             de="Ersparniszuwachs",
             ja="貯蓄の成長",
         ),
-        context_prob=dict(
-            en="100 % Certain",
-            fr="100 % certain",
-            de="100 % sicher",
-            ja="100 % 確実",
-        ),
+        context_prob=_PROB[50],
         text=dict(
             en="""
-<p><strong>A:</strong> Are you saving every month?</p>
-<p><strong>B:</strong> Yes — I put away £200 every paycheque into a compound interest account. The math is simple...</p>
-<p class='target'>...in two years it {{1}} <em>(be)</em> worth over £5,000. Guaranteed.</p>
+<p><strong>A:</strong> You should put money into a savings plan. In just two years...</p>
+<p class='target'>...it {{1}} <em>(be)</em> worth a lot more.</p>
 """,
             fr="""
-<p><strong>A :</strong> Tu épargnes tous les mois ?</p>
-<p><strong>B :</strong> Oui — je mets 200 € de côté à chaque salaire sur un compte à intérêts composés. Le calcul est simple...</p>
-<p class='target'>...dans deux ans ça {{1}} <em>(valoir)</em> plus de 5 000 €. Garanti.</p>
+<p><strong>A :</strong> Tu devrais placer de l'argent dans un plan d'épargne. Dans seulement deux ans...</p>
+<p class='target'>...ça {{1}} <em>(valoir)</em> beaucoup plus.</p>
 """,
             de="""
-<p><strong>A:</strong> Sparst du jeden Monat?</p>
-<p><strong>B:</strong> Ja — ich lege 200 € von jedem Gehalt auf ein Zinseszins-Konto. Die Rechnung ist einfach...</p>
-<p class='target'>...in zwei Jahren wird es über 5.000 € wert {{1}} <em>(sein)</em>. Garantiert.</p>
+<p><strong>A:</strong> Sie sollten Geld in einen Sparplan stecken. In nur zwei Jahren...</p>
+<p class='target'>...wird es viel mehr wert {{1}} <em>(sein)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>毎月貯金しているの？</p>
-<p><strong>B：</strong>うん——毎月の給料から2万円を複利口座に積み立てている。計算は簡単で…</p>
-<p class='target'>…2年後には50万円以上の価値に{{1}}でしょう。<em>（なる）</em>保証付きです。</p>
+<p><strong>A：</strong>貯蓄プランにお金を入れた方がいいよ。たった2年で…</p>
+<p class='target'>…ずっと価値が{{1}}はず。<em>（増える）</em></p>
 """,
         ),
     ),
 
-    # ══════════════════════════════════════════════════════
-    # SCHEDULING CONTROLS  (Neutral modality only)
-    # ══════════════════════════════════════════════════════
-
-    # S-T  Tomorrow / Neutral
+    # Item 39 — Backup / 2 years / 60 %  (Robertson 1163)
     dict(
-        id='s_tmr',
-        ftr_mode='scheduling', temporal='tomorrow', modality='neutral', certainty=None,
+        id='bp_2yr_60', robertson_src=1163,
+        ftr_mode='prediction', temporal='two_years', modality='low_60', certainty=60,
         context_header=dict(
-            en="Travel Schedule",
-            fr="Programme de voyage",
-            de="Reiseplan",
-            ja="旅行スケジュール",
+            en="Global Temperatures",
+            fr="Températures mondiales",
+            de="Globale Temperaturen",
+            ja="世界の気温",
         ),
-        context_prob=dict(en='', fr='', de='', ja=''),
+        context_prob=_PROB[60],
         text=dict(
             en="""
-<p><strong>A:</strong> What time is your flight tomorrow?</p>
-<p><strong>B:</strong> I just checked the ticket...</p>
-<p class='target'>...my flight {{1}} <em>(leave)</em> at 8 AM tomorrow morning.</p>
+<p><strong>Q:</strong> What do you expect temperatures to do in the next two years?</p>
+<p><strong>A:</strong> The science is unclear, right?</p>
+<p class='target'>...they {{1}} <em>(rise)</em>.</p>
 """,
             fr="""
-<p><strong>A :</strong> À quelle heure est ton vol demain ?</p>
-<p><strong>B :</strong> Je viens de vérifier le billet...</p>
-<p class='target'>...mon vol {{1}} <em>(partir)</em> demain matin à 8 h.</p>
+<p><strong>Q :</strong> Que pensez-vous qu'il arrivera aux températures dans les deux prochaines années ?</p>
+<p><strong>R :</strong> La science n'est pas claire, n'est-ce pas ?</p>
+<p class='target'>...elles {{1}} <em>(monter)</em>.</p>
 """,
             de="""
-<p><strong>A:</strong> Wann geht dein Flug morgen?</p>
-<p><strong>B:</strong> Ich habe gerade das Ticket überprüft...</p>
-<p class='target'>...morgen früh um 8 Uhr wird mein Flug {{1}} <em>(starten)</em>.</p>
+<p><strong>F:</strong> Was erwarten Sie von den Temperaturen in den nächsten zwei Jahren?</p>
+<p><strong>A:</strong> Die Wissenschaft ist nicht eindeutig, oder?</p>
+<p class='target'>...sie werden {{1}} <em>(steigen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>明日のフライトは何時？</p>
-<p><strong>B：</strong>今チケットを確認したんだけど…</p>
-<p class='target'>…明日の朝8時に便が{{1}}。<em>（出発する）</em></p>
+<p><strong>質問：</strong>今後2年間で気温はどうなると思いますか？</p>
+<p><strong>回答：</strong>科学的にもはっきりしていないけど…</p>
+<p class='target'>…{{1}}と思う。<em>（上昇する）</em></p>
 """,
         ),
     ),
 
-    # S-6M  Six months / Neutral
+    # Item 40 — Backup / 2 years / 100 %  (Robertson 1092)
     dict(
-        id='s_6mo',
-        ftr_mode='scheduling', temporal='six_months', modality='neutral', certainty=None,
+        id='bp_2yr_cer', robertson_src=1092,
+        ftr_mode='prediction', temporal='two_years', modality='certain', certainty=100,
         context_header=dict(
-            en="Moving House",
-            fr="Déménagement",
-            de="Umzug",
-            ja="引っ越し",
+            en="Market Bubble",
+            fr="Bulle de marché",
+            de="Marktblase",
+            ja="市場バブル",
         ),
-        context_prob=dict(en='', fr='', de='', ja=''),
+        context_prob=_PROB[100],
         text=dict(
             en="""
-<p><strong>A:</strong> When are you planning to move house?</p>
-<p><strong>B:</strong> I need to check the documents, but...</p>
-<p class='target'>...our lease {{1}} <em>(expire)</em> in six months.</p>
+<p><strong>A:</strong> Don't bother investing in that market. There is a bubble...</p>
+<p class='target'>...it {{1}} <em>(crash)</em> within two years.</p>
 """,
             fr="""
-<p><strong>A :</strong> Quand est-ce que tu comptes déménager ?</p>
-<p><strong>B :</strong> Je dois vérifier les documents, mais...</p>
-<p class='target'>...notre bail {{1}} <em>(expirer)</em> dans six mois.</p>
+<p><strong>A :</strong> Ne vous donnez pas la peine d'investir dans ce marché. Il y a une bulle...</p>
+<p class='target'>...il {{1}} <em>(s'effondrer)</em> d'ici deux ans.</p>
 """,
             de="""
-<p><strong>A:</strong> Wann planst du umzuziehen?</p>
-<p><strong>B:</strong> Ich muss die Dokumente prüfen, aber...</p>
-<p class='target'>...in sechs Monaten wird unser Mietvertrag {{1}} <em>(enden)</em>.</p>
+<p><strong>A:</strong> Investieren Sie nicht in diesen Markt. Es gibt eine Blase...</p>
+<p class='target'>...er wird innerhalb von zwei Jahren {{1}} <em>(zusammenbrechen)</em>.</p>
 """,
             ja="""
-<p><strong>A：</strong>いつ引っ越す予定なの？</p>
-<p><strong>B：</strong>書類を確認しないといけないんだけど…</p>
-<p class='target'>…私たちの賃貸契約が6ヶ月で{{1}}予定です。<em>（切れる）</em></p>
-""",
-        ),
-    ),
-
-    # S-2Y  Two years / Neutral
-    dict(
-        id='s_2yr',
-        ftr_mode='scheduling', temporal='two_years', modality='neutral', certainty=None,
-        context_header=dict(
-            en="University Degree",
-            fr="Diplôme universitaire",
-            de="Hochschulabschluss",
-            ja="大学の学位",
-        ),
-        context_prob=dict(en='', fr='', de='', ja=''),
-        text=dict(
-            en="""
-<p><strong>A:</strong> How much longer do you have on your degree?</p>
-<p><strong>B:</strong> I need to check how many credits I still have, but...</p>
-<p class='target'>...I {{1}} <em>(graduate)</em> in two years.</p>
-""",
-            fr="""
-<p><strong>A :</strong> Combien de temps te reste-t-il avant d'obtenir ton diplôme ?</p>
-<p><strong>B :</strong> Je dois vérifier mes crédits, mais...</p>
-<p class='target'>...j'{{1}} <em>(obtenir mon diplôme)</em> dans deux ans.</p>
-""",
-            de="""
-<p><strong>A:</strong> Wie lange hast du noch bis zu deinem Abschluss?</p>
-<p><strong>B:</strong> Ich muss meine Kreditpunkte prüfen, aber...</p>
-<p class='target'>...in zwei Jahren werde ich meinen Abschluss {{1}} <em>(machen)</em>.</p>
-""",
-            ja="""
-<p><strong>A：</strong>学位取得までどれくらいかかりますか？</p>
-<p><strong>B：</strong>まだ取得しなければならない単位数を確認する必要がありますが…</p>
-<p class='target'>…2年後に{{1}}予定です。<em>（卒業する）</em></p>
-""",
-        ),
-    ),
-
-    # ══════════════════════════════════════════════════════
-    # INTENTION CONTROLS  (Neutral modality only)
-    # ══════════════════════════════════════════════════════
-
-    # I-T  Tomorrow / Neutral
-    dict(
-        id='i_tmr',
-        ftr_mode='intention', temporal='tomorrow', modality='neutral', certainty=None,
-        context_header=dict(
-            en="Plans for Tonight",
-            fr="Plans pour ce soir",
-            de="Pläne für heute Abend",
-            ja="今夜の予定",
-        ),
-        context_prob=dict(en='', fr='', de='', ja=''),
-        text=dict(
-            en="""
-<p><strong>A:</strong> Do you want to come see a film tonight?</p>
-<p><strong>B:</strong> Sorry, I can't...</p>
-<p class='target'>...I {{1}} <em>(dine out)</em> with Sarah tonight.</p>
-""",
-            fr="""
-<p><strong>A :</strong> Tu veux venir voir un film ce soir ?</p>
-<p><strong>B :</strong> Désolé(e), je ne peux pas...</p>
-<p class='target'>...je {{1}} <em>(dîner)</em> au restaurant avec Sophie ce soir.</p>
-""",
-            de="""
-<p><strong>A:</strong> Willst du heute Abend einen Film sehen?</p>
-<p><strong>B:</strong> Leider nicht...</p>
-<p class='target'>...heute Abend werde ich mit Laura {{1}} <em>(speisen)</em>.</p>
-""",
-            ja="""
-<p><strong>A：</strong>今夜映画を見に行きませんか？</p>
-<p><strong>B：</strong>ごめんなさい、無理なんです…</p>
-<p class='target'>…今夜サラと{{1}}んです。<em>（外食する）</em></p>
-""",
-        ),
-    ),
-
-    # I-6M  Six months / Neutral
-    dict(
-        id='i_6mo',
-        ftr_mode='intention', temporal='six_months', modality='neutral', certainty=None,
-        context_header=dict(
-            en="A Friend's Plans",
-            fr="Les projets d'un ami",
-            de="Pläne eines Freundes",
-            ja="友人の計画",
-        ),
-        context_prob=dict(en='', fr='', de='', ja=''),
-        text=dict(
-            en="""
-<p><strong>A:</strong> [In October] What's Thomas up to lately? He seems unhappy living here.</p>
-<p><strong>B:</strong> I don't think he's happy here. In the spring...</p>
-<p class='target'>...he {{1}} <em>(travel)</em> in Mexico.</p>
-""",
-            fr="""
-<p><strong>A :</strong> [En octobre] Qu'est-ce que Thomas fait ces temps-ci ? Il a l'air malheureux ici.</p>
-<p><strong>B :</strong> Je ne pense pas qu'il soit heureux ici. Au printemps...</p>
-<p class='target'>...il {{1}} <em>(voyager)</em> au Mexique.</p>
-""",
-            de="""
-<p><strong>A:</strong> [Im Oktober] Was macht Thomas gerade? Er wirkt unglücklich hier.</p>
-<p><strong>B:</strong> Ich glaube nicht, dass er hier glücklich ist. Im Frühjahr...</p>
-<p class='target'>...wird er in Mexiko {{1}} <em>(reisen)</em>.</p>
-""",
-            ja="""
-<p><strong>A：</strong>[10月の話]トーマスは最近どうしてる？ここでの生活が嫌みたいだけど。</p>
-<p><strong>B：</strong>彼はここでの生活が幸せじゃないと思う。春には…</p>
-<p class='target'>…メキシコを{{1}}つもりみたい。<em>（旅行する）</em></p>
-""",
-        ),
-    ),
-
-    # I-2Y  Two years / Neutral
-    dict(
-        id='i_2yr',
-        ftr_mode='intention', temporal='two_years', modality='neutral', certainty=None,
-        context_header=dict(
-            en="Long-term Plans",
-            fr="Plans à long terme",
-            de="Langzeitpläne",
-            ja="長期計画",
-        ),
-        context_prob=dict(en='', fr='', de='', ja=''),
-        text=dict(
-            en="""
-<p><strong>A:</strong> Are you planning to stay in the UK long term?</p>
-<p><strong>B:</strong> I really love it here. In two years...</p>
-<p class='target'>...I {{1}} <em>(apply)</em> for permanent residency.</p>
-""",
-            fr="""
-<p><strong>A :</strong> Est-ce que tu comptes rester au Royaume-Uni à long terme ?</p>
-<p><strong>B :</strong> J'adore vraiment être ici. Dans deux ans...</p>
-<p class='target'>...je {{1}} <em>(faire une demande)</em> de résidence permanente.</p>
-""",
-            de="""
-<p><strong>A:</strong> Planst du, langfristig in Großbritannien zu bleiben?</p>
-<p><strong>B:</strong> Ich liebe es wirklich hier. In zwei Jahren...</p>
-<p class='target'>...werde ich die dauerhafte Aufenthaltserlaubnis {{1}} <em>(beantragen)</em>.</p>
-""",
-            ja="""
-<p><strong>A：</strong>長期的にイギリスに滞在するつもりですか？</p>
-<p><strong>B：</strong>本当にここが大好きです。2年後には…</p>
-<p class='target'>…永住権を{{1}}つもりです。<em>（申請する）</em></p>
+<p><strong>A：</strong>あの市場に投資しても無駄だよ。バブルがあるから…</p>
+<p class='target'>…2年以内に{{1}}。<em>（崩壊する）</em></p>
 """,
         ),
     ),
@@ -1565,11 +1688,15 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     language = models.StringField(initial='en')
 
-    # Task 2.1 responses: {"p_tmr_unc_1": {"1": "will pass"}, ...}
+    # Task 2.1 responses: {"p_tmr_neu": {"1": "will drop"}, ...}
     t2_production_data = models.LongStringField(initial='{}', blank=True)
 
     # Task 2.2 responses: {"It will rain...": 80, ...}
     t2_perception_data = models.LongStringField(initial='{}', blank=True)
+
+    # Attention checks: True if participant typed the correct word
+    t2_ac1_pass = models.BooleanField(initial=False)
+    t2_ac2_pass = models.BooleanField(initial=False)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -1591,7 +1718,20 @@ class Task2Intro(Page):
         return _ctx(player, 50)
 
 
-ITEMS_PER_PAGE = 7   # ← change this to 6 or 8 if desired
+# ── Page layout ──────────────────────────────────────────
+# Primary items (0–24) + 2 attention checks (25, 26)
+# Backup  items (27–41): 1 page of 15
+#
+# AC1 (index 25) 3rd-to-last on Page 1; AC2 (index 26) 3rd-to-last on Page 3
+PRIMARY_CHUNKS = [
+    [0, 1, 2, 3, 4, 5, 6, 25, 7, 8],       # Page 1: 10 items (AC1 at pos 8/10)
+    list(range(9, 17)),                       # Page 2: 8 items
+    [17, 18, 19, 20, 21, 22, 26, 23, 24],   # Page 3: 9 items (AC2 at pos 7/9)
+]
+BACKUP_CHUNK = list(range(27, 42))  # Page 4: backup items 28–42
+
+# Attention-check expected answers per language
+_AC_EXPECTED = dict(en='yes', fr='oui', de='ja', ja='はい')
 
 
 class Task2Item(Page):
@@ -1610,15 +1750,29 @@ class Task2Item(Page):
             **_ctx(player, progress),
         )
 
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        """Score attention checks after each page submission."""
+        lang = player.language
+        expected = _AC_EXPECTED.get(lang, 'yes')
+        try:
+            data = json.loads(player.t2_production_data or '{}')
+        except (json.JSONDecodeError, TypeError):
+            return
+        # Check AC1
+        ac1 = data.get('ac_1', {})
+        if ac1:
+            answer = ac1.get('1', '').strip().lower()
+            player.t2_ac1_pass = (answer == expected.lower())
+        # Check AC2
+        ac2 = data.get('ac_2', {})
+        if ac2:
+            answer = ac2.get('1', '').strip().lower()
+            player.t2_ac2_pass = (answer == expected.lower())
 
-def _make_item_page(indices):
+
+def _make_item_page(indices, progress, label):
     """Factory: generate one Task2Item page for a chunk of scenario indices."""
-    n_pages = -(-len(SCENARIOS) // ITEMS_PER_PAGE)   # ceiling division
-    page_num = indices[0] // ITEMS_PER_PAGE           # 0-based page number
-    # Progress sweeps from 55 % (first page) to 93 % (last page)
-    progress = 55 + round(38 * page_num / max(1, n_pages - 1))
-    label = f'{indices[0] + 1}_{indices[-1] + 1}'
-
     class _ItemPage(Task2Item):
         @staticmethod
         def vars_for_template(player):
@@ -1629,12 +1783,16 @@ def _make_item_page(indices):
     return _ItemPage
 
 
-# Build all item pages — one per chunk of ITEMS_PER_PAGE scenarios
-# 33 scenarios at 7/page → 5 pages  (4 × 7 + 1 × 5)
-_all_indices = list(range(len(SCENARIOS)))
-_chunks      = [_all_indices[i:i + ITEMS_PER_PAGE]
-                for i in range(0, len(_all_indices), ITEMS_PER_PAGE)]
-_ITEM_PAGES  = [_make_item_page(chunk) for chunk in _chunks]
+# Build primary pages (progress 55 → 70 → 80)
+_ITEM_PAGES = []
+_primary_progresses = [55, 68, 80]
+for i, chunk in enumerate(PRIMARY_CHUNKS):
+    label = f'{chunk[0] + 1}_{chunk[-1] + 1}'
+    _ITEM_PAGES.append(_make_item_page(chunk, _primary_progresses[i], label))
+
+# Build backup page (progress 90)
+_backup_label = f'{BACKUP_CHUNK[0] + 1}_{BACKUP_CHUNK[-1] + 1}'
+_ITEM_PAGES.append(_make_item_page(BACKUP_CHUNK, 90, _backup_label))
 
 
 class Task2Slider(Page):

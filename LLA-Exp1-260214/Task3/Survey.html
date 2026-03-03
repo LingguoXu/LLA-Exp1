@@ -7,34 +7,32 @@
 
     <div style="max-width: 500px; margin: 0 auto 30px;">
         <div class="mb-4">
-            <label class="form-label fw-bold">{{ ui.q_age }}</label>
-            <input type="number" name="age" form="form" class="blank" required min="18" max="100"
-                   style="width: 100%; max-width: 120px; display: block; margin: 0 auto;">
-        </div>
-
-        <div class="mb-4">
-            <label class="form-label fw-bold">{{ ui.q_gender }}</label>
-            <select name="gender" form="form" class="blank" required
-                    style="width: 100%; max-width: 250px; display: block; margin: 0 auto;">
+            <label class="form-label fw-bold">{{ ui.q_industry }}</label>
+            <select name="employment_industry" form="form" class="blank" required
+                    style="width: 100%; max-width: 350px; display: block; margin: 0 auto;">
                 <option value="" disabled selected>...</option>
-                <option value="Male">{{ ui.g_male }}</option>
-                <option value="Female">{{ ui.g_female }}</option>
-                <option value="Non-binary">{{ ui.g_nb }}</option>
-                <option value="Prefer not to say">{{ ui.g_no }}</option>
+                <option value="Agriculture/Mining">{{ ui.ind_1 }}</option>
+                <option value="Manufacturing/Construction">{{ ui.ind_2 }}</option>
+                <option value="IT/Technology">{{ ui.ind_3 }}</option>
+                <option value="Finance/Insurance">{{ ui.ind_4 }}</option>
+                <option value="Healthcare">{{ ui.ind_5 }}</option>
+                <option value="Education">{{ ui.ind_6 }}</option>
+                <option value="Retail/Hospitality">{{ ui.ind_7 }}</option>
+                <option value="Other/Unemployed/Student">{{ ui.ind_8 }}</option>
             </select>
         </div>
 
         <div class="mb-4">
-            <label class="form-label fw-bold">{{ ui.q_lang }}</label>
-            <select name="native_language" form="form" class="blank" required
-                    style="width: 100%; max-width: 250px; display: block; margin: 0 auto;">
+            <label class="form-label fw-bold">{{ ui.q_income }}</label>
+            <select name="income_level" form="form" class="blank" required
+                    style="width: 100%; max-width: 350px; display: block; margin: 0 auto;">
                 <option value="" disabled selected>...</option>
-                <option value="English">English</option>
-                <option value="German">Deutsch</option>
-                <option value="French">Français</option>
-                <option value="Japanese">日本語</option>
-                <option value="Chinese">中文</option>
-                <option value="Other">Other</option>
+                <option value="<30k">{{ ui.inc_1 }}</option>
+                <option value="30k-60k">{{ ui.inc_2 }}</option>
+                <option value="60k-90k">{{ ui.inc_3 }}</option>
+                <option value="90k-120k">{{ ui.inc_4 }}</option>
+                <option value=">120k">{{ ui.inc_5 }}</option>
+                <option value="Prefer not to say">{{ ui.inc_6 }}</option>
             </select>
         </div>
     </div>
@@ -75,30 +73,10 @@
         </div>
     </div>
 
-    <div class="mb-4">
-        <label class="form-label fw-bold">{{ ui.q_strat }}</label>
-        <textarea name="strategy_comment" form="form" class="blank" rows="3"
-                  style="width: 100%; text-align: left; padding: 10px; min-height: 80px;"></textarea>
-    </div>
-
     <div class="foot" style="justify-content: center; padding-top: 10px;">
-        <button type="button" class="btn btn-primary" style="padding: 12px 40px; font-size: 1.1rem;" onclick="handleSurveySubmit()">
+        <button type="button" class="btn btn-primary" style="padding: 12px 40px; font-size: 1.1rem;" onclick="submitPage()">
             {{ ui.btn_submit }}
         </button>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-    function handleSurveySubmit() {
-        const form = document.getElementById('form');
-
-        // Because we added 'form="form"' to the inputs,
-        // form.checkValidity() will now correctly see them and check them.
-        if (form.checkValidity()) {
-            form.submit();
-        } else {
-            form.reportValidity();
-        }
-    }
 {% endblock %}
