@@ -338,10 +338,10 @@
         var el = document.getElementById(elementId);
         if (!el) return;
         var xStr = '<strong>' + SYM + fmtAmt(x) + '</strong>';
-        if (LANG === 'fr') el.innerHTML = '50% de chance: <strong>perdre</strong> ' + xStr;
-        else if (LANG === 'de') el.innerHTML = '50% Chance: ' + xStr + ' <strong>verlieren</strong>';
-        else if (LANG === 'ja') el.innerHTML = '50%の確率で：' + xStr + ' <strong>損失</strong>';
-        else el.innerHTML = '50% chance: <strong>lose</strong> ' + xStr;
+        if (LANG === 'fr') el.innerHTML = '<strong>Perdre</strong> ' + xStr;
+        else if (LANG === 'de') el.innerHTML = xStr + ' <strong>verlieren</strong>';
+        else if (LANG === 'ja') el.innerHTML = xStr + ' <strong>損失</strong>';
+        else el.innerHTML = '<strong>Lose</strong> ' + xStr;
     }
 
     // ── Update bonus calculation lines ──

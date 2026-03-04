@@ -25,6 +25,7 @@ class C(BaseConstants):
 
     # ── LA Incentive ──────────────────────
     LA_ENDOWMENT_BASE = 20  # base endowment (×rate for currency)
+    COMP_EXAMPLE_LOSS_BASE = 6  # example loss for comprehension check (×rate)
 
     # ── Currency per language ────────────
     CURRENCY = dict(
@@ -125,6 +126,11 @@ class Player(BasePlayer):
 
     # --- BONUS CONTACT ---
     bonus_contact_email = models.StringField(blank=True)
+
+    # --- COMPREHENSION CHECK ---
+    comp_q1_attempts = models.IntegerField(initial=0, blank=True)
+    comp_q2_attempts = models.IntegerField(initial=0, blank=True)
+    comp_q3_attempts = models.IntegerField(initial=0, blank=True)
 
     # --- TEMPORAL DISCOUNTING FIELDS ---
     td_switching_1mo = models.IntegerField(min=1, max=8, blank=True)
@@ -287,16 +293,16 @@ UI = dict(
     la2_lottery_label=dict(en='Lottery', fr='Loterie', de='Lotterie', ja='くじ'),
     la2_sure_label=dict(en='Safe Option', fr='Option sûre', de='Sichere Option', ja='安全な選択肢'),
     la2_win_line=dict(
-        en='50% chance: <strong>win {symbol}{gain}</strong>',
-        fr='50% de chance: <strong>gagner {symbol}{gain}</strong>',
-        de='50% Chance: <strong>{symbol}{gain} gewinnen</strong>',
-        ja='50%の確率で：<strong>{symbol}{gain} 獲得</strong>'
+        en='<strong>Win {symbol}{gain}</strong>',
+        fr='<strong>Gagner {symbol}{gain}</strong>',
+        de='<strong>{symbol}{gain} gewinnen</strong>',
+        ja='<strong>{symbol}{gain} 獲得</strong>'
     ),
     la2_lose_line=dict(
-        en='50% chance: <strong>lose {symbol}{x}</strong>',
-        fr='50% de chance: <strong>perdre {symbol}{x}</strong>',
-        de='50% Chance: <strong>{symbol}{x} verlieren</strong>',
-        ja='50%の確率で：<strong>{symbol}{x} 損失</strong>'
+        en='<strong>Lose {symbol}{x}</strong>',
+        fr='<strong>Perdre {symbol}{x}</strong>',
+        de='<strong>{symbol}{x} verlieren</strong>',
+        ja='<strong>{symbol}{x} 損失</strong>'
     ),
     la2_sure_line=dict(
         en='<strong>Keep your {symbol}{endowment}</strong> (no change)',
@@ -567,6 +573,80 @@ UI = dict(
         de='ihre.email@example.com',
         ja='your.email@example.com'
     ),
+
+    # --- Comprehension Check ---
+    comp_title=dict(
+        en='Comprehension Check',
+        fr='Vérification de compréhension',
+        de='Verständnisprüfung',
+        ja='理解度チェック'
+    ),
+    comp_intro=dict(
+        en='Before we begin, let\'s make sure the task is clear. Below is an <strong>example</strong> of one of the five comparisons you will face. Imagine that <strong>this comparison is the one randomly selected</strong> to determine your bonus payment.',
+        fr='Avant de commencer, vérifions que la tâche est bien comprise. Ci-dessous se trouve un <strong>exemple</strong> de l\'une des cinq comparaisons que vous rencontrerez. Imaginez que <strong>cette comparaison est celle sélectionnée au hasard</strong> pour déterminer votre paiement bonus.',
+        de='Bevor wir beginnen, stellen wir sicher, dass die Aufgabe klar ist. Unten sehen Sie ein <strong>Beispiel</strong> eines der fünf Vergleiche, die Sie treffen werden. Stellen Sie sich vor, dass <strong>dieser Vergleich zufällig ausgewählt wird</strong>, um Ihre Bonuszahlung zu bestimmen.',
+        ja='始める前に、課題が明確であることを確認しましょう。以下は、あなたが直面する5つの比較の1つの<strong>例</strong>です。<strong>この比較がランダムに選ばれて</strong>ボーナスの支払いを決定すると想像してください。'
+    ),
+    comp_example_label=dict(
+        en='Example Comparison',
+        fr='Comparaison exemple',
+        de='Beispielvergleich',
+        ja='比較の例'
+    ),
+    comp_q1=dict(
+        en='<strong>Question 1:</strong> Suppose you chose <strong>Option A (Safe Option)</strong> for this comparison, and this comparison is the one randomly selected for payment. What would your bonus be?',
+        fr='<strong>Question 1 :</strong> Supposons que vous ayez choisi <strong>l\'Option A (Option Sûre)</strong> pour cette comparaison, et que cette comparaison soit celle sélectionnée au hasard pour le paiement. Quel serait votre bonus ?',
+        de='<strong>Frage 1:</strong> Angenommen, Sie haben <strong>Option A (Sichere Option)</strong> für diesen Vergleich gewählt, und dieser Vergleich wird zufällig für die Auszahlung ausgewählt. Wie hoch wäre Ihr Bonus?',
+        ja='<strong>質問1：</strong>この比較で<strong>選択肢A（安全な選択肢）</strong>を選び、この比較が支払いのためにランダムに選ばれたとします。あなたのボーナスはいくらになりますか？'
+    ),
+    comp_q2=dict(
+        en='<strong>Question 2:</strong> Suppose you chose <strong>Option B (Lottery)</strong> for this comparison, this comparison is randomly selected, and the coin flip results in a <strong>loss of {symbol}{example_loss}</strong>. What would your bonus be?',
+        fr='<strong>Question 2 :</strong> Supposons que vous ayez choisi <strong>l\'Option B (Loterie)</strong> pour cette comparaison, que cette comparaison soit sélectionnée, et que le tirage au sort résulte en une <strong>perte de {symbol}{example_loss}</strong>. Quel serait votre bonus ?',
+        de='<strong>Frage 2:</strong> Angenommen, Sie haben <strong>Option B (Lotterie)</strong> für diesen Vergleich gewählt, dieser Vergleich wird ausgewählt, und der Münzwurf ergibt einen <strong>Verlust von {symbol}{example_loss}</strong>. Wie hoch wäre Ihr Bonus?',
+        ja='<strong>質問2：</strong>この比較で<strong>選択肢B（くじ）</strong>を選び、この比較が選ばれ、コイン投げの結果<strong>{symbol}{example_loss}の損失</strong>になったとします。あなたのボーナスはいくらになりますか？'
+    ),
+    comp_check_btn=dict(
+        en='Check Answers',
+        fr='Vérifier les réponses',
+        de='Antworten prüfen',
+        ja='答えを確認'
+    ),
+    comp_correct=dict(
+        en='All answers are correct! You may now proceed.',
+        fr='Toutes les réponses sont correctes ! Vous pouvez maintenant continuer.',
+        de='Alle Antworten sind richtig! Sie können nun fortfahren.',
+        ja='すべての回答が正解です！次に進むことができます。'
+    ),
+    comp_wrong_q1=dict(
+        en='<strong>Question 1 is incorrect.</strong> When you choose the Safe Option, nothing changes — you simply keep your starting bonus of {symbol}{endowment}. The correct answer is <strong>{symbol}{endowment}</strong>.',
+        fr='<strong>La question 1 est incorrecte.</strong> Lorsque vous choisissez l\'Option Sûre, rien ne change — vous conservez simplement votre bonus de départ de {symbol}{endowment}. La bonne réponse est <strong>{symbol}{endowment}</strong>.',
+        de='<strong>Frage 1 ist falsch.</strong> Wenn Sie die Sichere Option wählen, ändert sich nichts — Sie behalten einfach Ihren Startbonus von {symbol}{endowment}. Die richtige Antwort ist <strong>{symbol}{endowment}</strong>.',
+        ja='<strong>質問1は不正解です。</strong>安全な選択肢を選ぶと、何も変わりません — 開始ボーナスの{symbol}{endowment}をそのまま受け取ります。正解は<strong>{symbol}{endowment}</strong>です。'
+    ),
+    comp_wrong_q2=dict(
+        en='<strong>Question 2 is incorrect.</strong> When you choose the Lottery and the coin flip results in a loss of {symbol}{example_loss}, that amount is subtracted from your starting bonus: {symbol}{endowment} &minus; {symbol}{example_loss} = <strong>{symbol}{loss_total}</strong>.',
+        fr='<strong>La question 2 est incorrecte.</strong> Lorsque vous choisissez la Loterie et que le tirage donne une perte de {symbol}{example_loss}, ce montant est soustrait de votre bonus de départ : {symbol}{endowment} &minus; {symbol}{example_loss} = <strong>{symbol}{loss_total}</strong>.',
+        de='<strong>Frage 2 ist falsch.</strong> Wenn Sie die Lotterie wählen und der Münzwurf einen Verlust von {symbol}{example_loss} ergibt, wird dieser Betrag von Ihrem Startbonus abgezogen: {symbol}{endowment} &minus; {symbol}{example_loss} = <strong>{symbol}{loss_total}</strong>.',
+        ja='<strong>質問2は不正解です。</strong>くじを選んでコイン投げの結果{symbol}{example_loss}の損失になった場合、その金額が開始ボーナスから差し引かれます：{symbol}{endowment} &minus; {symbol}{example_loss} = <strong>{symbol}{loss_total}</strong>。'
+    ),
+    comp_q3=dict(
+        en='<strong>Question 3:</strong> Suppose you chose <strong>Option B (Lottery)</strong> for this comparison, this comparison is randomly selected, and the coin flip results in a <strong>win of {symbol}{gain}</strong>. What would your bonus be?',
+        fr='<strong>Question 3 :</strong> Supposons que vous ayez choisi <strong>l\'Option B (Loterie)</strong> pour cette comparaison, que cette comparaison soit sélectionnée, et que le tirage au sort résulte en un <strong>gain de {symbol}{gain}</strong>. Quel serait votre bonus ?',
+        de='<strong>Frage 3:</strong> Angenommen, Sie haben <strong>Option B (Lotterie)</strong> für diesen Vergleich gewählt, dieser Vergleich wird ausgewählt, und der Münzwurf ergibt einen <strong>Gewinn von {symbol}{gain}</strong>. Wie hoch wäre Ihr Bonus?',
+        ja='<strong>質問3：</strong>この比較で<strong>選択肢B（くじ）</strong>を選び、この比較が選ばれ、コイン投げの結果<strong>{symbol}{gain}の獲得</strong>になったとします。あなたのボーナスはいくらになりますか？'
+    ),
+    comp_wrong_q3=dict(
+        en='<strong>Question 3 is incorrect.</strong> When you choose the Lottery and the coin flip results in a win of {symbol}{gain}, that amount is added to your starting bonus: {symbol}{endowment} + {symbol}{gain} = <strong>{symbol}{win_total}</strong>.',
+        fr='<strong>La question 3 est incorrecte.</strong> Lorsque vous choisissez la Loterie et que le tirage donne un gain de {symbol}{gain}, ce montant est ajouté à votre bonus de départ : {symbol}{endowment} + {symbol}{gain} = <strong>{symbol}{win_total}</strong>.',
+        de='<strong>Frage 3 ist falsch.</strong> Wenn Sie die Lotterie wählen und der Münzwurf einen Gewinn von {symbol}{gain} ergibt, wird dieser Betrag zu Ihrem Startbonus addiert: {symbol}{endowment} + {symbol}{gain} = <strong>{symbol}{win_total}</strong>.',
+        ja='<strong>質問3は不正解です。</strong>くじを選んでコイン投げの結果{symbol}{gain}の獲得になった場合、その金額が開始ボーナスに加算されます：{symbol}{endowment} + {symbol}{gain} = <strong>{symbol}{win_total}</strong>。'
+    ),
+    comp_please_select=dict(
+        en='Please answer all three questions before checking.',
+        fr='Veuillez répondre aux trois questions avant de vérifier.',
+        de='Bitte beantworten Sie alle drei Fragen, bevor Sie prüfen.',
+        ja='確認する前に3つの質問すべてにお答えください。'
+    ),
 )
 
 
@@ -612,6 +692,93 @@ class Task3Intro(Page):
             lang=lang,
             ui=ui,
             progress=99,
+        )
+
+
+class ComprehensionCheck(Page):
+    form_model = 'player'
+    form_fields = ['comp_q1_attempts', 'comp_q2_attempts', 'comp_q3_attempts']
+
+    @staticmethod
+    def vars_for_template(player):
+        lang = player.language
+        cur = C.CURRENCY.get(lang, C.CURRENCY['en'])
+        rate = cur['rate']
+        symbol = cur['symbol']
+        dec = cur['decimals']
+        ui = ui_dict(lang)
+
+        def fmt(v):
+            return f'{v:.0f}' if dec == 0 else f'{v:.{dec}f}'
+
+        endowment = C.LA_ENDOWMENT_BASE * rate
+        gain = C.GAIN_BASE * rate
+        example_loss = C.COMP_EXAMPLE_LOSS_BASE * rate
+        win_total = endowment + gain
+        loss_total = endowment - example_loss
+
+        endowment_s = fmt(endowment)
+        gain_s = fmt(gain)
+        example_loss_s = fmt(example_loss)
+        win_total_s = fmt(win_total)
+        loss_total_s = fmt(loss_total)
+
+        # Format Q2, Q3 and feedback strings with example amounts
+        ui['comp_q2'] = ui['comp_q2'].format(symbol=symbol, example_loss=example_loss_s)
+        ui['comp_q3'] = ui['comp_q3'].format(symbol=symbol, gain=gain_s)
+        ui['comp_wrong_q1'] = ui['comp_wrong_q1'].format(symbol=symbol, endowment=endowment_s)
+        ui['comp_wrong_q2'] = ui['comp_wrong_q2'].format(
+            symbol=symbol, example_loss=example_loss_s,
+            endowment=endowment_s, loss_total=loss_total_s
+        )
+        ui['comp_wrong_q3'] = ui['comp_wrong_q3'].format(
+            symbol=symbol, gain=gain_s,
+            endowment=endowment_s, win_total=win_total_s
+        )
+
+        # Build the win line for the example card
+        win_line = ui['la2_win_line'].format(symbol=symbol, gain=gain_s)
+        lose_line = ui['la2_lose_line'].format(symbol=symbol, x=example_loss_s)
+        sure_line = ui['la2_sure_line'].format(symbol=symbol, endowment=endowment_s)
+
+        # Q1 options: $0, endowment (correct), win_total, loss_total
+        q1_options = [
+            dict(value='a', label=f'{symbol}0'),
+            dict(value='b', label=f'{symbol}{endowment_s}'),
+            dict(value='c', label=f'{symbol}{win_total_s}'),
+            dict(value='d', label=f'{symbol}{loss_total_s}'),
+        ]
+        # Q2 options: win_total, $0, loss_total (correct), endowment
+        q2_options = [
+            dict(value='a', label=f'{symbol}{win_total_s}'),
+            dict(value='b', label=f'{symbol}0'),
+            dict(value='c', label=f'{symbol}{loss_total_s}'),
+            dict(value='d', label=f'{symbol}{endowment_s}'),
+        ]
+        # Q3 options: loss_total, endowment, $0, win_total (correct)
+        q3_options = [
+            dict(value='a', label=f'{symbol}{loss_total_s}'),
+            dict(value='b', label=f'{symbol}{endowment_s}'),
+            dict(value='c', label=f'{symbol}0'),
+            dict(value='d', label=f'{symbol}{win_total_s}'),
+        ]
+
+        return dict(
+            lang=lang,
+            ui=ui,
+            progress=99,
+            symbol=symbol,
+            endowment=endowment_s,
+            gain=gain_s,
+            example_loss=example_loss_s,
+            win_total=win_total_s,
+            loss_total=loss_total_s,
+            win_line=win_line,
+            lose_line=lose_line,
+            sure_line=sure_line,
+            q1_options=q1_options,
+            q2_options=q2_options,
+            q3_options=q3_options,
         )
 
 
@@ -900,6 +1067,7 @@ class FinalThankYou(Page):
 
 page_sequence = [
     Task3Intro,
+    ComprehensionCheck,
     LossAversionBisection,
     LossAversionResult,
     TemporalDiscounting,

@@ -1,0 +1,333 @@
+{% extends "global/Base.html" %}
+{% load otree static %}
+
+{% block extra_css %}
+<style>
+    .outcome-tag {
+        display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.05em; padding: 1px 6px; border-radius: 999px; margin-right: 4px; vertical-align: middle;
+    }
+    .tag-good { background: #d1fae5; color: #065f46; }
+    .tag-bad  { background: #fee2e2; color: #991b1b; }
+
+    .comp-question {
+        background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
+        padding: 20px 24px; margin-top: 24px;
+    }
+    .comp-question.q-wrong { border-color: #fca5a5; background: #fef2f2; }
+    .comp-question.q-correct { border-color: #86efac; background: #f0fdf4; }
+
+    .comp-question p { margin-bottom: 14px; color: #334155; line-height: 1.5; }
+
+    .comp-options { display: flex; flex-direction: column; gap: 8px; }
+    .comp-option {
+        display: flex; align-items: center; gap: 10px;
+        padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 8px;
+        cursor: pointer; transition: all 0.15s ease; background: #fff;
+    }
+    .comp-option:hover { border-color: #94a3b8; }
+    .comp-option.selected { border-color: #6366f1; background: #eef2ff; }
+    .comp-option.selected-wrong { border-color: #ef4444; background: #fef2f2; }
+    .comp-option.selected-correct { border-color: #22c55e; background: #f0fdf4; }
+    .comp-option input[type="radio"] { margin: 0; accent-color: #6366f1; }
+    .comp-option label { cursor: pointer; font-size: 0.95rem; font-weight: 500; color: #1e293b; margin: 0; }
+
+    .comp-feedback {
+        margin-top: 12px; padding: 12px 16px; border-radius: 6px;
+        font-size: 0.9rem; line-height: 1.5; display: none;
+    }
+    .comp-feedback.wrong { background: #fef2f2; border-left: 4px solid #ef4444; color: #991b1b; display: block; }
+    .comp-feedback.correct { background: #f0fdf4; border-left: 4px solid #22c55e; color: #166534; display: block; }
+
+    .comp-success-banner {
+        background: #f0fdf4; border: 2px solid #22c55e; border-radius: 10px;
+        padding: 16px 20px; margin-top: 24px; text-align: center;
+        font-size: 1rem; color: #166534; font-weight: 500; display: none;
+    }
+
+    .comp-error-banner {
+        background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 6px;
+        padding: 12px 16px; margin-top: 16px; font-size: 0.9rem; color: #991b1b; display: none;
+    }
+
+    /* Hide oTree's default Next button — we control visibility */
+    .otree-btn-next { visibility: hidden; position: absolute; pointer-events: none; }
+</style>
+{% endblock %}
+
+
+{% block hidden_fields %}
+<input type="hidden" name="comp_q1_attempts" id="field_q1_attempts" value="0">
+<input type="hidden" name="comp_q2_attempts" id="field_q2_attempts" value="0">
+<input type="hidden" name="comp_q3_attempts" id="field_q3_attempts" value="0">
+{% endblock %}
+
+
+{% block content %}
+<div class="card">
+
+    <h2 style="text-align:center;">{{ ui.comp_title }}</h2>
+
+    <p style="color:#475569; margin-bottom: 12px; line-height:1.6;">
+        {{ ui.comp_intro|safe }}
+    </p>
+
+    <!-- ═══ EXAMPLE COMPARISON ═══ -->
+    <div style="background:#f0f9ff; border-left:4px solid #0ea5e9; border-radius:6px; padding:12px 16px; margin-bottom:4px; font-size:0.88rem; color:#334155;">
+        <strong>{{ ui.comp_example_label }}</strong>
+        &mdash;
+        {% if lang == 'en' %}Your bonus starts at <strong>{{ symbol }}{{ endowment }}</strong>.
+        {% elif lang == 'fr' %}Votre bonus commence à <strong>{{ symbol }}{{ endowment }}</strong>.
+        {% elif lang == 'de' %}Ihr Bonus beginnt bei <strong>{{ symbol }}{{ endowment }}</strong>.
+        {% elif lang == 'ja' %}ボーナスは<strong>{{ symbol }}{{ endowment }}</strong>から始まります。{% endif %}
+    </div>
+
+    <div style="display:grid !important; grid-template-columns:1fr auto 1fr !important; gap:12px; align-items:stretch; margin:24px 0;">
+        <!-- Option A: Safe -->
+        <div style="border:2px solid #e2e8f0; border-radius:10px; padding:20px; background:#fff;">
+            <span class="bisect-card-label" style="background:#d1fae5; color:#065f46; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; display:inline-block; padding:2px 8px; border-radius:999px; margin-bottom:8px;">A</span>
+            <div style="font-weight:600; font-size:1rem; margin-bottom:10px; color:#1e293b;">{{ ui.la2_sure_label }}</div>
+            <div style="font-size:0.92rem; color:#475569; line-height:1.7;">{{ sure_line|safe }}</div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:50%; background:#f1f5f9; color:#64748b; font-size:0.7rem; font-weight:700; align-self:center;">VS</div>
+
+        <!-- Option B: Lottery -->
+        <div style="border:2px solid #e2e8f0; border-radius:10px; padding:20px; background:#fff;">
+            <span class="bisect-card-label" style="background:#e0e7ff; color:#3730a3; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; display:inline-block; padding:2px 8px; border-radius:999px; margin-bottom:8px;">B</span>
+            <div style="font-weight:600; font-size:1rem; margin-bottom:10px; color:#1e293b;">{{ ui.la2_lottery_label }}</div>
+            <div style="font-size:0.92rem; color:#475569; line-height:1.7;">
+                <span class="outcome-tag tag-good">50%</span> {{ win_line|safe }}<br>
+                <span style="font-size:0.82rem; color:#065f46; margin-left:42px; display:inline-block;">
+                    ({{ symbol }}{{ endowment }} + {{ symbol }}{{ gain }} = <strong style="color:#1e293b;">{{ symbol }}{{ win_total }}</strong>)
+                </span><br>
+                <span class="outcome-tag tag-bad">50%</span> {{ lose_line|safe }}<br>
+                <span style="font-size:0.82rem; color:#991b1b; margin-left:42px; display:inline-block;">
+                    ({{ symbol }}{{ endowment }} &minus; {{ symbol }}{{ example_loss }} = <strong style="color:#1e293b;">{{ symbol }}{{ loss_total }}</strong>)
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ QUESTION 1 ═══ -->
+    <div class="comp-question" id="q1-box">
+        <p>{{ ui.comp_q1|safe }}</p>
+        <div class="comp-options" id="q1-options">
+            {% for opt in q1_options %}
+            <div class="comp-option" onclick="selectOption('q1', '{{ opt.value }}', this)">
+                <input type="radio" name="comp_q1" id="q1_{{ opt.value }}" value="{{ opt.value }}">
+                <label for="q1_{{ opt.value }}">{{ opt.label }}</label>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="comp-feedback" id="q1-feedback"></div>
+    </div>
+
+    <!-- ═══ QUESTION 2 ═══ -->
+    <div class="comp-question" id="q2-box">
+        <p>{{ ui.comp_q2|safe }}</p>
+        <div class="comp-options" id="q2-options">
+            {% for opt in q2_options %}
+            <div class="comp-option" onclick="selectOption('q2', '{{ opt.value }}', this)">
+                <input type="radio" name="comp_q2" id="q2_{{ opt.value }}" value="{{ opt.value }}">
+                <label for="q2_{{ opt.value }}">{{ opt.label }}</label>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="comp-feedback" id="q2-feedback"></div>
+    </div>
+
+    <!-- ═══ QUESTION 3 ═══ -->
+    <div class="comp-question" id="q3-box">
+        <p>{{ ui.comp_q3|safe }}</p>
+        <div class="comp-options" id="q3-options">
+            {% for opt in q3_options %}
+            <div class="comp-option" onclick="selectOption('q3', '{{ opt.value }}', this)">
+                <input type="radio" name="comp_q3" id="q3_{{ opt.value }}" value="{{ opt.value }}">
+                <label for="q3_{{ opt.value }}">{{ opt.label }}</label>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="comp-feedback" id="q3-feedback"></div>
+    </div>
+
+    <!-- Error banner for missing selections -->
+    <div class="comp-error-banner" id="select-error">
+        {{ ui.comp_please_select }}
+    </div>
+
+    <!-- Success banner -->
+    <div class="comp-success-banner" id="success-banner">
+        ✓ {{ ui.comp_correct }}
+    </div>
+
+    <!-- Buttons -->
+    <div style="text-align:center; margin-top:28px;">
+        <button type="button" class="btn btn-primary" id="btn-check" onclick="checkAnswers()">
+            {{ ui.comp_check_btn }}
+        </button>
+        <button type="button" class="btn btn-primary" id="btn-next" onclick="submitPage()" style="display:none;">
+            {{ ui.btn_next }} &rarr;
+        </button>
+    </div>
+
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+(function() {
+
+    var q1Answer = null;
+    var q2Answer = null;
+    var q3Answer = null;
+    var q1Attempts = 0;
+    var q2Attempts = 0;
+    var q3Attempts = 0;
+    var passed = false;
+
+    // Correct answers: Q1='b' (endowment), Q2='c' (loss_total), Q3='d' (win_total)
+    var Q1_CORRECT = 'b';
+    var Q2_CORRECT = 'c';
+    var Q3_CORRECT = 'd';
+
+    var FEEDBACK_Q1_WRONG = '{{ ui.comp_wrong_q1|safe }}';
+    var FEEDBACK_Q2_WRONG = '{{ ui.comp_wrong_q2|safe }}';
+    var FEEDBACK_Q3_WRONG = '{{ ui.comp_wrong_q3|safe }}';
+
+    window.selectOption = function(q, value, el) {
+        if (passed) return;
+        // Clear previous selection styling in this question
+        var container = document.getElementById(q + '-options');
+        var opts = container.querySelectorAll('.comp-option');
+        for (var i = 0; i < opts.length; i++) {
+            opts[i].classList.remove('selected', 'selected-wrong', 'selected-correct');
+        }
+        el.classList.add('selected');
+        el.querySelector('input').checked = true;
+        if (q === 'q1') q1Answer = value;
+        else if (q === 'q2') q2Answer = value;
+        else q3Answer = value;
+
+        // Hide previous feedback when re-selecting
+        document.getElementById(q + '-box').classList.remove('q-wrong', 'q-correct');
+        document.getElementById(q + '-feedback').className = 'comp-feedback';
+        document.getElementById(q + '-feedback').innerHTML = '';
+        document.getElementById('select-error').style.display = 'none';
+        document.getElementById('success-banner').style.display = 'none';
+    };
+
+    window.checkAnswers = function() {
+        if (passed) return;
+
+        // Check all are answered
+        if (q1Answer === null || q2Answer === null || q3Answer === null) {
+            document.getElementById('select-error').style.display = 'block';
+            return;
+        }
+        document.getElementById('select-error').style.display = 'none';
+
+        var q1Correct = (q1Answer === Q1_CORRECT);
+        var q2Correct = (q2Answer === Q2_CORRECT);
+        var q3Correct = (q3Answer === Q3_CORRECT);
+
+        if (!q1Correct) q1Attempts++;
+        if (!q2Correct) q2Attempts++;
+        if (!q3Correct) q3Attempts++;
+
+        // Update hidden fields
+        document.getElementById('field_q1_attempts').value = q1Attempts;
+        document.getElementById('field_q2_attempts').value = q2Attempts;
+        document.getElementById('field_q3_attempts').value = q3Attempts;
+
+        // Q1 feedback
+        var q1Box = document.getElementById('q1-box');
+        var q1Fb = document.getElementById('q1-feedback');
+        if (q1Correct) {
+            q1Box.classList.remove('q-wrong');
+            q1Box.classList.add('q-correct');
+            q1Fb.className = 'comp-feedback correct';
+            q1Fb.innerHTML = '✓';
+            markOptionCorrect('q1');
+        } else {
+            q1Box.classList.remove('q-correct');
+            q1Box.classList.add('q-wrong');
+            q1Fb.className = 'comp-feedback wrong';
+            q1Fb.innerHTML = FEEDBACK_Q1_WRONG;
+            markOptionWrong('q1');
+        }
+
+        // Q2 feedback
+        var q2Box = document.getElementById('q2-box');
+        var q2Fb = document.getElementById('q2-feedback');
+        if (q2Correct) {
+            q2Box.classList.remove('q-wrong');
+            q2Box.classList.add('q-correct');
+            q2Fb.className = 'comp-feedback correct';
+            q2Fb.innerHTML = '✓';
+            markOptionCorrect('q2');
+        } else {
+            q2Box.classList.remove('q-correct');
+            q2Box.classList.add('q-wrong');
+            q2Fb.className = 'comp-feedback wrong';
+            q2Fb.innerHTML = FEEDBACK_Q2_WRONG;
+            markOptionWrong('q2');
+        }
+
+        // Q3 feedback
+        var q3Box = document.getElementById('q3-box');
+        var q3Fb = document.getElementById('q3-feedback');
+        if (q3Correct) {
+            q3Box.classList.remove('q-wrong');
+            q3Box.classList.add('q-correct');
+            q3Fb.className = 'comp-feedback correct';
+            q3Fb.innerHTML = '✓';
+            markOptionCorrect('q3');
+        } else {
+            q3Box.classList.remove('q-correct');
+            q3Box.classList.add('q-wrong');
+            q3Fb.className = 'comp-feedback wrong';
+            q3Fb.innerHTML = FEEDBACK_Q3_WRONG;
+            markOptionWrong('q3');
+        }
+
+        // If all correct, show success and next button
+        if (q1Correct && q2Correct && q3Correct) {
+            passed = true;
+            document.getElementById('success-banner').style.display = 'block';
+            document.getElementById('btn-check').style.display = 'none';
+            document.getElementById('btn-next').style.display = 'inline-block';
+        }
+    };
+
+    function markOptionCorrect(q) {
+        var container = document.getElementById(q + '-options');
+        var opts = container.querySelectorAll('.comp-option');
+        for (var i = 0; i < opts.length; i++) {
+            opts[i].classList.remove('selected', 'selected-wrong');
+            if (opts[i].querySelector('input').checked) {
+                opts[i].classList.add('selected-correct');
+            }
+        }
+    }
+
+    function markOptionWrong(q) {
+        var container = document.getElementById(q + '-options');
+        var opts = container.querySelectorAll('.comp-option');
+        for (var i = 0; i < opts.length; i++) {
+            opts[i].classList.remove('selected', 'selected-correct');
+            if (opts[i].querySelector('input').checked) {
+                opts[i].classList.add('selected-wrong');
+            }
+        }
+    }
+
+    window.submitPage = function() {
+        document.getElementById('field_q1_attempts').value = q1Attempts;
+        document.getElementById('field_q2_attempts').value = q2Attempts;
+        document.getElementById('field_q3_attempts').value = q3Attempts;
+        document.getElementById('form').submit();
+    };
+
+})();
+{% endblock %}
