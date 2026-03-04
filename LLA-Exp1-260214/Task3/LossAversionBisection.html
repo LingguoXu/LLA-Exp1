@@ -176,8 +176,10 @@
                     <div class="bisect-card-title">{{ ui.la2_lottery_label }}</div>
                     <div class="bisect-outcome">
                         <span class="outcome-tag tag-good">50%</span> {{ ui.la2_win_line_fmt }}<br>
+                        <span id="win-calc-text" style="font-size:0.82rem; color:#065f46; margin-left:42px; display:inline-block;"></span><br>
                         <span class="outcome-tag tag-bad">50%</span>
-                        <span id="lose-line-text">{{ ui.la2_lose_line_init }}</span>
+                        <span id="lose-line-text">{{ ui.la2_lose_line_init }}</span><br>
+                        <span id="lose-calc-text" style="font-size:0.82rem; color:#991b1b; margin-left:42px; display:inline-block;"></span>
                     </div>
                 </div>
 
@@ -227,8 +229,10 @@
                 <div class="bisect-card-title">{{ ui.la2_lottery_label }}</div>
                 <div class="bisect-outcome">
                     <span class="outcome-tag tag-good">50%</span> {{ ui.la2_win_line_fmt }}<br>
+                    <span id="slider-win-calc-text" style="font-size:0.82rem; color:#065f46; margin-left:42px; display:inline-block;"></span><br>
                     <span class="outcome-tag tag-bad">50%</span>
-                    <span id="slider-lose-text">—</span>
+                    <span id="slider-lose-text">—</span><br>
+                    <span id="slider-lose-calc-text" style="font-size:0.82rem; color:#991b1b; margin-left:42px; display:inline-block;"></span>
                 </div>
             </div>
 
@@ -279,6 +283,7 @@
     var LANG   = '{{ lang }}';
     var SYM    = '{{ symbol }}';
     var DEC    = {{ decimals }};
+    var ENDOW  = {{ endowment }};
 
     function fmtAmt(v) {
         return DEC === 0 ? Math.round(v).toString() : v.toFixed(DEC);
@@ -290,8 +295,9 @@
     var choices  = [];
     var currentX = (low + high) / 2;
 
-    // Initialise the first lose-line
+    // Initialise the first lose-line and calculations
     setLoseLine('lose-line-text', currentX);
+    updateCalcLines(currentX);
 
     // ── Binary choice ──
     window.bisectChoose = function(choice) {
@@ -317,6 +323,7 @@
             if (step < STEPS) {
                 currentX = (low + high) / 2;
                 setLoseLine('lose-line-text', currentX);
+                updateCalcLines(currentX);
                 updatePips(step);
                 cardA.classList.remove('selected-a'); cardB.classList.remove('selected-b');
                 area.classList.remove('fading');
@@ -335,6 +342,21 @@
         else if (LANG === 'de') el.innerHTML = '50% Chance: ' + xStr + ' <strong>verlieren</strong>';
         else if (LANG === 'ja') el.innerHTML = '50%の確率で：' + xStr + ' <strong>損失</strong>';
         else el.innerHTML = '50% chance: <strong>lose</strong> ' + xStr;
+    }
+
+    // ── Update bonus calculation lines ──
+    function updateCalcLines(x) {
+        var winCalc = document.getElementById('win-calc-text');
+        var loseCalc = document.getElementById('lose-calc-text');
+        var winTotal = ENDOW + GAIN;
+        var loseTotal = ENDOW - x;
+
+        if (winCalc) {
+            winCalc.innerHTML = '(' + SYM + fmtAmt(ENDOW) + ' + ' + SYM + fmtAmt(GAIN) + ' = <strong>' + SYM + fmtAmt(winTotal) + '</strong>)';
+        }
+        if (loseCalc) {
+            loseCalc.innerHTML = '(' + SYM + fmtAmt(ENDOW) + ' &minus; ' + SYM + fmtAmt(x) + ' = <strong>' + SYM + fmtAmt(loseTotal) + '</strong>)';
+        }
     }
 
     // ── Update progress pips ──
@@ -390,6 +412,18 @@
         document.getElementById('field_indiff_loss').value = x.toFixed(2);
 
         setLoseLine('slider-lose-text', x);
+
+        // Update slider card calculation lines
+        var winCalc = document.getElementById('slider-win-calc-text');
+        var loseCalc = document.getElementById('slider-lose-calc-text');
+        var winTotal = ENDOW + GAIN;
+        var loseTotal = ENDOW - x;
+        if (winCalc) {
+            winCalc.innerHTML = '(' + SYM + fmtAmt(ENDOW) + ' + ' + SYM + fmtAmt(GAIN) + ' = <strong>' + SYM + fmtAmt(winTotal) + '</strong>)';
+        }
+        if (loseCalc) {
+            loseCalc.innerHTML = '(' + SYM + fmtAmt(ENDOW) + ' &minus; ' + SYM + fmtAmt(x) + ' = <strong>' + SYM + fmtAmt(loseTotal) + '</strong>)';
+        }
 
         var big = document.getElementById('slider-big-display');
         var sub = document.getElementById('slider-sub-display');

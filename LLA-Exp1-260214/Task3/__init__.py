@@ -159,56 +159,56 @@ UI = dict(
                      ja='パート3: 意思決定'),
     intro_text=dict(
         en=(
-            'In this final part, you will make a series of choices involving potential gains and losses. You will have a chance to earn a bonus payment based on your decisions. '
-
+            'In this final part, you will make a series of choices involving potential gains and losses. '
             '<br><br>'
-            'To start, you will be given <strong>{symbol}{endowment}</strong>. '
+            '<strong>Bonus payment:</strong> You will have a chance to earn a bonus payment from completing the task in this part. '
+            'Specifically, after the study is completed, 1 in 10 participants will be randomly selected to receive their task bonus as an <strong>Amazon gift card</strong>. '
+            'Your choices below determine how large that bonus could be, so please decide as if every choice is real.'
+            '<br><br>'
+            '<strong>How it works:</strong> You will start with a bonus balance of <strong>{symbol}{endowment}</strong>. '
             'You will then choose between a lottery and a safe option across several rounds. '
             'At the end, <strong>one of your choices will be picked at random and played out for real. The outcome will be revealed to you immediately on the next screen</strong>. '
             'If you chose the safe option on that round, you simply keep your {symbol}{endowment}. '
-            'If you chose the lottery, a coin flip decides whether you win more or lose some. '
-            '<br><br>'
-            '<strong>Payment:</strong> After the study is completed, 1 in 10 participants will be randomly selected to receive their task bonus as an <strong>Amazon gift card</strong>. '
-            'Your final balance will determine your bonus.'
+            'If you chose the lottery, a coin flip decides whether you win more or lose some of your balance.'
         ),
         fr=(
-            'Dans cette dernière partie, vous ferez une série de choix impliquant des gains et des pertes potentiels. Vous aurez la possibilité de gagner un bonus basé sur vos décisions. '
-
+            'Dans cette dernière partie, vous ferez une série de choix impliquant des gains et des pertes potentiels. '
             '<br><br>'
-            'Pour commencer, vous recevrez <strong>{symbol}{endowment}</strong>. '
+            '<strong>Paiement bonus :</strong> Vous aurez la possibilité de gagner un bonus en complétant la tâche de cette partie. '
+            'Plus précisément, une fois l\'étude terminée, 1 participant sur 10 sera sélectionné au hasard pour recevoir son bonus sous forme de <strong>carte cadeau Amazon</strong>. '
+            'Vos choix ci-dessous déterminent le montant de ce bonus, alors veuillez décider comme si chaque choix était réel.'
+            '<br><br>'
+            '<strong>Comment ça marche :</strong> Vous commencerez avec un solde bonus de <strong>{symbol}{endowment}</strong>. '
             'Vous choisirez ensuite entre une loterie et une option sûre sur plusieurs tours. '
             'À la fin, <strong>un de vos choix sera tiré au sort et joué pour de vrai. Le résultat vous sera révélé immédiatement sur l\'écran suivant</strong>. '
             'Si vous avez choisi l\'option sûre à ce tour, vous conservez simplement vos {symbol}{endowment}. '
-            'Si vous avez choisi la loterie, un tirage au sort détermine si vous gagnez ou perdez. '
-            '<br><br>'
-            '<strong>Paiement :</strong> Une fois l\'étude terminée, 1 participant sur 10 sera sélectionné au hasard pour recevoir son bonus sous forme de <strong>carte cadeau Amazon</strong>. '
-            'Votre solde final déterminera votre bonus.'
+            'Si vous avez choisi la loterie, un tirage au sort détermine si vous gagnez ou perdez une partie de votre solde.'
         ),
         de=(
-            'In diesem letzten Teil treffen Sie eine Reihe von Entscheidungen mit möglichen Gewinnen und Verlusten. Sie haben die Möglichkeit, basierend auf Ihren Entscheidungen einen Bonus zu verdienen. '
-
+            'In diesem letzten Teil treffen Sie eine Reihe von Entscheidungen mit möglichen Gewinnen und Verlusten. '
             '<br><br>'
-            'Zu Beginn erhalten Sie <strong>{symbol}{endowment}</strong>. '
+            '<strong>Bonuszahlung:</strong> Sie haben die Möglichkeit, durch die Aufgabe in diesem Teil eine Bonuszahlung zu verdienen. '
+            'Nach Abschluss der Studie wird 1 von 10 Teilnehmenden zufällig ausgewählt, um den Aufgabenbonus als <strong>Amazon-Gutschein</strong> zu erhalten. '
+            'Ihre Entscheidungen unten bestimmen die Höhe dieses Bonus — bitte entscheiden Sie so, als ob jede Wahl real wäre.'
+            '<br><br>'
+            '<strong>So funktioniert es:</strong> Zu Beginn erhalten Sie ein Bonusguthaben von <strong>{symbol}{endowment}</strong>. '
             'Danach wählen Sie in mehreren Runden zwischen einer Lotterie und einer sicheren Option. '
             'Am Ende wird <strong>eine Ihrer Entscheidungen zufällig ausgewählt und tatsächlich ausgespielt. Das Ergebnis wird Ihnen sofort auf dem nächsten Bildschirm angezeigt</strong>. '
             'Wenn Sie in dieser Runde die sichere Option gewählt haben, behalten Sie einfach Ihre {symbol}{endowment}. '
-            'Wenn Sie die Lotterie gewählt haben, entscheidet ein Münzwurf, ob Sie gewinnen oder verlieren. '
-            '<br><br>'
-            '<strong>Auszahlung:</strong> Nach Abschluss der Studie wird 1 von 10 Teilnehmenden zufällig ausgewählt, um den Aufgabenbonus als <strong>Amazon-Gutschein</strong> zu erhalten. '
-            'Ihr Endstand bestimmt Ihren Bonus.'
+            'Wenn Sie die Lotterie gewählt haben, entscheidet ein Münzwurf, ob Sie gewinnen oder einen Teil Ihres Guthabens verlieren.'
         ),
         ja=(
-            'この最終パートでは、利益と損失を含む一連の選択を行います。あなたの決定に基づいてボーナスを獲得するチャンスがあります。'
-
+            'この最終パートでは、利益と損失を含む一連の選択を行います。'
             '<br><br>'
-            'まず、<strong>{symbol}{endowment}</strong>が支給されます。'
+            '<strong>ボーナス支払い：</strong>このパートの課題を完了することで、ボーナスを獲得するチャンスがあります。'
+            '具体的には、調査完了後、参加者の10人に1人がランダムに選ばれ、課題ボーナスが<strong>Amazonギフトカード</strong>として支払われます。'
+            '以下のあなたの選択がボーナスの金額を決定しますので、すべての選択が実際のものであるかのようにお答えください。'
+            '<br><br>'
+            '<strong>仕組み：</strong>まず、ボーナス残高として<strong>{symbol}{endowment}</strong>が支給されます。'
             'その後、複数のラウンドでくじと安全な選択肢のどちらかを選びます。'
             '最後に、<strong>あなたの選択の中から1つがランダムに選ばれ、実際に実行されます。その結果は次の画面ですぐに発表されます</strong>。'
             'そのラウンドで安全な選択肢を選んでいた場合、{symbol}{endowment}をそのまま受け取ります。'
-            'くじを選んでいた場合、コイン投げで増えるか減るかが決まります。'
-            '<br><br>'
-            '<strong>支払い：</strong>調査完了後、参加者の10人に1人がランダムに選ばれ、課題ボーナスが<strong>Amazonギフトカード</strong>として支払われます。'
-            '最終残高がボーナスを決定します。'
+            'くじを選んでいた場合、コイン投げで残高が増えるか減るかが決まります。'
         ),
     ),
     la_alert_head=dict(en='How it works:', fr='Comment ça marche :', de='So funktioniert es:', ja='仕組み:'),
@@ -258,10 +258,10 @@ UI = dict(
         ja='パート3: くじの決定'
     ),
     la2_intro=dict(
-        en='You will now make a series of choices between a <strong>lottery</strong> and a <strong>safe option ({symbol}0)</strong>. The lottery always gives you a 50% chance to <strong>win {symbol}{gain}</strong>. The potential loss changes with each choice. Your task is to find the loss amount where the lottery and the safe option feel <em>equally appealing</em> to you. <strong>Remember, the outcome of this task will be revealed to you immediately after you submit your decision.</strong>',
-        fr='Vous allez maintenant faire une série de choix entre une <strong>loterie</strong> et une <strong>option sûre ({symbol}0)</strong>. La loterie vous donne toujours 50% de chance de <strong>gagner {symbol}{gain}</strong>. Le montant de la perte change à chaque choix. Votre tâche est de trouver le montant de perte où la loterie et l\'option sûre vous semblent <em>aussi attractives l\'une que l\'autre</em>. <strong>N\'oubliez pas que le résultat de cette tâche vous sera révélé immédiatement après avoir soumis votre décision.</strong>',
-        de='Sie treffen nun eine Reihe von Entscheidungen zwischen einer <strong>Lotterie</strong> und einer <strong>sicheren Option ({symbol}0)</strong>. Die Lotterie bietet immer eine 50%-Chance, <strong>{symbol}{gain} zu gewinnen</strong>. Der mögliche Verlust ändert sich bei jeder Entscheidung. Ihre Aufgabe ist es, den Verlustbetrag zu finden, bei dem Lotterie und sichere Option für Sie <em>gleich attraktiv</em> sind. <strong>Denken Sie daran, dass Ihnen das Ergebnis dieser Aufgabe sofort nach dem Absenden Ihrer Entscheidung mitgeteilt wird.</strong>',
-        ja='これから、<strong>くじ</strong>と<strong>安全な選択肢（{symbol}0）</strong>の間で一連の選択を行います。くじは常に50%の確率で<strong>{symbol}{gain}を獲得</strong>できます。損失額は選択ごとに変わります。あなたの課題は、くじと安全な選択肢が<em>同じくらい魅力的に感じる</em>損失額を見つけることです。<strong>この課題の結果は、決定を送信した後すぐに発表されますのでご注意ください。</strong>'
+        en='You will now make a series of choices between a <strong>lottery</strong> and a <strong>safe option</strong> (keeping your bonus as-is). The lottery always gives you a 50% chance to <strong>win {symbol}{gain}</strong>. The potential loss changes with each choice. Your task is to find the loss amount where the lottery and the safe option feel <em>equally appealing</em> to you. <strong>Remember, the outcome of this task will be revealed to you immediately after you submit your decision.</strong>',
+        fr='Vous allez maintenant faire une série de choix entre une <strong>loterie</strong> et une <strong>option sûre</strong> (garder votre bonus tel quel). La loterie vous donne toujours 50% de chance de <strong>gagner {symbol}{gain}</strong>. Le montant de la perte change à chaque choix. Votre tâche est de trouver le montant de perte où la loterie et l\'option sûre vous semblent <em>aussi attractives l\'une que l\'autre</em>. <strong>N\'oubliez pas que le résultat de cette tâche vous sera révélé immédiatement après avoir soumis votre décision.</strong>',
+        de='Sie treffen nun eine Reihe von Entscheidungen zwischen einer <strong>Lotterie</strong> und einer <strong>sicheren Option</strong> (Ihr Bonus bleibt unverändert). Die Lotterie bietet immer eine 50%-Chance, <strong>{symbol}{gain} zu gewinnen</strong>. Der mögliche Verlust ändert sich bei jeder Entscheidung. Ihre Aufgabe ist es, den Verlustbetrag zu finden, bei dem Lotterie und sichere Option für Sie <em>gleich attraktiv</em> sind. <strong>Denken Sie daran, dass Ihnen das Ergebnis dieser Aufgabe sofort nach dem Absenden Ihrer Entscheidung mitgeteilt wird.</strong>',
+        ja='これから、<strong>くじ</strong>と<strong>安全な選択肢</strong>（ボーナスをそのまま保持）の間で一連の選択を行います。くじは常に50%の確率で<strong>{symbol}{gain}を獲得</strong>できます。損失額は選択ごとに変わります。あなたの課題は、くじと安全な選択肢が<em>同じくらい魅力的に感じる</em>損失額を見つけることです。<strong>この課題の結果は、決定を送信した後すぐに発表されますのでご注意ください。</strong>'
     ),
     la2_step_label=dict(
         en='Comparison {current} of {total}',
@@ -299,10 +299,10 @@ UI = dict(
         ja='50%の確率で：<strong>{symbol}{x} 損失</strong>'
     ),
     la2_sure_line=dict(
-        en='<strong>{symbol}0</strong> (keep what you have)',
-        fr='<strong>{symbol}0</strong> (garder ce que vous avez)',
-        de='<strong>{symbol}0</strong> (behalten, was Sie haben)',
-        ja='<strong>{symbol}0</strong>（今あるものをそのまま保持）'
+        en='<strong>Keep your {symbol}{endowment}</strong> (no change)',
+        fr='<strong>Garder vos {symbol}{endowment}</strong> (aucun changement)',
+        de='<strong>Ihre {symbol}{endowment} behalten</strong> (keine Änderung)',
+        ja='<strong>{symbol}{endowment}をそのまま保持</strong>（変更なし）'
     ),
     la2_slider_title=dict(
         en='Almost done — adjust the exact amount',
@@ -520,10 +520,10 @@ UI = dict(
         ja='コンピュータは支払いのために<strong>比較 {step}</strong>をランダムに選択しました。'
     ),
     res_choice_a=dict(
-        en='In this comparison, you chose the <strong>Safe Option</strong> ({symbol}0).',
-        fr='Dans cette comparaison, vous avez choisi l\'<strong>Option Sûre</strong> ({symbol}0).',
-        de='In diesem Vergleich haben Sie die <strong>Sichere Option</strong> ({symbol}0) gewählt.',
-        ja='この比較では、あなたは<strong>安全な選択肢</strong>（{symbol}0）を選びました。'
+        en='In this comparison, you chose the <strong>Safe Option</strong> — keeping your bonus unchanged.',
+        fr='Dans cette comparaison, vous avez choisi l\'<strong>Option Sûre</strong> — votre bonus reste inchangé.',
+        de='In diesem Vergleich haben Sie die <strong>Sichere Option</strong> gewählt — Ihr Bonus bleibt unverändert.',
+        ja='この比較では、あなたは<strong>安全な選択肢</strong>を選びました — ボーナスは変更なしです。'
     ),
     res_choice_b=dict(
         en='In this comparison, you chose the <strong>Lottery</strong>.',
@@ -672,8 +672,8 @@ class LossAversionBisection(Page):
 
         ui['la2_win_line_fmt'] = ui['la2_win_line'].format(symbol=symbol, gain=fmt(gain))
         ui['la2_lose_line_init'] = ui['la2_lose_line'].format(symbol=symbol, x=fmt(x_init))
-        ui['la2_sure_line'] = ui['la2_sure_line'].format(symbol=symbol)
         endowment_str = fmt(C.LA_ENDOWMENT_BASE * rate)
+        ui['la2_sure_line'] = ui['la2_sure_line'].format(symbol=symbol, endowment=endowment_str)
         ui['la2_bonus_note'] = ui['la2_bonus_note'].format(symbol=symbol, endowment=endowment_str)
 
         return dict(
@@ -685,6 +685,7 @@ class LossAversionBisection(Page):
             x_max=x_max,
             symbol=symbol,
             decimals=dec,
+            endowment=C.LA_ENDOWMENT_BASE * rate,
             bisection_steps=C.BISECTION_STEPS,
             steps_range=list(range(1, C.BISECTION_STEPS + 1)),
             la2_intro_formatted=ui['la2_intro'].format(symbol=symbol, gain=fmt(gain)),
@@ -776,7 +777,6 @@ class LossAversionResult(Page):
         res_final = ui['res_final'].format(symbol=symbol, endowment=fmt(endowment), sign=sign, outcome=fmt(outcome),
                                            total=fmt(bonus))
         res_final_a = ui['res_final_a'].format(symbol=symbol, total=fmt(bonus))
-        ui['res_choice_a'] = ui['res_choice_a'].format(symbol=symbol)
 
         return dict(
             lang=lang,
