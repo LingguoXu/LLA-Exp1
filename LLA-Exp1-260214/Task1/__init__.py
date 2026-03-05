@@ -246,13 +246,13 @@ UI = dict(
         ja='やり方',
     ),
     task1_how_step1=dict(
-        en='You will read short stories with some words missing. The missing words appear as blue hints inside the gaps.',
+        en='You will read short stories with some words missing. The missing words appear as <span style="color: black;"><strong>blue hints inside the gaps</strong></span>.',
         fr='Vous lirez de courtes histoires avec des mots manquants. Les mots manquants apparaissent sous forme d\u2019indices en bleu dans les espaces.',
         de='Sie lesen kurze Geschichten, in denen einige W\u00f6rter fehlen. Die fehlenden W\u00f6rter erscheinen als blaue Hinweise in den L\u00fccken.',
         ja='\u77ed\u3044\u7269\u8a9e\u3092\u8aad\u307f\u307e\u3059\u3002\u3044\u304f\u3064\u304b\u306e\u5358\u8a9e\u304c\u6b20\u3051\u3066\u3044\u307e\u3059\u3002\u6b20\u3051\u3066\u3044\u308b\u5358\u8a9e\u306f\u7a7a\u6b04\u306e\u4e2d\u306b\u9752\u3044\u30d2\u30f3\u30c8\u3068\u3057\u3066\u8868\u793a\u3055\u308c\u307e\u3059\u3002',
     ),
     task1_how_step2=dict(
-        en='Click on a blue hint to open the gap, then type the word or short phrase that feels most natural to you.',
+        en='Click on a blue hint to open the gap, then <span style="color: black;"><strong>type the word or short phrase that feels most natural to you</strong></span>.',
         fr='Cliquez sur un indice bleu pour ouvrir l\u2019espace, puis tapez le mot ou la courte expression qui vous semble le plus naturel.',
         de='Klicken Sie auf einen blauen Hinweis, um die L\u00fccke zu \u00f6ffnen, und geben Sie dann das Wort oder die kurze Phrase ein, die Ihnen am nat\u00fcrlichsten erscheint.',
         ja='\u9752\u3044\u30d2\u30f3\u30c8\u3092\u30af\u30ea\u30c3\u30af\u3057\u3066\u7a7a\u6b04\u3092\u958b\u304d\u3001\u6700\u3082\u81ea\u7136\u3060\u3068\u611f\u3058\u308b\u8a00\u8449\u3084\u77ed\u3044\u30d5\u30ec\u30fc\u30ba\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002',

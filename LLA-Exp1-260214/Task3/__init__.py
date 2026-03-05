@@ -207,12 +207,12 @@ UI = dict(
             'この最終パートでは、利益と損失を含む一連の選択を行います。'
             '<br><br>'
             '<strong>ボーナス支払い：</strong>このパートの課題を完了することで、ボーナスを獲得するチャンスがあります。'
-            '具体的には、調査完了後、参加者の10人に1人がランダムに選ばれ、課題ボーナスが<strong>Amazonギフトカード</strong>として支払われます。'
+            '具体的には、調査完了後、参加者の10人に1人がランダムに選ばれ、<strong>オンラインプラットフォームを通じて直接</strong>お支払いされます。'
             '以下のあなたの選択がボーナスの金額を決定しますので、すべての選択が実際のものであるかのようにお答えください。'
             '<br><br>'
             '<strong>仕組み：</strong>まず、ボーナス残高として<strong>{symbol}{endowment}</strong>が支給されます。'
-            'その後、複数のラウンドでくじと安全な選択肢のどちらかを選びます。'
-            '最後に、<strong>あなたの選択の中から1つがランダムに選ばれ、実際に実行されます。その結果は次の画面ですぐに発表されます</strong>。'
+            'その後、５つのラウンドでくじと安全な選択肢のどちらかを選びます。'
+            '最後に、<strong>あなたの５つの選択の中から1つがランダムに選ばれ、実際に実行されます。その結果は次の画面ですぐに発表されます</strong>。'
             'そのラウンドで安全な選択肢を選んでいた場合、{symbol}{endowment}をそのまま受け取ります。'
             'くじを選んでいた場合、コイン投げで残高が増えるか減るかが決まります。'
         ),
@@ -424,7 +424,7 @@ UI = dict(
         en='You start with {symbol}{endowment}. One of your choices will be played out for real. 1 in 10 participants will be randomly selected to receive their bonus as an Amazon gift card.',
         fr='Vous commencez avec {symbol}{endowment}. Un de vos choix sera joué pour de vrai. 1 participant sur 10 sera sélectionné au hasard pour recevoir son bonus sous forme de carte cadeau Amazon.',
         de='Sie starten mit {symbol}{endowment}. Eine Ihrer Entscheidungen wird tatsächlich ausgespielt. 1 von 10 Teilnehmenden wird zufällig ausgewählt, um den Bonus als Amazon-Gutschein zu erhalten.',
-        ja='{symbol}{endowment}からスタートします。あなたの選択の1つが実際に実行されます。10人に1人の参加者がランダムに選ばれ、Amazonギフトカードとしてボーナスが支払われます。',
+        ja='{symbol}{endowment}からスタートします。あなたの選択の1つが実際に実行されます。10人に1人の参加者がランダムに選ばれ、オンラインプラットフォームを通じてボーナスが支払われます。',
     ),
 
     td_title=dict(

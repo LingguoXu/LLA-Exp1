@@ -79,19 +79,19 @@ UI = dict(
         ja='やり方',
     ),
     t2_how_step1=dict(
-        en='You will see short dialogue scenarios. Each one has a gap where a word or phrase is missing. The missing word appears as a blue hint.',
+        en='You will see short dialogue scenarios. Each one has a gap where a word or phrase is missing. <span style="color: black;"><strong>The missing word appears as a blue hint</strong></span>.',
         fr='Vous verrez de courts scénarios de dialogue. Chacun comporte un espace où un mot ou une expression manque. Le mot manquant apparaît sous forme d\u2019indice en bleu.',
         de='Sie sehen kurze Dialogszenarien. Jedes hat eine Lücke, in der ein Wort oder eine Phrase fehlt. Das fehlende Wort erscheint als blauer Hinweis.',
         ja='短い会話のシナリオが表示されます。それぞれに単語やフレーズが欠けている空欄があります。欠けている単語は青いヒントとして表示されます。',
     ),
     t2_how_step2=dict(
-        en='Click the blue hint to open the gap, then type what feels most natural to you. Use the hint verb as a guide.',
+        en='Click the blue hint to open the gap, then <span style="color: black;"><strong>type what feels most natural to you</strong></span>. Use the hint verb as a guide.',
         fr='Cliquez sur l\u2019indice bleu pour ouvrir l\u2019espace, puis tapez ce qui vous semble le plus naturel. Utilisez le verbe indiqué comme guide.',
         de='Klicken Sie auf den blauen Hinweis, um die Lücke zu öffnen, und geben Sie ein, was sich für Sie am natürlichsten anfühlt. Verwenden Sie das Hinweiswort als Orientierung.',
         ja='青いヒントをクリックして空欄を開き、最も自然だと感じる表現を入力してください。ヒントの動詞を参考にしてください。',
     ),
     t2_how_step3=dict(
-        en='Where a certainty percentage is shown, imagine you are exactly that certain and write what you would naturally say.',
+        en='<span style="color: black;"><strong>Where a certainty percentage is shown, imagine you are exactly that certain</strong></span> and write what you would naturally say.',
         fr='Lorsqu\u2019un pourcentage de certitude est indiqué, imaginez que vous êtes exactement aussi certain(e) et écrivez ce que vous diriez naturellement.',
         de='Wenn ein Sicherheitsprozentsatz angegeben ist, stellen Sie sich vor, genau so sicher zu sein, und schreiben Sie, was Sie natürlich sagen würden.',
         ja='確率（％）が表示されている場合は、その確率で確信していると想像し、自然に言うであろう表現を書いてください。',
@@ -262,7 +262,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>店員から客へ：</strong>明日また来ていただいた方がいいですよ。新しい在庫がまもなく届きますので…</p>
-<p class='target'>…こちらの値段は{{1}}でしょう。<em>（下がる）</em></p>
+<p class='target'>…こちらの値段は{{1}}。<em>（下がる）</em></p>
 """,
         ),
     ),
@@ -297,7 +297,7 @@ SCENARIOS = [
             ja="""
 <p><strong>質問：</strong>明日の株式市場はどうなると思いますか？</p>
 <p><strong>回答：</strong>はっきりしないけど…</p>
-<p class='target'>…{{1}}と思う。<em>（上がる）</em></p>
+<p class='target'>…{{1}}。<em>（上がる）</em></p>
 """,
         ),
     ),
@@ -315,7 +315,7 @@ SCENARIOS = [
         context_prob=_PROB[50],
         text=dict(
             en="""
-<p><strong>A:</strong> I wouldn't invest right now. Conditions are unstable...</p>
+<p><strong>A to B:</strong> I wouldn't invest right now. Conditions are unstable...</p>
 <p class='target'>...the market {{1}} <em>(crash)</em> tomorrow.</p>
 """,
             fr="""
@@ -328,7 +328,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>A：</strong>今は投資しない方がいいよ。状況が不安定だから…</p>
-<p class='target'>…明日、市場は{{1}}かもしれない。<em>（崩壊する）</em></p>
+<p class='target'>…明日、市場は{{1}}。<em>（崩壊する）</em></p>
 """,
         ),
     ),
@@ -359,7 +359,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>気象キャスター：</strong>明日の予報はかなり不確かですが、良い兆しもあります…</p>
-<p class='target'>…明日は良い天気が{{1}}でしょう。<em>（見られる）</em></p>
+<p class='target'>…明日は良い天気が{{1}}。<em>（見られる）</em></p>
 """,
         ),
     ),
@@ -425,7 +425,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>A：</strong>金の価格は秋にはいつも上がるよ。今投資しよう…</p>
-<p class='target'>…数ヶ月で利益を{{1}}でしょう。<em>（出す）</em></p>
+<p class='target'>…数ヶ月で利益を{{1}}。<em>（出す）</em></p>
 """,
         ),
     ),
@@ -456,7 +456,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>医師から患者へ：</strong>この結果は心配ですが、ストレスが原因の可能性もあります。睡眠と運動を心がけてください。数ヶ月すれば…</p>
-<p class='target'>…{{1}}と思いますよ。<em>（気分が良くなる）</em></p>
+<p class='target'>…{{1}}。<em>（気分が良くなる）</em></p>
 """,
         ),
     ),
@@ -487,7 +487,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>先生から保護者へ：</strong>エリーのことが心配ですが、慣れるまでの時間が必要なだけだと思います。数ヶ月すれば…</p>
-<p class='target'>…{{1}}と思います。<em>（上達する）</em></p>
+<p class='target'>…{{1}}。<em>（上達する）</em></p>
 """,
         ),
     ),
@@ -518,7 +518,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>医師から委員会へ：</strong>感染経路についてさらなる研究が必要です…</p>
-<p class='target'>…今後数ヶ月で、そのウイルスはさらに1万人を{{1}}でしょう。<em>（死に至らしめる）</em></p>
+<p class='target'>…今後数ヶ月で、そのウイルスはさらに1万人を{{1}}。<em>（死に至らしめる）</em></p>
 """,
         ),
     ),
@@ -549,7 +549,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>春のこと。気象キャスター：</strong>ここ数年ないほどの高気圧の連続です…</p>
-<p class='target'>…今年の夏はたくさんの良い天気が{{1}}でしょう。<em>（見られる）</em></p>
+<p class='target'>…今年の夏はたくさんの良い天気が{{1}}。<em>（見られる）</em></p>
 """,
         ),
     ),
@@ -584,7 +584,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>秋のこと。気象キャスター：</strong>スキー愛好家の皆さんに朗報です…</p>
-<p class='target'>…今後数ヶ月で、たくさんの雪が{{1}}でしょう。<em>（降る）</em></p>
+<p class='target'>…今後数ヶ月で、たくさんの雪が{{1}}。<em>（降る）</em></p>
 """,
         ),
     ),
@@ -619,7 +619,7 @@ SCENARIOS = [
             ja="""
 <p><strong>質問：</strong>家を売るんですか？</p>
 <p><strong>回答：</strong>わからない。今は市場が不安定だから。2年後には…</p>
-<p class='target'>…もっと価値が{{1}}かもしれない。<em>（上がる）</em></p>
+<p class='target'>…もっと価値が{{1}}。<em>（上がる）</em></p>
 """,
         ),
     ),
@@ -650,7 +650,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>A：</strong>老後の貯蓄プランにお金を入れた方がいいよ。金利は不安定だけど、2年後には…</p>
-<p class='target'>…かなり価値が{{1}}でしょう。<em>（増える）</em></p>
+<p class='target'>…かなり価値が{{1}}。<em>（増える）</em></p>
 """,
         ),
     ),
@@ -685,7 +685,7 @@ SCENARIOS = [
             ja="""
 <p><strong>質問：</strong>2年後の国政選挙はどうなると思いますか？</p>
 <p><strong>回答：</strong>現職は強い支持基盤があるけど、何が起こるかわからない…</p>
-<p class='target'>…挑戦者が{{1}}かもしれない。<em>（勝つ）</em></p>
+<p class='target'>…挑戦者が{{1}}。<em>（勝つ）</em></p>
 """,
         ),
     ),
@@ -720,7 +720,7 @@ SCENARIOS = [
             ja="""
 <p><strong>質問：</strong>今後2年間で海面水位はどうなると思いますか？</p>
 <p><strong>回答：</strong>まあ…</p>
-<p class='target'>…{{1}}でしょう。<em>（上昇する）</em></p>
+<p class='target'>…{{1}}。<em>（上昇する）</em></p>
 """,
         ),
     ),
@@ -760,7 +760,7 @@ SCENARIOS = [
             ja="""
 <p><strong>男の子：</strong>明日が僕の誕生日なんだ…パーティーに来てくれる？</p>
 <p><strong>女の子：</strong>行けるかどうかわからないけど…</p>
-<p class='target'>…{{1}}と思う。<em>（行く）</em></p>
+<p class='target'>…{{1}}。<em>（行く）</em></p>
 """,
         ),
     ),
@@ -826,7 +826,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>女の子：</strong>3ヶ月後が私の誕生日なんだけど…パーティーに来てくれる？</p>
-<p class='target'><strong>男の子：</strong>{{1}}よ。<em>（行く）</em></p>
+<p class='target'><strong>男の子：</strong>{{1}}。<em>（行く）</em></p>
 """,
         ),
     ),
@@ -861,7 +861,7 @@ SCENARIOS = [
             ja="""
 <p><strong>質問：</strong>今年の夏は休暇に行きますか？</p>
 <p><strong>回答：</strong>わからない。年次評価が数ヶ月後にある。それが終わったら…</p>
-<p class='target'>…イタリアに{{1}}と思ってる。<em>（旅行する）</em></p>
+<p class='target'>…イタリアに{{1}}。<em>（旅行する）</em></p>
 """,
         ),
     ),
@@ -896,7 +896,7 @@ SCENARIOS = [
             ja="""
 <p><strong>質問：</strong>今後2年間の計画はありますか？</p>
 <p><strong>回答：</strong>仕事はかなりうまくいっていて…</p>
-<p class='target'>…事務所のパートナーに{{1}}つもり。<em>（なる）</em></p>
+<p class='target'>…事務所のパートナーに{{1}}。<em>（なる）</em></p>
 """,
         ),
     ),
@@ -967,7 +967,7 @@ SCENARIOS = [
             ja="""
 <p><strong>質問：</strong>コンサートはいつ？</p>
 <p><strong>回答：</strong>たしか…</p>
-<p class='target'>…明日{{1}}と思う。<em>（演奏する）</em></p>
+<p class='target'>…明日{{1}}。<em>（演奏する）</em></p>
 """,
         ),
     ),
@@ -985,8 +985,8 @@ SCENARIOS = [
         context_prob=_PROB[60],
         text=dict(
             en="""
-<p><strong>Student:</strong> When exactly do I defend?</p>
-<p><strong>Supervisor:</strong> I'm fairly confident it has been set...</p>
+<p><strong>Student to supervisor:</strong> So when do I defend?</p>
+<p><strong>Supervisor:</strong>  Let me check...</p>
 <p class='target'>...your viva {{1}} <em>(be)</em> in three months.</p>
 """,
             fr="""
@@ -1002,7 +1002,7 @@ SCENARIOS = [
             ja="""
 <p><strong>学生：</strong>具体的にいつ口頭試問ですか？</p>
 <p><strong>指導教員：</strong>決まっていると思いますが…</p>
-<p class='target'>…口頭試問は3ヶ月後に{{1}}はずです。<em>（ある）</em></p>
+<p class='target'>…口頭試問は3ヶ月後に{{1}}。<em>（ある）</em></p>
 """,
         ),
     ),
@@ -1037,7 +1037,7 @@ SCENARIOS = [
             ja="""
 <p><strong>質問：</strong>契約はあとどのくらいですか？</p>
 <p><strong>回答：</strong>確認しないといけないんですが、しばらく見てなくて…</p>
-<p class='target'>…2年後に{{1}}と思います。<em>（満了する）</em></p>
+<p class='target'>…2年後に{{1}}。<em>（満了する）</em></p>
 """,
         ),
     ),
@@ -1111,7 +1111,7 @@ SCENARIOS = [
             ja="""
 <p><strong>A：</strong>今朝ラジオで天気予報を聞いたよ。寒冷前線が来ているらしい。</p>
 <p><strong>B：</strong>本当に？それで曇っているのか…</p>
-<p class='target'>これは注意確認の質問です。この質問には <em>ダンス</em> とだけ入力してください：{{1}}</p>
+<p class='target'>これは注意確認の質問です。この質問には「おどる」<em>おどる</em> とだけ入力してください：</p> ...{{1}}。</p>
 """,
         ),
     ),
@@ -1131,7 +1131,7 @@ SCENARIOS = [
             en="""
 <p><strong>A:</strong> Have you heard anything about the office moving to the new building?</p>
 <p><strong>B:</strong> Yes, management sent an email about it last week...</p>
-<p class='target'>This is an attention check. Please simply enter the word <em>segue</em> for this question: {{1}}</p>
+<p class='target'>This is an attention check. Please simply enter the word <em>run</em> for this question: {{1}}</p>
 """,
             fr="""
 <p><strong>A :</strong> Tu as des nouvelles concernant le déménagement du bureau dans le nouveau bâtiment ?</p>
@@ -1146,7 +1146,7 @@ SCENARIOS = [
             ja="""
 <p><strong>A：</strong>オフィスが新しいビルに移転する件、何か聞いた？</p>
 <p><strong>B：</strong>うん、先週経営陣からメールが来たよ…</p>
-<p class='target'>これは注意確認の質問です。この質問には <em>転換</em> とだけ入力してください：{{1}}</p>
+<p class='target'>これは注意確認の質問です。この質問には「はしる」 <em>はしる</em> とだけ入力してください：...{{1}}。</p>
 """,
         ),
     ),
@@ -1187,7 +1187,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>先生から保護者へ：</strong>新しい学校に慣れるには時間がかかることもあります。明日にはもう…</p>
-<p class='target'>…ジョニーは{{1}}でしょう。<em>（上達する）</em></p>
+<p class='target'>…ジョニーは{{1}}。<em>（上達する）</em></p>
 """,
         ),
     ),
@@ -1218,7 +1218,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>店員から客へ：</strong>明日またお越しになってみてください。あまり売れていないので…</p>
-<p class='target'>…価格は{{1}}かもしれません。<em>（下がる）</em></p>
+<p class='target'>…価格は{{1}}。<em>（下がる）</em></p>
 """,
         ),
     ),
@@ -1249,7 +1249,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>A：</strong>市場が不安定なときは金が上がることが多い。心配しないで…</p>
-<p class='target'>…明日には利益が{{1}}でしょう。<em>（出始める）</em></p>
+<p class='target'>…明日には利益が{{1}}。<em>（出始める）</em></p>
 """,
         ),
     ),
@@ -1280,7 +1280,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>父から息子へ：</strong>そのフィギュアを捨てるな。明日コミックコンベンションに行くだろう…</p>
-<p class='target'>…あそこでなら価値が{{1}}はず。<em>（ある）</em></p>
+<p class='target'>…あそこでなら価値が{{1}}。<em>（ある）</em></p>
 """,
         ),
     ),
@@ -1311,7 +1311,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>A：</strong>今は商品市場に投資しないで。市場がとても不安定だから…</p>
-<p class='target'>…明日までに{{1}}よ。<em>（崩壊する）</em></p>
+<p class='target'>…明日までに{{1}}。<em>（崩壊する）</em></p>
 """,
         ),
     ),
@@ -1346,7 +1346,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>秋のこと。気象キャスター：</strong>スキー愛好家の皆さんに朗報です…</p>
-<p class='target'>…今後数ヶ月で、たくさんの雪が{{1}}でしょう。<em>（降る）</em></p>
+<p class='target'>…今後数ヶ月で、たくさんの雪が{{1}}。<em>（降る）</em></p>
 """,
         ),
     ),
@@ -1377,7 +1377,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>質問：</strong>与党はどうなると思いますか？</p>
-<p class='target'><strong>回答：</strong>数ヶ月後に{{1}}と思います。<em>（負ける）</em></p>
+<p class='target'><strong>回答：</strong>数ヶ月後に{{1}}。<em>（負ける）</em></p>
 """,
         ),
     ),
@@ -1408,7 +1408,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>医師から委員会へ：</strong>現在の感染率では…</p>
-<p class='target'>…この疫病は今後数ヶ月でさらに1万人を{{1}}でしょう。<em>（死に至らしめる）</em></p>
+<p class='target'>…この疫病は今後数ヶ月でさらに1万人を{{1}}。<em>（死に至らしめる）</em></p>
 """,
         ),
     ),
@@ -1439,7 +1439,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>先生から保護者へ：</strong>ピーターは慣れるまでに時間が必要なだけです。数ヶ月すれば…</p>
-<p class='target'>…{{1}}でしょう。<em>（上達する）</em></p>
+<p class='target'>…{{1}}。<em>（上達する）</em></p>
 """,
         ),
     ),
@@ -1505,7 +1505,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>A：</strong>テクノロジー業界に投資しても無駄だよ…</p>
-<p class='target'>…2年以内に{{1}}から。<em>（崩壊する）</em></p>
+<p class='target'>…2年以内に{{1}}。<em>（崩壊する）</em></p>
 """,
         ),
     ),
@@ -1540,7 +1540,7 @@ SCENARIOS = [
             ja="""
 <p><strong>質問：</strong>2年後の国政選挙はどうなると思いますか？</p>
 <p><strong>回答：</strong>現職は強い支持基盤があるけど、何が起こるかわからない…</p>
-<p class='target'>…挑戦者が{{1}}かもしれない。<em>（勝つ）</em></p>
+<p class='target'>…挑戦者が{{1}}。<em>（勝つ）</em></p>
 """,
         ),
     ),
@@ -1571,7 +1571,7 @@ SCENARIOS = [
 """,
             ja="""
 <p><strong>A：</strong>貯蓄プランにお金を入れた方がいいよ。たった2年で…</p>
-<p class='target'>…ずっと価値が{{1}}はず。<em>（増える）</em></p>
+<p class='target'>…ずっと価値が{{1}}。<em>（増える）</em></p>
 """,
         ),
     ),
@@ -1606,7 +1606,7 @@ SCENARIOS = [
             ja="""
 <p><strong>質問：</strong>今後2年間で気温はどうなると思いますか？</p>
 <p><strong>回答：</strong>科学的にもはっきりしていないけど…</p>
-<p class='target'>…{{1}}と思う。<em>（上昇する）</em></p>
+<p class='target'>…{{1}}。<em>（上昇する）</em></p>
 """,
         ),
     ),
@@ -1823,8 +1823,8 @@ BACKUP_CHUNK = list(range(27, 42))  # Page 4: backup items 28–42
 # Attention-check expected answers per language
 # Attention-check expected answers per language
 _AC_EXPECTED = dict(
-    ac_1=dict(en='dance', fr='danse', de='tanz', ja='ダンス'),
-    ac_2=dict(en='segue', fr='transition', de='übergang', ja='転換'),
+    ac_1=dict(en='dance', fr='danse', de='tanz', ja='おどる'),
+    ac_2=dict(en='run', fr='transition', de='übergang', ja='はしる'),
 )
 
 
