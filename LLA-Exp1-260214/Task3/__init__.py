@@ -165,56 +165,44 @@ UI = dict(
                      ja='パート3: 意思決定'),
     intro_text=dict(
         en=(
-            'In this final part, you will make a series of choices involving potential gains and losses. '
+            'In this final part, you will choose between lotteries and safe options involving potential gains and losses.'
             '<br><br>'
-            '<strong>Bonus payment:</strong> You will have a chance to earn a bonus payment from completing the task in this part. '
-            'Specifically, after the study is completed, 1 in 10 participants will be randomly selected to receive their task bonus as an <strong>Amazon gift card</strong>. '
-            'Your choices below determine how large that bonus could be, so please decide as if every choice is real.'
+            'You start with a bonus balance of <strong>{symbol}{endowment}</strong>. '
+            'In each round you pick either a <strong>lottery</strong> (a coin flip that can increase or decrease your balance) or a <strong>safe option</strong> (keep your balance unchanged). '
+            'At the end, <strong>one round is selected at random and played out for real</strong>.'
             '<br><br>'
-            '<strong>How it works:</strong> You will start with a bonus balance of <strong>{symbol}{endowment}</strong>. '
-            'You will then choose between a lottery and a safe option across several rounds. '
-            'At the end, <strong>one of your choices will be picked at random and played out for real. The outcome will be revealed to you immediately on the next screen</strong>. '
-            'If you chose the safe option on that round, you simply keep your {symbol}{endowment}. '
-            'If you chose the lottery, a coin flip decides whether you win more or lose some of your balance.'
+            '1 in 10 participants will be randomly selected to receive their bonus <strong>through the CloudResearch platform</strong>. '
+            'Please decide as if every choice is real.'
         ),
         fr=(
-            'Dans cette dernière partie, vous ferez une série de choix impliquant des gains et des pertes potentiels. '
+            'Dans cette dernière partie, vous choisirez entre des loteries et des options sûres impliquant des gains et des pertes potentiels.'
             '<br><br>'
-            '<strong>Paiement bonus :</strong> Vous aurez la possibilité de gagner un bonus en complétant la tâche de cette partie. '
-            'Plus précisément, une fois l\'étude terminée, 1 participant sur 10 sera sélectionné au hasard pour recevoir son bonus sous forme de <strong>carte cadeau Amazon</strong>. '
-            'Vos choix ci-dessous déterminent le montant de ce bonus, alors veuillez décider comme si chaque choix était réel.'
+            'Vous commencez avec un solde bonus de <strong>{symbol}{endowment}</strong>. '
+            'À chaque tour, vous choisissez soit une <strong>loterie</strong> (un tirage au sort qui peut augmenter ou diminuer votre solde), soit une <strong>option sûre</strong> (conserver votre solde inchangé). '
+            'À la fin, <strong>un tour est sélectionné au hasard et joué pour de vrai</strong>.'
             '<br><br>'
-            '<strong>Comment ça marche :</strong> Vous commencerez avec un solde bonus de <strong>{symbol}{endowment}</strong>. '
-            'Vous choisirez ensuite entre une loterie et une option sûre sur plusieurs tours. '
-            'À la fin, <strong>un de vos choix sera tiré au sort et joué pour de vrai. Le résultat vous sera révélé immédiatement sur l\'écran suivant</strong>. '
-            'Si vous avez choisi l\'option sûre à ce tour, vous conservez simplement vos {symbol}{endowment}. '
-            'Si vous avez choisi la loterie, un tirage au sort détermine si vous gagnez ou perdez une partie de votre solde.'
+            '1 participant sur 10 sera sélectionné au hasard pour recevoir son bonus <strong>via la plateforme CloudResearch</strong>. '
+            'Veuillez décider comme si chaque choix était réel.'
         ),
         de=(
-            'In diesem letzten Teil treffen Sie eine Reihe von Entscheidungen mit möglichen Gewinnen und Verlusten. '
+            'In diesem letzten Teil wählen Sie zwischen Lotterien und sicheren Optionen mit möglichen Gewinnen und Verlusten.'
             '<br><br>'
-            '<strong>Bonuszahlung:</strong> Sie haben die Möglichkeit, durch die Aufgabe in diesem Teil eine Bonuszahlung zu verdienen. '
-            'Nach Abschluss der Studie wird 1 von 10 Teilnehmenden zufällig ausgewählt, um den Aufgabenbonus als <strong>Amazon-Gutschein</strong> zu erhalten. '
-            'Ihre Entscheidungen unten bestimmen die Höhe dieses Bonus — bitte entscheiden Sie so, als ob jede Wahl real wäre.'
+            'Sie starten mit einem Bonusguthaben von <strong>{symbol}{endowment}</strong>. '
+            'In jeder Runde wählen Sie entweder eine <strong>Lotterie</strong> (ein Münzwurf, der Ihr Guthaben erhöhen oder verringern kann) oder eine <strong>sichere Option</strong> (Guthaben unverändert behalten). '
+            'Am Ende wird <strong>eine Runde zufällig ausgewählt und tatsächlich ausgespielt</strong>.'
             '<br><br>'
-            '<strong>So funktioniert es:</strong> Zu Beginn erhalten Sie ein Bonusguthaben von <strong>{symbol}{endowment}</strong>. '
-            'Danach wählen Sie in mehreren Runden zwischen einer Lotterie und einer sicheren Option. '
-            'Am Ende wird <strong>eine Ihrer Entscheidungen zufällig ausgewählt und tatsächlich ausgespielt. Das Ergebnis wird Ihnen sofort auf dem nächsten Bildschirm angezeigt</strong>. '
-            'Wenn Sie in dieser Runde die sichere Option gewählt haben, behalten Sie einfach Ihre {symbol}{endowment}. '
-            'Wenn Sie die Lotterie gewählt haben, entscheidet ein Münzwurf, ob Sie gewinnen oder einen Teil Ihres Guthabens verlieren.'
+            '1 von 10 Teilnehmenden wird zufällig ausgewählt, um den Bonus <strong>über die CloudResearch-Plattform</strong> zu erhalten. '
+            'Bitte entscheiden Sie so, als ob jede Wahl real wäre.'
         ),
         ja=(
-            'この最終パートでは、利益と損失を含む一連の選択を行います。'
+            'この最終パートでは、利益と損失を含むくじと安全な選択肢のどちらかを選びます。'
             '<br><br>'
-            '<strong>ボーナス支払い：</strong>このパートの課題を完了することで、ボーナスを獲得するチャンスがあります。'
-            '具体的には、調査完了後、参加者の10人に1人がランダムに選ばれ、<strong>オンラインプラットフォームを通じて直接</strong>お支払いされます。'
-            '以下のあなたの選択がボーナスの金額を決定しますので、すべての選択が実際のものであるかのようにお答えください。'
+            'まず、ボーナス残高として<strong>{symbol}{endowment}</strong>が支給されます。'
+            '各ラウンドで<strong>くじ</strong>（コイン投げで残高が増減する）か<strong>安全な選択肢</strong>（残高をそのまま維持する）を選びます。'
+            '最後に、<strong>1つのラウンドがランダムに選ばれ、実際に実行されます</strong>。'
             '<br><br>'
-            '<strong>仕組み：</strong>まず、ボーナス残高として<strong>{symbol}{endowment}</strong>が支給されます。'
-            'その後、５つのラウンドでくじと安全な選択肢のどちらかを選びます。'
-            '最後に、<strong>あなたの５つの選択の中から1つがランダムに選ばれ、実際に実行されます。その結果は次の画面ですぐに発表されます</strong>。'
-            'そのラウンドで安全な選択肢を選んでいた場合、{symbol}{endowment}をそのまま受け取ります。'
-            'くじを選んでいた場合、コイン投げで残高が増えるか減るかが決まります。'
+            '参加者の10人に1人がランダムに選ばれ、<strong>CloudResearchプラットフォームを通じて</strong>ボーナスが支払われます。'
+            'すべての選択が実際のものであるかのようにお答えください。'
         ),
     ),
     la_alert_head=dict(en='How it works:', fr='Comment ça marche :', de='So funktioniert es:', ja='仕組み:'),
@@ -421,10 +409,10 @@ UI = dict(
         ja='支払い',
     ),
     payment_box_note=dict(
-        en='You start with {symbol}{endowment}. One of your choices will be played out for real. 1 in 10 participants will be randomly selected to receive their bonus as an Amazon gift card.',
-        fr='Vous commencez avec {symbol}{endowment}. Un de vos choix sera joué pour de vrai. 1 participant sur 10 sera sélectionné au hasard pour recevoir son bonus sous forme de carte cadeau Amazon.',
-        de='Sie starten mit {symbol}{endowment}. Eine Ihrer Entscheidungen wird tatsächlich ausgespielt. 1 von 10 Teilnehmenden wird zufällig ausgewählt, um den Bonus als Amazon-Gutschein zu erhalten.',
-        ja='{symbol}{endowment}からスタートします。あなたの選択の1つが実際に実行されます。10人に1人の参加者がランダムに選ばれ、オンラインプラットフォームを通じてボーナスが支払われます。',
+        en='You start with {symbol}{endowment}. One round will be played out for real. 1 in 10 participants will receive their bonus through the CloudResearch platform.',
+        fr='Vous commencez avec {symbol}{endowment}. Un tour sera joué pour de vrai. 1 participant sur 10 recevra son bonus via la plateforme CloudResearch.',
+        de='Sie starten mit {symbol}{endowment}. Eine Runde wird tatsächlich ausgespielt. 1 von 10 Teilnehmenden erhält den Bonus über die CloudResearch-Plattform.',
+        ja='{symbol}{endowment}からスタートします。1つのラウンドが実際に実行されます。10人に1人がCloudResearchプラットフォームを通じてボーナスを受け取ります。',
     ),
 
     td_title=dict(
@@ -562,10 +550,10 @@ UI = dict(
         ja='この課題の最終残高は初期残高のままです：<strong>{symbol}{total}</strong>。'
     ),
     res_email_label=dict(
-        en='Please enter your Amazon email address (or another contact email if you do not have one) so we can send you the gift card if you are selected:',
-        fr='Veuillez entrer votre adresse e-mail Amazon (ou une autre adresse e-mail de contact si vous n\'en avez pas) afin que nous puissions vous envoyer la carte cadeau si vous êtes sélectionné(e) :',
-        de='Bitte geben Sie Ihre Amazon-E-Mail-Adresse an (oder eine andere Kontakt-E-Mail, falls Sie keine haben), damit wir Ihnen den Gutschein zusenden können, falls Sie ausgewählt werden:',
-        ja='選ばれた場合にギフトカードをお送りできるよう、Amazonのメールアドレスをご入力ください（Amazonアカウントをお持ちでない場合は、連絡先メールアドレスをご入力ください）：'
+        en='Please enter your contact email so we can reach you if you are selected for the bonus:',
+        fr='Veuillez entrer votre adresse e-mail de contact afin que nous puissions vous joindre si vous êtes sélectionné(e) pour le bonus :',
+        de='Bitte geben Sie Ihre Kontakt-E-Mail-Adresse an, damit wir Sie kontaktieren können, falls Sie für den Bonus ausgewählt werden:',
+        ja='ボーナスに選ばれた場合に連絡できるよう、連絡先メールアドレスをご入力ください：'
     ),
     res_email_placeholder=dict(
         en='your.email@example.com',

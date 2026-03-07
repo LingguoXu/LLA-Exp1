@@ -65,7 +65,12 @@ UI = dict(
         ja='すべての項目に回答してください。',
     ),
     # ── Task 2 Intro ──
-    intro_title = dict(en='Part 2', fr='Partie 2', de='Teil 2', ja='パート2'),
+    intro_title = dict(
+        en='Part 2 \u2014 Complete the Conversations',
+        fr='Partie 2 \u2014 Compl\u00e9ter les conversations',
+        de='Teil 2 \u2014 Gespr\u00e4che vervollst\u00e4ndigen',
+        ja='\u30d1\u30fc\u30c82 \u2014 \u4f1a\u8a71\u3092\u5b8c\u6210\u3055\u305b\u308b',
+    ),
     intro_text  = dict(
         en='You are now moving on to the second part of the study.',
         fr="Vous passez maintenant à la deuxième partie de l'étude.",
@@ -115,54 +120,50 @@ UI = dict(
         ja='\u2714\ufe0f 正解や不正解はありません。最も自然だと感じるものを書いてください。',
     ),
     t2_guideline_2=dict(
-        en='\u2714\ufe0f Imagine you are talking to a close friend.',
-        fr='\u2714\ufe0f Imaginez que vous parlez \u00e0 un ami proche.',
-        de='\u2714\ufe0f Stellen Sie sich vor, Sie sprechen mit einem guten Freund.',
-        ja='\u2714\ufe0f 親しい友人に話しているつもりで書いてください。',
+        en='\u2714\ufe0f Imagine you are the speaker in the conversation.',
+        fr='\u2714\ufe0f Imaginez que vous \u00eates la personne qui parle dans la conversation.',
+        de='\u2714\ufe0f Stellen Sie sich vor, Sie sind die sprechende Person im Gespr\u00e4ch.',
+        ja='\u2714\ufe0f \u4f1a\u8a71\u306e\u8a71\u3057\u624b\u306e\u7acb\u5834\u3067\u66f8\u3044\u3066\u304f\u3060\u3055\u3044\u3002',
     ),
     t2_guideline_3=dict(
-        en='\u2714\ufe0f One word or a short phrase is enough.',
-        fr='\u2714\ufe0f Un mot ou une courte expression suffit.',
-        de='\u2714\ufe0f Ein Wort oder eine kurze Phrase reicht aus.',
-        ja='\u2714\ufe0f 一語または短いフレーズで十分です。',
+        en='\u2714\ufe0f Use the hint word in any form \u2014 add extra words if they feel natural.',
+        fr='\u2714\ufe0f Utilisez le mot-indice sous n\u2019importe quelle forme \u2014 ajoutez des mots si cela vous semble naturel.',
+        de='\u2714\ufe0f Verwenden Sie das Hinweiswort in beliebiger Form \u2014 f\u00fcgen Sie weitere W\u00f6rter hinzu, wenn es sich nat\u00fcrlich anf\u00fchlt.',
+        ja='\u2714\ufe0f \u30d2\u30f3\u30c8\u306e\u5358\u8a9e\u306f\u3069\u3093\u306a\u5f62\u3067\u3082\u4f7f\u3048\u307e\u3059\u3002\u81ea\u7136\u306b\u611f\u3058\u308b\u306a\u3089\u8a00\u8449\u3092\u52a0\u3048\u3066\u304f\u3060\u3055\u3044\u3002',
     ),
     # ── Task 2.1 Instructions ──
     t2_instructions = dict(
         en=(
-            # "There are no correct answers. "
-            "Please complete the sentence as though you were speaking to a close friend. "
+            "Please complete the sentence as though you were the speaker in the conversation. "
             "Use the verb shown in italics as a guide, and write whatever feels most natural to you. "
             "Where a certainty percentage is shown, imagine you are exactly that certain "
             "and write what you would say."
         ),
         fr=(
-            # "Il n'y a pas de bonnes ou de mauvaises réponses. "
-            "Complétez la phrase comme si vous parliez à un(e) ami(e) proche. "
-            "Le verbe en italique est une indication — écrivez ce qui vous semble le plus naturel. "
-            "Lorsqu'un pourcentage de certitude est indiqué, imaginez que vous êtes exactement "
-            "aussi certain(e) et écrivez ce que vous diriez."
+            "Compl\u00e9tez la phrase comme si vous \u00e9tiez la personne qui parle dans la conversation. "
+            "Le verbe en italique est une indication \u2014 \u00e9crivez ce qui vous semble le plus naturel. "
+            "Lorsqu\u2019un pourcentage de certitude est indiqu\u00e9, imaginez que vous \u00eates exactement "
+            "aussi certain(e) et \u00e9crivez ce que vous diriez."
         ),
         de=(
-            # "Es gibt keine richtigen oder falschen Antworten. "
-            "Vervollständigen Sie den Satz, als würden Sie mit einem guten Freund / einer guten Freundin sprechen. "
-            "Das kursiv gedruckte Verb dient als Hinweis — schreiben Sie, was sich für Sie am natürlichsten anfühlt. "
+            "Vervollst\u00e4ndigen Sie den Satz, als w\u00e4ren Sie die sprechende Person im Gespr\u00e4ch. "
+            "Das kursiv gedruckte Verb dient als Hinweis \u2014 schreiben Sie, was sich f\u00fcr Sie am nat\u00fcrlichsten anf\u00fchlt. "
             "Wenn ein Sicherheitsprozentsatz angegeben ist, stellen Sie sich vor, genau so sicher zu sein, "
-            "und schreiben Sie, was Sie sagen würden."
+            "und schreiben Sie, was Sie sagen w\u00fcrden."
         ),
         ja=(
-            # "正解・不正解はありません。"
-            "親しい友人に話しかけるつもりで文を完成させてください。"
-            "斜体の動詞はヒントです——最も自然に感じる表現を書いてください。"
-            "確率（%）が表示されている場合は、自分がちょうどその確率で確信しているとイメージして、"
-            "そのときに言うであろう表現を書いてください。"
+            "\u4f1a\u8a71\u306e\u8a71\u3057\u624b\u306e\u7acb\u5834\u3067\u6587\u3092\u5b8c\u6210\u3055\u305b\u3066\u304f\u3060\u3055\u3044\u3002"
+            "\u659c\u4f53\u306e\u52d5\u8a5e\u306f\u30d2\u30f3\u30c8\u3067\u3059\u2014\u2014\u6700\u3082\u81ea\u7136\u306b\u611f\u3058\u308b\u8868\u73fe\u3092\u66f8\u3044\u3066\u304f\u3060\u3055\u3044\u3002"
+            "\u78ba\u7387\uff08\uff05\uff09\u304c\u8868\u793a\u3055\u308c\u3066\u3044\u308b\u5834\u5408\u306f\u3001\u81ea\u5206\u304c\u3061\u3087\u3046\u3069\u305d\u306e\u78ba\u7387\u3067\u78ba\u4fe1\u3057\u3066\u3044\u308b\u3068\u30a4\u30e1\u30fc\u30b8\u3057\u3066\u3001"
+            "\u305d\u306e\u3068\u304d\u306b\u8a00\u3046\u3067\u3042\u308d\u3046\u8868\u73fe\u3092\u66f8\u3044\u3066\u304f\u3060\u3055\u3044\u3002"
         ),
     ),
     # ── Task 2.2 Slider ──
     slider_title = dict(
-        en='Part 2: Certainty Ratings',
-        fr='Partie 2 : Évaluation de la certitude',
-        de='Teil 2: Bewertung der Gewissheit',
-        ja='パート2：確信度の評価',
+        en='Part 2b — Certainty Ratings',
+        fr='Partie 2b — Évaluation de la certitude',
+        de='Teil 2b — Bewertung der Sicherheit',
+        ja='パート2b — 確信度の評価',
     ),
     slider_prompt = dict(
         en=(
@@ -951,23 +952,19 @@ SCENARIOS = [
         text=dict(
             en="""
 <p><strong>Q:</strong> When is the concert?</p>
-<p><strong>A:</strong> I think...</p>
-<p class='target'>...they {{1}} <em>(play)</em> tomorrow.</p>
+<p class='target'><strong>A:</strong> ...they {{1}} <em>(play)</em> tomorrow.</p>
 """,
             fr="""
 <p><strong>Q :</strong> C'est quand le concert ?</p>
-<p><strong>R :</strong> Je crois que...</p>
-<p class='target'>...ils {{1}} <em>(jouer)</em> demain.</p>
+<p class='target'><strong>R :</strong> ...ils {{1}} <em>(jouer)</em> demain.</p>
 """,
             de="""
 <p><strong>F:</strong> Wann ist das Konzert?</p>
-<p><strong>A:</strong> Ich glaube...</p>
-<p class='target'>...sie werden morgen {{1}} <em>(spielen)</em>.</p>
+<p class='target'><strong>A:</strong> ...sie werden morgen {{1}} <em>(spielen)</em>.</p>
 """,
             ja="""
-<p><strong>質問：</strong>コンサートはいつ？</p>
-<p><strong>回答：</strong>たしか…</p>
-<p class='target'>…明日{{1}}。<em>（演奏する）</em></p>
+<p><strong>\u8cea\u554f\uff1a</strong>\u30b3\u30f3\u30b5\u30fc\u30c8\u306f\u3044\u3064\uff1f</p>
+<p class='target'><strong>\u56de\u7b54\uff1a</strong>\u2026\u660e\u65e5{{1}}\u3002<em>\uff08\u6f14\u594f\u3059\u308b\uff09</em></p>
 """,
         ),
     ),
@@ -1081,72 +1078,76 @@ SCENARIOS = [
     #  IDs: ac_1, ac_2  (indices 25, 26)
     # ══════════════════════════════════════════════════════════
 
-    # AC 1 — Looks like a prediction / tomorrow item (placed in Page 1)
+    # AC 1 — Disguised as prediction / tomorrow item (placed in Page 1)
+    # IRI: instruction to type "sunny" is buried in B's dialogue line.
+    # Hint word "rain" is a decoy; inattentive participants will fill a verb form.
     dict(
         id='ac_1', robertson_src=None,
         ftr_mode='attention_check', temporal='tomorrow', modality='neutral', certainty=None,
         context_header=dict(
             en="Local Weather",
-            fr="Météo locale",
+            fr="M\u00e9t\u00e9o locale",
             de="Lokales Wetter",
-            ja="地元の天気",
+            ja="\u5730\u5143\u306e\u5929\u6c17",
         ),
         context_prob=_PROB[None],
         text=dict(
             en="""
 <p><strong>A:</strong> I heard the weather report on the radio this morning. There's a cold front coming through.</p>
-<p><strong>B:</strong> Really? That would explain the clouds...</p>
-<p class='target'>This is an attention check. Please simply enter the word <em>dance</em> for this question: {{1}}</p>
+<p><strong>B:</strong> Really? That would explain the clouds. To show you are reading carefully, please type the word "sunny" below instead of completing the sentence.</p>
+<p class='target'>...it {{1}} <em>(rain)</em> tomorrow.</p>
 """,
             fr="""
-<p><strong>A :</strong> J'ai entendu le bulletin météo à la radio ce matin. Un front froid approche.</p>
-<p><strong>B :</strong> Vraiment ? Cela expliquerait les nuages...</p>
-<p class='target'>Ceci est une question d'attention. Veuillez simplement entrer le mot <em>danse</em> pour cette question : {{1}}</p>
+<p><strong>A\u00a0:</strong> J'ai entendu le bulletin m\u00e9t\u00e9o \u00e0 la radio ce matin. Un front froid approche.</p>
+<p><strong>B\u00a0:</strong> Vraiment\u00a0? Cela expliquerait les nuages. Pour montrer que vous lisez attentivement, veuillez taper le mot \u00ab\u00a0soleil\u00a0\u00bb ci-dessous au lieu de compl\u00e9ter la phrase.</p>
+<p class='target'>...il {{1}} <em>(pleuvoir)</em> demain.</p>
 """,
             de="""
-<p><strong>A:</strong> Ich habe heute Morgen den Wetterbericht im Radio gehört. Eine Kaltfront kommt durch.</p>
-<p><strong>B:</strong> Wirklich? Das würde die Wolken erklären...</p>
-<p class='target'>Dies ist eine Aufmerksamkeitsfrage. Bitte geben Sie einfach das Wort <em>Tanz</em> für diese Frage ein: {{1}}</p>
+<p><strong>A:</strong> Ich habe heute Morgen den Wetterbericht im Radio geh\u00f6rt. Eine Kaltfront kommt durch.</p>
+<p><strong>B:</strong> Wirklich? Das w\u00fcrde die Wolken erkl\u00e4ren. Um zu zeigen, dass Sie aufmerksam lesen, geben Sie bitte das Wort \u201eSonne\u201c unten ein, anstatt den Satz zu vervollst\u00e4ndigen.</p>
+<p class='target'>...es {{1}} <em>(regnen)</em> morgen.</p>
 """,
             ja="""
-<p><strong>A：</strong>今朝ラジオで天気予報を聞いたよ。寒冷前線が来ているらしい。</p>
-<p><strong>B：</strong>本当に？それで曇っているのか…</p>
-<p class='target'>これは注意確認の質問です。この質問には「おどる」<em>おどる</em> とだけ入力してください：</p> ...{{1}}。</p>
+<p><strong>A\uff1a</strong>\u4eca\u671d\u30e9\u30b8\u30aa\u3067\u5929\u6c17\u4e88\u5831\u3092\u805e\u3044\u305f\u3088\u3002\u5bd2\u51b7\u524d\u7dda\u304c\u6765\u3066\u3044\u308b\u3089\u3057\u3044\u3002</p>
+<p><strong>B\uff1a</strong>\u672c\u5f53\u306b\uff1f\u305d\u308c\u3067\u66c7\u3063\u3066\u3044\u308b\u306e\u304b\u2026\u3002\u6ce8\u610f\u3057\u3066\u8aad\u3093\u3067\u3044\u308b\u3053\u3068\u3092\u793a\u3059\u305f\u3081\u306b\u3001\u6587\u3092\u5b8c\u6210\u3055\u305b\u308b\u4ee3\u308f\u308a\u306b\u300c\u306f\u308c\u300d\u3068\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002</p>
+<p class='target'>\u2026\u660e\u65e5{{1}}\u3002<em>\uff08\u964d\u308b\uff09</em></p>
 """,
         ),
     ),
 
-    # AC 2 — Looks like a scheduling / 3-month item (placed in Page 3)
+    # AC 2 — Disguised as scheduling / 3-month item (placed in Page 3)
+    # IRI: instruction to type "friday" is buried in B's dialogue line.
+    # Hint word "move" is a decoy.
     dict(
         id='ac_2', robertson_src=None,
         ftr_mode='attention_check', temporal='three_months', modality='neutral', certainty=None,
         context_header=dict(
             en="Office Relocation",
-            fr="Déménagement du bureau",
-            de="Büroumzug",
-            ja="オフィスの移転",
+            fr="D\u00e9m\u00e9nagement du bureau",
+            de="B\u00fcroumzug",
+            ja="\u30aa\u30d5\u30a3\u30b9\u306e\u79fb\u8ee2",
         ),
         context_prob=_PROB[None],
         text=dict(
             en="""
 <p><strong>A:</strong> Have you heard anything about the office moving to the new building?</p>
-<p><strong>B:</strong> Yes, management sent an email about it last week...</p>
-<p class='target'>This is an attention check. Please simply enter the word <em>run</em> for this question: {{1}}</p>
+<p><strong>B:</strong> Yes, management sent an email about it last week. If you are reading this, please type "friday" in the gap below instead of completing the sentence.</p>
+<p class='target'>...we {{1}} <em>(move)</em> in three months.</p>
 """,
             fr="""
-<p><strong>A :</strong> Tu as des nouvelles concernant le déménagement du bureau dans le nouveau bâtiment ?</p>
-<p><strong>B :</strong> Oui, la direction a envoyé un e-mail à ce sujet la semaine dernière...</p>
-<p class='target'>Ceci est une question d'attention. Veuillez simplement entrer le mot <em>transition</em> pour cette question : {{1}}</p>
+<p><strong>A\u00a0:</strong> Tu as des nouvelles concernant le d\u00e9m\u00e9nagement du bureau dans le nouveau b\u00e2timent\u00a0?</p>
+<p><strong>B\u00a0:</strong> Oui, la direction a envoy\u00e9 un e-mail \u00e0 ce sujet la semaine derni\u00e8re. Si vous lisez ceci, veuillez taper \u00ab\u00a0vendredi\u00a0\u00bb dans l\u2019espace ci-dessous au lieu de compl\u00e9ter la phrase.</p>
+<p class='target'>...on {{1}} <em>(d\u00e9m\u00e9nager)</em> dans trois mois.</p>
 """,
             de="""
-<p><strong>A:</strong> Haben Sie etwas über den Büroumzug ins neue Gebäude gehört?</p>
-<p><strong>B:</strong> Ja, die Geschäftsführung hat letzte Woche eine E-Mail dazu geschickt...</p>
-<p class='target'>Dies ist eine Aufmerksamkeitsfrage. Bitte geben Sie einfach das Wort <em>Übergang</em> für diese Frage ein: {{1}}</p>
+<p><strong>A:</strong> Haben Sie etwas \u00fcber den B\u00fcroumzug ins neue Geb\u00e4ude geh\u00f6rt?</p>
+<p><strong>B:</strong> Ja, die Gesch\u00e4ftsf\u00fchrung hat letzte Woche eine E-Mail dazu geschickt. Wenn Sie dies lesen, geben Sie bitte \u201eFreitag\u201c in die L\u00fccke unten ein, anstatt den Satz zu vervollst\u00e4ndigen.</p>
+<p class='target'>...wir {{1}} <em>(umziehen)</em> in drei Monaten.</p>
 """,
             ja="""
-<p><strong>A：</strong>オフィスが新しいビルに移転する件、何か聞いた？</p>
-<p><strong>B：</strong>うん、先週経営陣からメールが来たよ…</p>
-<p class='target'>これは注意確認の質問です。この質問には「はしる」 <em>はしる</em> とだけ入力してください：...{{1}}。</p>
+<p><strong>A\uff1a</strong>\u30aa\u30d5\u30a3\u30b9\u304c\u65b0\u3057\u3044\u30d3\u30eb\u306b\u79fb\u8ee2\u3059\u308b\u4ef6\u3001\u4f55\u304b\u805e\u3044\u305f\uff1f</p>
+<p><strong>B\uff1a</strong>\u3046\u3093\u3001\u5148\u9031\u7d4c\u55b6\u9663\u304b\u3089\u30e1\u30fc\u30eb\u304c\u6765\u305f\u3088\u3002\u3053\u308c\u3092\u8aad\u3093\u3067\u3044\u308b\u306a\u3089\u3001\u6587\u3092\u5b8c\u6210\u3055\u305b\u308b\u4ee3\u308f\u308a\u306b\u300c\u304d\u3093\u3088\u3046\u3073\u300d\u3068\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002</p>
+<p class='target'>\u20263\u304b\u6708\u5f8c\u306b{{1}}\u3002<em>\uff08\u5f15\u3063\u8d8a\u3059\uff09</em></p>
 """,
         ),
     ),
@@ -1823,8 +1824,8 @@ BACKUP_CHUNK = list(range(27, 42))  # Page 4: backup items 28–42
 # Attention-check expected answers per language
 # Attention-check expected answers per language
 _AC_EXPECTED = dict(
-    ac_1=dict(en='dance', fr='danse', de='tanz', ja='おどる'),
-    ac_2=dict(en='run', fr='transition', de='übergang', ja='はしる'),
+    ac_1=dict(en='sunny', fr='soleil', de='sonne', ja='\u306f\u308c'),
+    ac_2=dict(en='friday', fr='vendredi', de='freitag', ja='\u304d\u3093\u3088\u3046\u3073'),
 )
 
 

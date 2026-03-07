@@ -33,16 +33,15 @@
     .conversation { font-size: 1.02rem; }
     .conversation p { margin-bottom: 10px; }
     .target {
-        margin-top: 12px; padding-top: 12px;
-        border-top: 1px dashed #cbd5e1; font-weight: 500;
+        font-weight: 500;
     }
     /* -- Gap wrapper (matches Task 1) -- */
     .gap-wrap {
-        display: inline-block; position: relative;
-        vertical-align: baseline; min-width: 80px;
+        display: inline; position: relative;
+        vertical-align: baseline;
     }
     .gap-hint {
-        display: inline-block; padding: 2px 10px; min-width: 60px;
+        display: inline; padding: 2px 4px;
         text-align: center; color: #3b82f6; font-weight: 600;
         font-style: italic; font-size: 0.92em; background: #eff6ff;
         border-bottom: 2px dashed #93c5fd; border-radius: 3px 3px 0 0;
@@ -51,19 +50,23 @@
     }
     .gap-hint:hover { background: #dbeafe; color: #2563eb; }
     .gap-wrap input.blank {
-        display: none; width: 130px; padding: 2px 8px; border: none;
+        display: none; width: 10ch; min-width: 6ch; padding: 2px 4px; border: none;
         border-bottom: 2px solid #6366f1; border-radius: 3px 3px 0 0;
         font-size: 1rem; font-family: inherit; background: #eef2ff;
-        color: #1e293b; text-align: center; transition: border-color 0.15s, background 0.15s;
+        color: #1e293b; text-align: center; transition: border-color 0.15s, background 0.15s, width 0.1s;
         vertical-align: baseline; outline: none; line-height: 1.6;
     }
     .gap-wrap input.blank:focus { border-bottom-color: #4f46e5; background: #e0e7ff; }
     .gap-wrap input.blank.filled { background: #ecfdf5; border-bottom-color: #22c55e; color: #065f46; }
-    .gap-wrap input.blank.active { display: inline-block; }
+    .gap-wrap input.blank.active { display: inline; }
     .gap-wrap input.blank.error { border-bottom-color: #ef4444; background: #fef2f2; }
+    .gap-sizer {
+        position: absolute; visibility: hidden; white-space: pre;
+        font-family: inherit; font-size: 1rem; padding: 0 4px;
+    }
     @media (max-width: 500px) {
-        .gap-wrap input.blank { min-width: 80px; max-width: 140px; font-size: .88rem; }
-        .gap-hint { font-size: 0.84em; min-width: 50px; }
+        .gap-wrap input.blank { font-size: .88rem; }
+        .gap-hint { font-size: 0.84em; }
     }
 </style>
 {% endblock %}
@@ -122,7 +125,7 @@
             if (saved) {
                 /* Already answered: show input directly */
                 return '<span class="gap-wrap">' +
-                    '<span class="gap-hint" data-hint="' + hint + '" style="display:none">' + hint + '</span>' +
+                    '<span class="gap-hint" data-hint="' + hint + '" style="display:none">{' + hint + '}</span>' +
                     '<input type="text" class="blank active' + filledClass + '"' +
                     ' data-sc="' + scId + '"' +
                     ' data-n="' + num + '"' +
@@ -132,7 +135,7 @@
             }
 
             return '<span class="gap-wrap">' +
-                '<span class="gap-hint" data-hint="' + hint + '">' + hint + '</span>' +
+                '<span class="gap-hint" data-hint="' + hint + '">{' + hint + '}</span>' +
                 '<input type="text" class="blank"' +
                 ' data-sc="' + scId + '"' +
                 ' data-n="' + num + '"' +
@@ -194,11 +197,24 @@
         if (e.target.classList.contains("blank")) deactivateGap(e.target);
     });
 
+    /* -- auto-size inputs to content -- */
+    var sizer = document.createElement("span");
+    sizer.className = "gap-sizer";
+    document.body.appendChild(sizer);
+
+    function autoSize(input) {
+        var text = input.value || "";
+        sizer.textContent = text || "......";
+        var w = sizer.offsetWidth + 16;
+        input.style.width = Math.max(w, 60) + "px";
+    }
+
     container.addEventListener("input", function(e) {
         if (e.target.classList.contains("blank")) {
             var hasVal = e.target.value.trim().length > 0;
             e.target.classList.toggle("filled", hasVal);
             e.target.classList.remove("error");
+            autoSize(e.target);
         }
     });
 

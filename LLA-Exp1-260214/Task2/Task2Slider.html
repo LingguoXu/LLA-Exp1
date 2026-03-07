@@ -4,26 +4,27 @@
 {% block extra_css %}
 <style>
     .slider-item {
-        margin-bottom: 35px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #eee;
+        margin-bottom: 0;
+        padding: 18px 20px 14px;
+        border-radius: 6px;
     }
-    .slider-item:last-child { border-bottom: none; }
+    .slider-item:nth-child(odd)  { background: #f0f6ff; }
+    .slider-item:nth-child(even) { background: transparent; }
 
-    .stmt { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; }
+    .stmt { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
 
     .range-wrap { position: relative; padding: 0 10px; }
 
     /* ── Slider base ── */
     input[type=range] {
         width: 100%;
-        margin: 10px 0;
+        margin: 8px 0 4px;
         cursor: pointer;
         -webkit-appearance: none;
         appearance: none;
         height: 6px;
         border-radius: 3px;
-        background: #cbd5e1;   /* flat neutral track when touched */
+        background: #cbd5e1;
         outline: none;
     }
 
@@ -34,7 +35,7 @@
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background: var(--primary);
+        background: #1d4ed8;
         cursor: pointer;
         border: 2px solid white;
         box-shadow: 0 1px 4px rgba(0,0,0,0.25);
@@ -43,15 +44,14 @@
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background: var(--primary);
+        background: #1d4ed8;
         cursor: pointer;
         border: 2px solid white;
         box-shadow: 0 1px 4px rgba(0,0,0,0.25);
     }
 
-    /* ── UNTOUCHED: hide thumb AND suppress all track fill ── */
+    /* ── UNTOUCHED: hide thumb AND suppress track fill ── */
     input[type=range].untouched {
-        /* flat gray — no blue fill, no position indicator of any kind */
         background: #cbd5e1 !important;
     }
     input[type=range].untouched::-webkit-slider-thumb {
@@ -66,7 +66,6 @@
         width: 0;
         height: 0;
     }
-    /* Firefox fills the left side of the track via ::-moz-range-progress */
     input[type=range].untouched::-moz-range-progress {
         background: #cbd5e1;
         height: 6px;
@@ -79,8 +78,8 @@
         font-size: 0.82rem;
         color: #94a3b8;
         font-style: italic;
-        margin-top: -4px;
-        margin-bottom: 4px;
+        margin-top: -2px;
+        margin-bottom: 2px;
         transition: opacity 0.2s;
     }
     .click-hint.hidden { display: none; }
@@ -90,12 +89,12 @@
         justify-content: space-between;
         font-size: 0.85rem;
         color: var(--muted);
-        margin-top: -5px;
+        margin-top: -2px;
     }
 
     .val-display {
         font-weight: 700;
-        color: var(--primary);
+        color: #1d4ed8;
         margin-left: 10px;
     }
 </style>
@@ -128,15 +127,15 @@
     var items      = {{ items|json }};
     var rawExisting = {{ existing|json }};
 
-    var labelUncertain = "{{ ui.impossible }}";   // "Uncertain" in Robertson framing
-    var labelCertain   = "{{ ui.certain }}";
+    var labelImpossible = "{{ ui.impossible }}";
+    var labelCertain    = "{{ ui.certain }}";
 
     // Click-to-respond hint (translated)
     var hintText = {
-        en: "← click the bar to respond →",
-        fr: "← cliquez sur la barre pour répondre →",
-        de: "← klicken Sie auf die Leiste, um zu antworten →",
-        ja: "← バーをクリックして回答してください →"
+        en: "\u2190 click the bar to respond \u2192",
+        fr: "\u2190 cliquez sur la barre pour r\u00e9pondre \u2192",
+        de: "\u2190 klicken Sie auf die Leiste, um zu antworten \u2192",
+        ja: "\u2190 \u30d0\u30fc\u3092\u30af\u30ea\u30c3\u30af\u3057\u3066\u56de\u7b54\u3057\u3066\u304f\u3060\u3055\u3044 \u2192"
     };
     var lang = document.documentElement.lang || "{{ lang }}";
     var hint = hintText[lang] || hintText['en'];
@@ -150,7 +149,7 @@
     var savedData = {};
     try { savedData = JSON.parse(rawExisting || '{}'); } catch(e){}
 
-    // ── Build slider items ──────────────────────────────────────────────
+    // ── Build slider items ──
     items.forEach(function(txt, idx){
         var div = document.createElement('div');
         div.className = 'slider-item';
@@ -158,27 +157,27 @@
         var prevVal = savedData[txt] !== undefined ? savedData[txt] : -1;
         var hasVal  = prevVal !== -1;
 
-        // Start value at 50 (hidden until touched), or restore saved value
-        var initVal   = hasVal ? prevVal : 50;
+        var initVal    = hasVal ? prevVal : 50;
         var thumbClass = hasVal ? 'q-slider touched' : 'q-slider untouched';
 
         div.innerHTML = `
-            <div class="stmt">${txt} <span class="val-display" id="disp_${idx}">${hasVal ? prevVal : ''}</span></div>
+            <div class="stmt">${txt} <span class="val-display" id="disp_${idx}">${hasVal ? prevVal + '%' : ''}</span></div>
             <div class="range-wrap">
                 <input type="range" class="${thumbClass}"
                        data-idx="${idx}" data-txt="${txt}"
                        min="0" max="100" step="1" value="${initVal}">
                 <span class="click-hint${hasVal ? ' hidden' : ''}" id="hint_${idx}">${hint}</span>
                 <div class="labels">
-                    <span>0 (${labelUncertain})</span>
-                    <span>100 (${labelCertain})</span>
+                    <span>0% (${labelImpossible})</span>
+                    <span>50%</span>
+                    <span>100% (${labelCertain})</span>
                 </div>
             </div>
         `;
         container.appendChild(div);
     });
 
-    // ── Reveal thumb + record value on first interaction ────────────────
+    // ── Reveal thumb + record value on first interaction ──
     container.addEventListener('input', function(e){
         if(!e.target.classList.contains('q-slider')) return;
         var slider = e.target;
@@ -192,10 +191,10 @@
             if(hintEl) hintEl.classList.add('hidden');
         }
 
-        document.getElementById('disp_' + idx).innerText = slider.value;
+        document.getElementById('disp_' + idx).innerText = slider.value + '%';
     });
 
-    // ── Submit ──────────────────────────────────────────────────────────
+    // ── Submit ──
     submitBtn.addEventListener('click', function(){
         var sliders    = container.querySelectorAll('.q-slider');
         var answers    = {};

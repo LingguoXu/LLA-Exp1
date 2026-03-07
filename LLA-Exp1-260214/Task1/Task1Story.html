@@ -9,17 +9,15 @@
 
 /* -- Gap wrapper -- */
 .gap-wrap {
-    display: inline-block;
+    display: inline;
     position: relative;
     vertical-align: baseline;
-    min-width: 80px;
 }
 
 /* -- Clickable hint word (blue, in the gap) -- */
 .gap-hint {
-    display: inline-block;
-    padding: 2px 10px;
-    min-width: 60px;
+    display: inline;
+    padding: 2px 4px;
     text-align: center;
     color: #3b82f6;
     font-weight: 600;
@@ -42,8 +40,9 @@
 /* -- Text input (hidden until activated) -- */
 .gap-wrap input.blank {
     display: none;
-    width: 130px;
-    padding: 2px 8px;
+    width: 10ch;
+    min-width: 6ch;
+    padding: 2px 4px;
     border: none;
     border-bottom: 2px solid #6366f1;
     border-radius: 3px 3px 0 0;
@@ -52,7 +51,7 @@
     background: #eef2ff;
     color: #1e293b;
     text-align: center;
-    transition: border-color 0.15s, background 0.15s;
+    transition: border-color 0.15s, background 0.15s, width 0.1s;
     vertical-align: baseline;
     outline: none;
     line-height: 1.6;
@@ -67,12 +66,22 @@
     color: #065f46;
 }
 .gap-wrap input.blank.active {
-    display: inline-block;
+    display: inline;
+}
+
+/* Hidden sizer span for auto-width inputs */
+.gap-sizer {
+    position: absolute;
+    visibility: hidden;
+    white-space: pre;
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0 4px;
 }
 
 @media (max-width: 500px) {
-    .gap-wrap input.blank { min-width: 80px; max-width: 140px; font-size: .88rem; }
-    .gap-hint { font-size: 0.84em; min-width: 50px; }
+    .gap-wrap input.blank { font-size: .88rem; }
+    .gap-hint { font-size: 0.84em; }
 }
 {% endblock %}
 
@@ -133,7 +142,7 @@
         /* Combined: N **{HINT}** -> single gap */
         var html = txt.replace(/\{\{(\d+)\}\}\s*\*\*\{([^}]+)\}\*\*/g, function(m, num, hint){
             return '<span class="gap-wrap">' +
-                       '<span class="gap-hint" data-hint="' + hint + '">' + hint + '</span>' +
+                       '<span class="gap-hint" data-hint="' + hint + '">{' + hint + '}</span>' +
                        '<input type="text" class="blank" data-n="' + num + '" ' +
                            'autocomplete="off" autocapitalize="off" spellcheck="false">' +
                    '</span>';
@@ -142,7 +151,7 @@
         /* Fallback: bare N */
         html = html.replace(/\{\{(\d+)\}\}/g, function(m, num){
             return '<span class="gap-wrap">' +
-                       '<span class="gap-hint" data-hint="\u2026">\u2026</span>' +
+                       '<span class="gap-hint" data-hint="\u2026">{…}</span>' +
                        '<input type="text" class="blank" data-n="' + num + '" ' +
                            'autocomplete="off" autocapitalize="off" spellcheck="false">' +
                    '</span>';
@@ -183,9 +192,22 @@
         if (e.target.classList.contains('blank')) deactivateGap(e.target);
     });
 
+    /* -- auto-size inputs to content -- */
+    var sizer = document.createElement('span');
+    sizer.className = 'gap-sizer';
+    document.body.appendChild(sizer);
+
+    function autoSize(input) {
+        var text = input.value || '';
+        sizer.textContent = text || '......';
+        var w = sizer.offsetWidth + 16;
+        input.style.width = Math.max(w, 60) + 'px';
+    }
+
     body.addEventListener('input', function(e) {
         if (e.target.classList.contains('blank')) {
             e.target.classList.toggle('filled', e.target.value.trim().length > 0);
+            autoSize(e.target);
         }
     });
 

@@ -288,10 +288,10 @@ UI = dict(
         ja='\u2714\ufe0f \u89aa\u3057\u3044\u53cb\u4eba\u306b\u8a71\u3057\u3066\u3044\u308b\u3064\u3082\u308a\u3067\u66f8\u3044\u3066\u304f\u3060\u3055\u3044\u3002',
     ),
     task1_guideline_3=dict(
-        en='\u2714\ufe0f One word or a short phrase is enough for each gap.',
-        fr='\u2714\ufe0f Un mot ou une courte expression suffit pour chaque espace.',
-        de='\u2714\ufe0f Ein Wort oder eine kurze Phrase reicht f\u00fcr jede L\u00fccke.',
-        ja='\u2714\ufe0f \u5404\u7a7a\u6b04\u306b\u306f\u4e00\u8a9e\u307e\u305f\u306f\u77ed\u3044\u30d5\u30ec\u30fc\u30ba\u3067\u5341\u5206\u3067\u3059\u3002',
+        en='\u2714\ufe0f Use the hint word in any form \u2014 add extra words if they feel natural.',
+        fr='\u2714\ufe0f Utilisez le mot-indice sous n\u2019importe quelle forme \u2014 ajoutez des mots si cela vous semble naturel.',
+        de='\u2714\ufe0f Verwenden Sie das Hinweiswort in beliebiger Form \u2014 f\u00fcgen Sie weitere W\u00f6rter hinzu, wenn es sich nat\u00fcrlich anf\u00fchlt.',
+        ja='\u2714\ufe0f \u30d2\u30f3\u30c8\u306e\u5358\u8a9e\u306f\u3069\u3093\u306a\u5f62\u3067\u3082\u4f7f\u3048\u307e\u3059\u3002\u81ea\u7136\u306b\u611f\u3058\u308b\u306a\u3089\u8a00\u8449\u3092\u52a0\u3048\u3066\u304f\u3060\u3055\u3044\u3002',
     ),
 )
 
