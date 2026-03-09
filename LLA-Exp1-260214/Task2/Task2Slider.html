@@ -2,16 +2,17 @@
 {% load otree %}
 
 {% block extra_css %}
-<style>
     .slider-item {
-        margin-bottom: 0;
-        padding: 18px 20px 14px;
+        margin-bottom: 10px;
+        padding: 11px 20px 10px;
         border-radius: 6px;
+        border-bottom: 2px solid #e2e8f0;
     }
+    .slider-item:last-child { border-bottom: none; }
     .slider-item:nth-child(odd)  { background: #f0f6ff; }
-    .slider-item:nth-child(even) { background: transparent; }
+    .slider-item:nth-child(even) { background: #f9faf5; }
 
-    .stmt { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+    .stmt { font-size: 1.05rem; font-weight: 600; margin-bottom: 1px; }
 
     .range-wrap { position: relative; padding: 0 10px; }
 
@@ -71,33 +72,28 @@
         height: 6px;
     }
 
-    /* ── "Click to respond" hint overlay ── */
-    .click-hint {
-        display: block;
-        text-align: center;
-        font-size: 0.82rem;
-        color: #94a3b8;
-        font-style: italic;
-        margin-top: -2px;
-        margin-bottom: 2px;
-        transition: opacity 0.2s;
-    }
-    .click-hint.hidden { display: none; }
-
+    /* ── Labels row: 0% | hint | 100% on one line ── */
     .labels {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         font-size: 0.85rem;
         color: var(--muted);
-        margin-top: -2px;
+        margin-top: 2px;
     }
+    .click-hint {
+        font-size: 0.82rem;
+        color: #94a3b8;
+        font-style: italic;
+        transition: opacity 0.2s;
+    }
+    .click-hint.hidden { visibility: hidden; }
 
     .val-display {
         font-weight: 700;
         color: #1d4ed8;
         margin-left: 10px;
     }
-</style>
 {% endblock %}
 
 {% block content %}
@@ -166,10 +162,9 @@
                 <input type="range" class="${thumbClass}"
                        data-idx="${idx}" data-txt="${txt}"
                        min="0" max="100" step="1" value="${initVal}">
-                <span class="click-hint${hasVal ? ' hidden' : ''}" id="hint_${idx}">${hint}</span>
                 <div class="labels">
                     <span>0% (${labelImpossible})</span>
-                    <span>50%</span>
+                    <span class="click-hint${hasVal ? ' hidden' : ''}" id="hint_${idx}">${hint}</span>
                     <span>100% (${labelCertain})</span>
                 </div>
             </div>

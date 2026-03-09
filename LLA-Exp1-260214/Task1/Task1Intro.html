@@ -33,6 +33,7 @@
     display: none;
     width: 10ch;
     min-width: 6ch;
+    max-width: 100%;
     padding: 2px 4px;
     border: none;
     border-bottom: 2px solid #6366f1;
@@ -46,6 +47,8 @@
     vertical-align: baseline;
     outline: none;
     line-height: 1.6;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .gap-wrap input.blank:focus {
     border-bottom-color: #4f46e5;
@@ -85,7 +88,7 @@
     font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
     letter-spacing: 0.06em; color: #3b82f6; margin-bottom: 12px;
 }
-.practice-para { font-size: 1.02rem; line-height: 1.85; margin-bottom: 0.6em; }
+.practice-para { font-size: 1.02rem; line-height: 1.85; margin-bottom: 0.6em; overflow: hidden; }
 .guidelines-box {
     background: #f0fdf4; border-left: 4px solid #22c55e;
     border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0 24px;
@@ -154,7 +157,7 @@
 
         var html = txt.replace(/\{\{(\d+)\}\}\s*\*\*\{([^}]+)\}\*\*/g, function(m, num, hint){
             return '<span class="gap-wrap">' +
-                       '<span class="gap-hint" data-hint="' + hint + '">{' + hint + '}</span>' +
+                       '<span class="gap-hint" data-hint="' + hint + '">' + hint + '</span>' +
                        '<input type="text" class="blank" data-n="p' + num + '" ' +
                            'autocomplete="off" autocapitalize="off" spellcheck="false">' +
                    '</span>';
@@ -162,7 +165,7 @@
 
         html = html.replace(/\{\{(\d+)\}\}/g, function(m, num){
             return '<span class="gap-wrap">' +
-                       '<span class="gap-hint" data-hint="\u2026">{…}</span>' +
+                       '<span class="gap-hint" data-hint="\u2026">…</span>' +
                        '<input type="text" class="blank" data-n="p' + num + '" ' +
                            'autocomplete="off" autocapitalize="off" spellcheck="false">' +
                    '</span>';
@@ -209,7 +212,8 @@
         var text = input.value || "";
         sizer.textContent = text || "......";
         var w = sizer.offsetWidth + 16;
-        input.style.width = Math.max(w, 60) + "px";
+        var maxW = input.closest(".practice-para").offsetWidth * 0.85;
+        input.style.width = Math.min(Math.max(w, 60), maxW) + "px";
     }
 
     practiceBody.addEventListener("input", function(e) {

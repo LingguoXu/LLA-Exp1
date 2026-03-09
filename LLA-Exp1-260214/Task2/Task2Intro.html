@@ -2,7 +2,6 @@
 {% load otree %}
 
 {% block extra_css %}
-<style>
     /* -- Gap wrapper (same as Task2Item) -- */
     .gap-wrap {
         display: inline; position: relative;
@@ -72,7 +71,6 @@
     }
     .guidelines-box p { margin: 0 0 6px; font-size: 0.92rem; color: #334155; line-height: 1.55; }
     .guidelines-box p:last-child { margin-bottom: 0; }
-</style>
 {% endblock %}
 
 {% block content %}
@@ -141,7 +139,7 @@
     practiceHtml = practiceHtml.replace(/\{\{(\d+)\}\}/g, function(m, num) {
         var hint = hints[parseInt(num) - 1] || "\u2026";
         return '<span class="gap-wrap">' +
-            '<span class="gap-hint" data-hint="' + hint + '">{' + hint + '}</span>' +
+            '<span class="gap-hint" data-hint="' + hint + '">' + hint + '</span>' +
             '<input type="text" class="blank" data-n="p' + num + '"' +
             ' autocomplete="off" autocapitalize="off" spellcheck="false">' +
             '</span>';

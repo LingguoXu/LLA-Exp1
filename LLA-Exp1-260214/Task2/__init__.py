@@ -1813,11 +1813,21 @@ class Task2Intro(Page):
 # Primary items (0–24) + 2 attention checks (25, 26)
 # Backup  items (27–41): 1 page of 15
 #
-# AC1 (index 25) 3rd-to-last on Page 1; AC2 (index 26) 3rd-to-last on Page 3
+# Fixed randomised order (generated with random.Random(2), pooled globally).
+# All 25 primary items shuffled into one pool, then split across 3 pages.
+# AC1 (25) pinned at page 1 pos 7; AC2 (26) pinned at page 3 pos 5.
+# Identical for every participant, every session, every server restart.
+#
+# Index → scenario id mapping:
+#   0  p_tmr_neu    5  p_3mo_neu   10 p_3mo_neu_b  15 i_tmr_40   20 s_tmr_neu   25 ac_1
+#   1  p_tmr_40     6  p_3mo_40    11 p_2yr_40      16 i_tmr_cer  21 s_tmr_50    26 ac_2
+#   2  p_tmr_50     7  p_3mo_50    12 p_2yr_50      17 i_3mo_neu  22 s_3mo_60
+#   3  p_tmr_60     8  p_3mo_60    13 p_2yr_40_b    18 i_3mo_50   23 s_2yr_40
+#   4  p_tmr_cer    9  p_3mo_cer   14 p_2yr_cer     19 i_2yr_60   24 s_2yr_cer
 PRIMARY_CHUNKS = [
-    [0, 1, 2, 3, 4, 5, 6, 25, 7, 8],       # Page 1: 10 items (AC1 at pos 8/10)
-    list(range(9, 17)),                       # Page 2: 8 items
-    [17, 18, 19, 20, 21, 22, 26, 23, 24],   # Page 3: 9 items (AC2 at pos 7/9)
+    [3, 19, 16, 12, 0, 22, 25, 4, 7, 13],   # Page 1: 10 items (AC1 at pos 7)
+    [15, 18, 21, 14, 10, 17, 20, 24],        # Page 2: 8 items
+    [6, 8, 9, 5, 26, 11, 23, 2, 1],          # Page 3: 9 items (AC2 at pos 5)
 ]
 BACKUP_CHUNK = list(range(27, 42))  # Page 4: backup items 28–42
 

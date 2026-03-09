@@ -2,7 +2,6 @@
 {% load otree %}
 
 {% block extra_css %}
-<style>
     /* -- Instruction bar -- */
     .task-instructions {
         background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;
@@ -68,7 +67,6 @@
         .gap-wrap input.blank { font-size: .88rem; }
         .gap-hint { font-size: 0.84em; }
     }
-</style>
 {% endblock %}
 
 {% block content %}
@@ -125,7 +123,7 @@
             if (saved) {
                 /* Already answered: show input directly */
                 return '<span class="gap-wrap">' +
-                    '<span class="gap-hint" data-hint="' + hint + '" style="display:none">{' + hint + '}</span>' +
+                    '<span class="gap-hint" data-hint="' + hint + '" style="display:none">' + hint + '</span>' +
                     '<input type="text" class="blank active' + filledClass + '"' +
                     ' data-sc="' + scId + '"' +
                     ' data-n="' + num + '"' +
@@ -135,7 +133,7 @@
             }
 
             return '<span class="gap-wrap">' +
-                '<span class="gap-hint" data-hint="' + hint + '">{' + hint + '}</span>' +
+                '<span class="gap-hint" data-hint="' + hint + '">' + hint + '</span>' +
                 '<input type="text" class="blank"' +
                 ' data-sc="' + scId + '"' +
                 ' data-n="' + num + '"' +

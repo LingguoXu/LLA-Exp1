@@ -110,6 +110,23 @@
     .slider-value-display .sub-text { font-size: 0.83rem; color: var(--muted); margin-top: 4px; }
     .slider-labels { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); margin-top: 6px; }
     .alert-custom { background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem; }
+
+    /* ── Collapsible info box ── */
+    .info-collapse {
+        background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+        margin-bottom: 20px; overflow: hidden;
+    }
+    .info-collapse summary {
+        cursor: pointer; padding: 10px 16px; font-size: 0.9rem; font-weight: 600;
+        color: #475569; list-style: none; display: flex; align-items: center; gap: 8px;
+        user-select: none; -webkit-user-select: none;
+    }
+    .info-collapse summary::-webkit-details-marker { display: none; }
+    .info-collapse summary::before {
+        content: '▶'; font-size: 0.7rem; transition: transform 0.2s; flex-shrink: 0;
+    }
+    .info-collapse[open] summary::before { transform: rotate(90deg); }
+    .info-collapse .info-body { padding: 0 16px 16px; }
 </style>
 {% endblock %}
 
@@ -125,17 +142,27 @@
 <div class="card">
     <h2 style="text-align:center;">{{ ui.la2_title }}</h2>
 
-    <p style="color:#475569; margin-bottom:18px;">
-        {{ la2_intro_formatted }}
-    </p>
+    <details class="info-collapse" id="infoDetails" open>
+        <summary>
+            {% if lang == 'en' %}Task instructions — click to review
+            {% elif lang == 'fr' %}Instructions — cliquez pour revoir
+            {% elif lang == 'de' %}Aufgabenanleitung — klicken zum Anzeigen
+            {% elif lang == 'ja' %}タスクの説明 — クリックで表示{% endif %}
+        </summary>
+        <div class="info-body">
+            <p style="color:#475569; margin-bottom:18px;">
+                {{ la2_intro_formatted }}
+            </p>
 
-    <div class="alert-custom">
-        <strong>{{ ui.la_alert_head }}</strong>
-        {% if lang == 'en' %}There are no right or wrong answers — we are simply trying to find the loss amount that makes the lottery and the safe option feel equally appealing <em>for you personally</em>.
-        {% elif lang == 'fr' %}Il n'y a pas de bonnes ou de mauvaises réponses — nous cherchons simplement le montant de perte où la loterie et l'option sûre vous semblent aussi attractives l'une que l'autre <em>pour vous personnellement</em>.
-        {% elif lang == 'de' %}Es gibt keine richtigen oder falschen Antworten — wir versuchen, den Verlustbetrag zu finden, bei dem die Lotterie und die sichere Option für <em>Sie persönlich</em> gleich attraktiv erscheinen.
-        {% elif lang == 'ja' %}正解や不正解はありません — <em>あなた個人にとって</em>、くじと安全な選択肢が同じくらい魅力的に感じる損失額を見つけようとしています。{% endif %}
-    </div>
+            <div class="alert-custom" style="margin-bottom:0;">
+                <strong>{{ ui.la_alert_head }}</strong>
+                {% if lang == 'en' %}There are no right or wrong answers — we are simply trying to find the loss amount that makes the lottery and the safe option feel equally appealing <em>for you personally</em>.
+                {% elif lang == 'fr' %}Il n'y a pas de bonnes ou de mauvaises réponses — nous cherchons simplement le montant de perte où la loterie et l'option sûre vous semblent aussi attractives l'une que l'autre <em>pour vous personnellement</em>.
+                {% elif lang == 'de' %}Es gibt keine richtigen oder falschen Antworten — wir versuchen, den Verlustbetrag zu finden, bei dem die Lotterie und die sichere Option für <em>Sie persönlich</em> gleich attraktiv erscheinen.
+                {% elif lang == 'ja' %}正解や不正解はありません — <em>あなた個人にとって</em>、くじと安全な選択肢が同じくらい魅力的に感じる損失額を見つけようとしています。{% endif %}
+            </div>
+        </div>
+    </details>
 
 
     <!-- ═══ PHASE 1: BISECTION CHOICES ═══ -->
@@ -211,9 +238,6 @@
         </div>
 
         <!-- Static cards (non-clickable) -->
-        <div style="background:#f0f9ff; border-left:4px solid #0ea5e9; border-radius:6px; padding:12px 16px; margin-top:18px; margin-bottom:18px; font-size:0.9rem; color:#334155;">
-            {{ ui.la2_bonus_note|safe }}
-        </div>
         <div class="bisect-compare-row" style="margin-top:20px;">
 
             <div class="bisect-card bisect-card-a" style="cursor:default;">
@@ -387,6 +411,7 @@
     // ── Switch to slider phase ──
     function showSlider() {
         document.getElementById('phase-bisection').classList.remove('active');
+        document.getElementById('infoDetails').removeAttribute('open');
         var sp = document.getElementById('phase-slider');
         sp.classList.add('active');
 

@@ -142,7 +142,7 @@
         /* Combined: N **{HINT}** -> single gap */
         var html = txt.replace(/\{\{(\d+)\}\}\s*\*\*\{([^}]+)\}\*\*/g, function(m, num, hint){
             return '<span class="gap-wrap">' +
-                       '<span class="gap-hint" data-hint="' + hint + '">{' + hint + '}</span>' +
+                       '<span class="gap-hint" data-hint="' + hint + '">' + hint + '</span>' +
                        '<input type="text" class="blank" data-n="' + num + '" ' +
                            'autocomplete="off" autocapitalize="off" spellcheck="false">' +
                    '</span>';
@@ -151,7 +151,7 @@
         /* Fallback: bare N */
         html = html.replace(/\{\{(\d+)\}\}/g, function(m, num){
             return '<span class="gap-wrap">' +
-                       '<span class="gap-hint" data-hint="\u2026">{…}</span>' +
+                       '<span class="gap-hint" data-hint="\u2026">…</span>' +
                        '<input type="text" class="blank" data-n="' + num + '" ' +
                            'autocomplete="off" autocapitalize="off" spellcheck="false">' +
                    '</span>';
