@@ -79,7 +79,8 @@
         {% if lang == 'en' %}Your bonus starts at <strong>{{ symbol }}{{ endowment }}</strong>.
         {% elif lang == 'fr' %}Votre bonus commence à <strong>{{ symbol }}{{ endowment }}</strong>.
         {% elif lang == 'de' %}Ihr Bonus beginnt bei <strong>{{ symbol }}{{ endowment }}</strong>.
-        {% elif lang == 'ja' %}ボーナスは<strong>{{ symbol }}{{ endowment }}</strong>から始まります。{% endif %}
+        {% elif lang == 'ja' %}ボーナスは<strong>{{ symbol }}{{ endowment }}</strong>から始まります。
+        {% elif lang == 'zh' %}您的奖金从<strong>{{ symbol }}{{ endowment }}</strong>开始。{% endif %}
     </div>
 
     <div style="display:grid !important; grid-template-columns:1fr auto 1fr !important; gap:12px; align-items:stretch; margin:24px 0;">

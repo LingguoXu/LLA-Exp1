@@ -160,6 +160,9 @@
             {% elif lang == 'ja' %}
                 各行：<strong>{{ symbol }}{{ h.rows.0.sooner }}（{{ h.sooner_label }}）</strong>（選択肢A）
                 または より多く（<strong>{{ h.later_label }}</strong>）（選択肢B）。
+            {% elif lang == 'zh' %}
+                每行：<strong>{{ symbol }}{{ h.rows.0.sooner }}（{{ h.sooner_label }}）</strong>（选项A）
+                或 更高金额（<strong>{{ h.later_label }}</strong>）（选项B）。
             {% endif %}
         </p>
 

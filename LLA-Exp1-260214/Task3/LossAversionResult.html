@@ -26,7 +26,7 @@
 
     <div style="background:#f0fdf4; border-left:4px solid #22c55e; border-radius:6px; padding:20px; margin-top:30px;">
         <div style="font-size:0.9rem; font-weight:700; text-transform:uppercase; color:#166534; margin-bottom:10px;">
-            {% if lang == 'en' %}Your Task Bonus (if selected){% elif lang == 'fr' %}Votre bonus de tâche (si sélectionné){% elif lang == 'de' %}Ihr Aufgabenbonus (falls ausgewählt){% elif lang == 'ja' %}課題のボーナス（選ばれた場合）{% endif %}
+            {% if lang == 'en' %}Your Task Bonus (if selected){% elif lang == 'fr' %}Votre bonus de tâche (si sélectionné){% elif lang == 'de' %}Ihr Aufgabenbonus (falls ausgewählt){% elif lang == 'ja' %}課題のボーナス（選ばれた場合）{% elif lang == 'zh' %}您的任务奖金（如被选中）{% endif %}
         </div>
         <div style="font-size:1.5rem; font-weight:700; color:#14532d;">
             {{ symbol }}{{ bonus_fmt }}
@@ -35,7 +35,8 @@
             {% if lang == 'en' %}After the study, 1 in 10 participants will be randomly selected to receive this bonus as an Amazon gift card.
             {% elif lang == 'fr' %}Après l'étude, 1 participant sur 10 sera sélectionné au hasard pour recevoir ce bonus sous forme de carte cadeau Amazon.
             {% elif lang == 'de' %}Nach der Studie wird 1 von 10 Teilnehmenden zufällig ausgewählt, um diesen Bonus als Amazon-Gutschein zu erhalten.
-            {% elif lang == 'ja' %}調査終了後、10人に1人の参加者がランダムに選ばれ、このボーナスがオンラインプラットフォームを通じて支払われます。{% endif %}
+            {% elif lang == 'ja' %}調査終了後、10人に1人の参加者がランダムに選ばれ、このボーナスがオンラインプラットフォームを通じて支払われます。
+            {% elif lang == 'zh' %}研究结束后，每10名参与者中将随机选出1名，通过在线平台发放该奖金。{% endif %}
         </div>
     </div>
 

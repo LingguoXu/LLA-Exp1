@@ -4,7 +4,7 @@ import json
 doc = """
 Task 2: FTR Elicitation (Production) & Subjective Probability (Perception).
 Design based on Robertson et al. (2023).
-Languages: English (en), French (fr), German (de), Japanese (ja).
+Languages: English (en), French (fr), German (de), Japanese (ja), Chinese (zh).
 
 Task 2.1 Design (SCENARIOS):
   PRIMARY (25 items, 3 pages of ~8–9):
@@ -56,13 +56,14 @@ class C(BaseConstants):
 # UI STRINGS
 # ═══════════════════════════════════════════════════════════
 UI = dict(
-    btn_next    = dict(en='Next',    fr='Suivant', de='Weiter', ja='次へ'),
-    btn_submit  = dict(en='Submit',  fr='Soumettre', de='Absenden', ja='送信'),
+    btn_next    = dict(en='Next',    fr='Suivant', de='Weiter', ja='次へ', zh='下一步'),
+    btn_submit  = dict(en='Submit',  fr='Soumettre', de='Absenden', ja='送信', zh='提交'),
     required_msg = dict(
         en='Please answer all items.',
         fr='Veuillez répondre à toutes les questions.',
         de='Bitte beantworten Sie alle Fragen.',
         ja='すべての項目に回答してください。',
+        zh='请回答所有问题。',
     ),
     # ── Task 2 Intro ──
     intro_title = dict(
@@ -70,66 +71,77 @@ UI = dict(
         fr='Partie 2 \u2014 Compl\u00e9ter les conversations',
         de='Teil 2 \u2014 Gespr\u00e4che vervollst\u00e4ndigen',
         ja='\u30d1\u30fc\u30c82 \u2014 \u4f1a\u8a71\u3092\u5b8c\u6210\u3055\u305b\u308b',
+        zh='第二部分 \u2014 完成对话',
     ),
     intro_text  = dict(
         en='You are now moving on to the second part of the study.',
         fr="Vous passez maintenant à la deuxième partie de l'étude.",
         de='Sie fahren nun mit dem zweiten Teil der Studie fort.',
         ja='調査の第2パートに移ります。',
+        zh='现在进入研究的第二部分。',
     ),
     t2_how_title=dict(
         en='How it works',
         fr='Comment ça marche',
         de='So funktioniert es',
         ja='やり方',
+        zh='操作说明',
     ),
     t2_how_step1=dict(
         en='You will see short dialogue scenarios. Each one has a gap where a word or phrase is missing. <span style="color: black;"><strong>The missing word appears as a blue hint</strong></span>.',
         fr='Vous verrez de courts scénarios de dialogue. Chacun comporte un espace où un mot ou une expression manque. Le mot manquant apparaît sous forme d\u2019indice en bleu.',
         de='Sie sehen kurze Dialogszenarien. Jedes hat eine Lücke, in der ein Wort oder eine Phrase fehlt. Das fehlende Wort erscheint als blauer Hinweis.',
         ja='短い会話のシナリオが表示されます。それぞれに単語やフレーズが欠けている空欄があります。欠けている単語は青いヒントとして表示されます。',
+        zh='你将看到一些简短的对话场景。每段对话中都有一个空格，缺少一个词或短语。<span style="color: black;"><strong>缺少的词会以蓝色提示的形式显示</strong></span>。',
     ),
     t2_how_step2=dict(
         en='Click the blue hint to open the gap, then <span style="color: black;"><strong>type what feels most natural to you</strong></span>. Use the hint verb as a guide.',
         fr='Cliquez sur l\u2019indice bleu pour ouvrir l\u2019espace, puis tapez ce qui vous semble le plus naturel. Utilisez le verbe indiqué comme guide.',
         de='Klicken Sie auf den blauen Hinweis, um die Lücke zu öffnen, und geben Sie ein, was sich für Sie am natürlichsten anfühlt. Verwenden Sie das Hinweiswort als Orientierung.',
         ja='青いヒントをクリックして空欄を開き、最も自然だと感じる表現を入力してください。ヒントの動詞を参考にしてください。',
+        zh='点击蓝色提示打开空格，然后<span style="color: black;"><strong>输入你觉得最自然的表达</strong></span>。以提示词为参考。',
     ),
     t2_how_step3=dict(
         en='<span style="color: black;"><strong>Where a certainty percentage is shown, imagine you are exactly that certain</strong></span> and write what you would naturally say.',
         fr='Lorsqu\u2019un pourcentage de certitude est indiqué, imaginez que vous êtes exactement aussi certain(e) et écrivez ce que vous diriez naturellement.',
         de='Wenn ein Sicherheitsprozentsatz angegeben ist, stellen Sie sich vor, genau so sicher zu sein, und schreiben Sie, was Sie natürlich sagen würden.',
         ja='確率（％）が表示されている場合は、その確率で確信していると想像し、自然に言うであろう表現を書いてください。',
+        zh='<span style="color: black;"><strong>如果显示了确定性百分比，请想象你正好有那么确定</strong></span>，然后写出你最自然的说法。',
     ),
     t2_practice_label=dict(
         en='\u270f\ufe0f Try it yourself',
         fr='\u270f\ufe0f Essayez vous-m\u00eame',
         de='\u270f\ufe0f Probieren Sie es aus',
         ja='\u270f\ufe0f 練習してみましょう',
+        zh='\u270f\ufe0f 试一试',
     ),
     t2_guidelines_title=dict(
         en='Tips',
         fr='Conseils',
         de='Tipps',
         ja='ヒント',
+        zh='提示',
     ),
     t2_guideline_1=dict(
         en='\u2714\ufe0f There are no right or wrong answers. Write whatever feels most natural.',
         fr='\u2714\ufe0f Il n\u2019y a pas de bonne ou de mauvaise r\u00e9ponse. \u00c9crivez ce qui vous semble le plus naturel.',
         de='\u2714\ufe0f Es gibt keine richtigen oder falschen Antworten. Schreiben Sie, was Ihnen am nat\u00fcrlichsten vorkommt.',
         ja='\u2714\ufe0f 正解や不正解はありません。最も自然だと感じるものを書いてください。',
+        zh='\u2714\ufe0f 没有对错之分。写出你觉得最自然的表达就好。',
     ),
     t2_guideline_2=dict(
         en='\u2714\ufe0f Imagine you are the speaker in the conversation.',
         fr='\u2714\ufe0f Imaginez que vous \u00eates la personne qui parle dans la conversation.',
         de='\u2714\ufe0f Stellen Sie sich vor, Sie sind die sprechende Person im Gespr\u00e4ch.',
         ja='\u2714\ufe0f \u4f1a\u8a71\u306e\u8a71\u3057\u624b\u306e\u7acb\u5834\u3067\u66f8\u3044\u3066\u304f\u3060\u3055\u3044\u3002',
+        zh='\u2714\ufe0f 想象你就是对话中的说话人。',
     ),
     t2_guideline_3=dict(
         en='\u2714\ufe0f Use the hint word in any form \u2014 add extra words if they feel natural.',
         fr='\u2714\ufe0f Utilisez le mot-indice sous n\u2019importe quelle forme \u2014 ajoutez des mots si cela vous semble naturel.',
         de='\u2714\ufe0f Verwenden Sie das Hinweiswort in beliebiger Form \u2014 f\u00fcgen Sie weitere W\u00f6rter hinzu, wenn es sich nat\u00fcrlich anf\u00fchlt.',
         ja='\u2714\ufe0f \u30d2\u30f3\u30c8\u306e\u5358\u8a9e\u306f\u3069\u3093\u306a\u5f62\u3067\u3082\u4f7f\u3048\u307e\u3059\u3002\u81ea\u7136\u306b\u611f\u3058\u308b\u306a\u3089\u8a00\u8449\u3092\u52a0\u3048\u3066\u304f\u3060\u3055\u3044\u3002',
+        zh='\u2714\ufe0f 提示词可以用任何形式——觉得自然的话，可以加上其他词。',
     ),
     # ── Task 2.1 Instructions ──
     t2_instructions = dict(
@@ -157,6 +169,12 @@ UI = dict(
             "\u78ba\u7387\uff08\uff05\uff09\u304c\u8868\u793a\u3055\u308c\u3066\u3044\u308b\u5834\u5408\u306f\u3001\u81ea\u5206\u304c\u3061\u3087\u3046\u3069\u305d\u306e\u78ba\u7387\u3067\u78ba\u4fe1\u3057\u3066\u3044\u308b\u3068\u30a4\u30e1\u30fc\u30b8\u3057\u3066\u3001"
             "\u305d\u306e\u3068\u304d\u306b\u8a00\u3046\u3067\u3042\u308d\u3046\u8868\u73fe\u3092\u66f8\u3044\u3066\u304f\u3060\u3055\u3044\u3002"
         ),
+        zh=(
+            "请站在对话中说话人的角度来完成句子。"
+            "斜体的动词是提示——请写出你觉得最自然的表达。"
+            "如果显示了确定性百分比，请想象你正好有那么确定，"
+            "然后写出你会怎么说。"
+        ),
     ),
     # ── Task 2.2 Slider ──
     slider_title = dict(
@@ -164,6 +182,7 @@ UI = dict(
         fr='Partie 2b — Évaluation de la certitude',
         de='Teil 2b — Bewertung der Sicherheit',
         ja='パート2b — 確信度の評価',
+        zh='第二部分b — 确定性评分',
     ),
     slider_prompt = dict(
         en=(
@@ -186,9 +205,14 @@ UI = dict(
             "各文について、「もし自分がこれを言ったとしたら、どれだけの確信を表していることになるか」を答えてください"
             "（0 = 不確か、100 = 確実）。"
         ),
+        zh=(
+            "请根据你的感觉，判断每句话表达了多大的确定性。"
+            "对于每个句子，请想象如果是你说出这句话，你表达的确定性有多大"
+            "（0 = 不确定，100 = 完全确定）。"
+        ),
     ),
-    impossible = dict(en='Uncertain', fr='Incertain(e)', de='Unsicher', ja='不確か'),
-    certain    = dict(en='Certain',   fr='Certain(e)',   de='Sicher',   ja='確実'),
+    impossible = dict(en='Uncertain', fr='Incertain(e)', de='Unsicher', ja='不確か', zh='不确定'),
+    certain    = dict(en='Certain',   fr='Certain(e)',   de='Sicher',   ja='確実', zh='完全确定'),
 )
 
 
@@ -220,11 +244,11 @@ def ui_dict(lang):
 
 # ── Probability badge templates ──
 _PROB = {
-    40:   dict(en="40% Likely", fr="40% probable", de="40% wahrscheinlich", ja="40%の確率"),
-    50:   dict(en="50% Likely", fr="50% probable", de="50% wahrscheinlich", ja="50%の確率"),
-    60:   dict(en="60% Likely", fr="60% probable", de="60% wahrscheinlich", ja="60%の確率"),
-    100:  dict(en="100% Certain", fr="100% certain", de="100% sicher", ja="100% 確実"),
-    None: dict(en='', fr='', de='', ja=''),
+    40:   dict(en="40% Likely", fr="40% probable", de="40% wahrscheinlich", ja="40%の確率", zh="40%可能"),
+    50:   dict(en="50% Likely", fr="50% probable", de="50% wahrscheinlich", ja="50%の確率", zh="50%可能"),
+    60:   dict(en="60% Likely", fr="60% probable", de="60% wahrscheinlich", ja="60%の確率", zh="60%可能"),
+    100:  dict(en="100% Certain", fr="100% certain", de="100% sicher", ja="100% 確実", zh="100%确定"),
+    None: dict(en='', fr='', de='', ja='', zh=''),
 }
 
 SCENARIOS = [
@@ -246,6 +270,7 @@ SCENARIOS = [
             fr="Prix en magasin",
             de="Ladenpreise",
             ja="小売価格",
+            zh="零售价格",
         ),
         context_prob=_PROB[None],
         text=dict(
@@ -265,6 +290,10 @@ SCENARIOS = [
 <p><strong>店員から客へ：</strong>明日また来ていただいた方がいいですよ。新しい在庫がまもなく届きますので…</p>
 <p class='target'>…こちらの値段は{{1}}。<em>（下がる）</em></p>
 """,
+            zh="""
+<p><strong>店员对顾客说：</strong>建议您明天再来。新货马上就到了……</p>
+<p class='target'>……这些东西的价格{{1}}。<em>（降）</em></p>
+""",
         ),
     ),
 
@@ -277,6 +306,7 @@ SCENARIOS = [
             fr="Marchés boursiers",
             de="Aktienmärkte",
             ja="株式市場",
+            zh="股市",
         ),
         context_prob=_PROB[40],
         text=dict(
@@ -300,6 +330,11 @@ SCENARIOS = [
 <p><strong>回答：</strong>はっきりしないけど…</p>
 <p class='target'>…{{1}}。<em>（上がる）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>你觉得明天股市会怎样？</p>
+<p><strong>答：</strong>不好说……</p>
+<p class='target'>……{{1}}。<em>（涨）</em></p>
+""",
         ),
     ),
 
@@ -312,6 +347,7 @@ SCENARIOS = [
             fr="Marchés financiers",
             de="Finanzmärkte",
             ja="金融市場",
+            zh="金融市场",
         ),
         context_prob=_PROB[50],
         text=dict(
@@ -331,6 +367,10 @@ SCENARIOS = [
 <p><strong>A：</strong>今は投資しない方がいいよ。状況が不安定だから…</p>
 <p class='target'>…明日、市場は{{1}}。<em>（崩壊する）</em></p>
 """,
+            zh="""
+<p><strong>A：</strong>现在不适合投资。行情太不稳定了……</p>
+<p class='target'>……明天市场{{1}}。<em>（崩盘）</em></p>
+""",
         ),
     ),
 
@@ -343,6 +383,7 @@ SCENARIOS = [
             fr="Prévisions météo",
             de="Wettervorhersage",
             ja="天気予報",
+            zh="天气预报",
         ),
         context_prob=_PROB[60],
         text=dict(
@@ -362,6 +403,10 @@ SCENARIOS = [
 <p><strong>気象キャスター：</strong>明日の予報はかなり不確かですが、良い兆しもあります…</p>
 <p class='target'>…明日は良い天気が{{1}}。<em>（見られる）</em></p>
 """,
+            zh="""
+<p><strong>天气预报主持人：</strong>明天的天气还不太确定，不过有理由乐观……</p>
+<p class='target'>……明天{{1}}好天气。<em>（有）</em></p>
+""",
         ),
     ),
 
@@ -374,6 +419,7 @@ SCENARIOS = [
             fr="Prix du pétrole",
             de="Ölpreise",
             ja="原油価格",
+            zh="油价",
         ),
         context_prob=_PROB[100],
         text=dict(
@@ -393,6 +439,10 @@ SCENARIOS = [
 <p><strong>質問：</strong>明日の原油価格の予想は？</p>
 <p class='target'><strong>回答：</strong>{{1}}。<em>（上がる）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>你对明天的油价怎么看？</p>
+<p class='target'><strong>答：</strong>{{1}}。<em>（涨）</em></p>
+""",
         ),
     ),
 
@@ -409,6 +459,7 @@ SCENARIOS = [
             fr="Investissement dans l'or",
             de="Goldinvestition",
             ja="金への投資",
+            zh="黄金投资",
         ),
         context_prob=_PROB[None],
         text=dict(
@@ -428,6 +479,10 @@ SCENARIOS = [
 <p><strong>A：</strong>金の価格は秋にはいつも上がるよ。今投資しよう…</p>
 <p class='target'>…数ヶ月で利益を{{1}}。<em>（出す）</em></p>
 """,
+            zh="""
+<p><strong>A：</strong>金价到秋天总是涨的。我们现在投资吧……</p>
+<p class='target'>……几个月后就能{{1}}。<em>（赚到钱）</em></p>
+""",
         ),
     ),
 
@@ -440,6 +495,7 @@ SCENARIOS = [
             fr="Santé du patient",
             de="Patientengesundheit",
             ja="患者の健康",
+            zh="患者健康",
         ),
         context_prob=_PROB[40],
         text=dict(
@@ -459,6 +515,10 @@ SCENARIOS = [
 <p><strong>医師から患者へ：</strong>この結果は心配ですが、ストレスが原因の可能性もあります。睡眠と運動を心がけてください。数ヶ月すれば…</p>
 <p class='target'>…{{1}}。<em>（気分が良くなる）</em></p>
 """,
+            zh="""
+<p><strong>医生对病人说：</strong>这些检查结果有点让人担心，不过也可能是压力造成的。注意睡眠，多运动。过几个月……</p>
+<p class='target'>……你{{1}}。<em>（好起来）</em></p>
+""",
         ),
     ),
 
@@ -471,6 +531,7 @@ SCENARIOS = [
             fr="Adaptation d'une élève",
             de="Eingewöhnung einer Schülerin",
             ja="生徒の適応",
+            zh="学生适应",
         ),
         context_prob=_PROB[50],
         text=dict(
@@ -490,6 +551,10 @@ SCENARIOS = [
 <p><strong>先生から保護者へ：</strong>エリーのことが心配ですが、慣れるまでの時間が必要なだけだと思います。数ヶ月すれば…</p>
 <p class='target'>…{{1}}。<em>（上達する）</em></p>
 """,
+            zh="""
+<p><strong>老师对家长说：</strong>小丽的情况让我有点担心，不过我觉得她只是需要时间来适应。过几个月……</p>
+<p class='target'>……她{{1}}。<em>（进步）</em></p>
+""",
         ),
     ),
 
@@ -502,6 +567,7 @@ SCENARIOS = [
             fr="Propagation du virus",
             de="Virusausbreitung",
             ja="ウイルスの拡散",
+            zh="病毒传播",
         ),
         context_prob=_PROB[60],
         text=dict(
@@ -521,6 +587,10 @@ SCENARIOS = [
 <p><strong>医師から委員会へ：</strong>感染経路についてさらなる研究が必要です…</p>
 <p class='target'>…今後数ヶ月で、そのウイルスはさらに1万人を{{1}}。<em>（死に至らしめる）</em></p>
 """,
+            zh="""
+<p><strong>医生向委员会报告：</strong>我们还需要更多关于传播途径的研究……</p>
+<p class='target'>……接下来几个月，这种病毒还{{1}}一万人。<em>（夺走）</em></p>
+""",
         ),
     ),
 
@@ -533,6 +603,7 @@ SCENARIOS = [
             fr="Météo estivale",
             de="Sommerwetter",
             ja="夏の天気",
+            zh="夏季天气",
         ),
         context_prob=_PROB[100],
         text=dict(
@@ -552,6 +623,10 @@ SCENARIOS = [
 <p><strong>春のこと。気象キャスター：</strong>ここ数年ないほどの高気圧の連続です…</p>
 <p class='target'>…今年の夏はたくさんの良い天気が{{1}}。<em>（見られる）</em></p>
 """,
+            zh="""
+<p><strong>春天时，天气预报主持人：</strong>已经好几年没有出现这么持续的高压天气了……</p>
+<p class='target'>……今年夏天{{1}}很多好天气。<em>（有）</em></p>
+""",
         ),
     ),
 
@@ -568,6 +643,7 @@ SCENARIOS = [
             fr="Prévisions de neige hivernale",
             de="Winterliche Schneeprognose",
             ja="冬の降雪予報",
+            zh="冬季降雪预报",
         ),
         context_prob=_PROB[None],
         text=dict(
@@ -587,6 +663,10 @@ SCENARIOS = [
 <p><strong>秋のこと。気象キャスター：</strong>スキー愛好家の皆さんに朗報です…</p>
 <p class='target'>…今後数ヶ月で、たくさんの雪が{{1}}。<em>（降る）</em></p>
 """,
+            zh="""
+<p><strong>秋天时，天气预报主持人：</strong>滑雪爱好者们有好消息了……</p>
+<p class='target'>……接下来几个月{{1}}很多雪。<em>（下）</em></p>
+""",
         ),
     ),
 
@@ -599,6 +679,7 @@ SCENARIOS = [
             fr="Valeur immobilière",
             de="Immobilienwert",
             ja="不動産価値",
+            zh="房产价值",
         ),
         context_prob=_PROB[40],
         text=dict(
@@ -622,6 +703,11 @@ SCENARIOS = [
 <p><strong>回答：</strong>わからない。今は市場が不安定だから。2年後には…</p>
 <p class='target'>…もっと価値が{{1}}。<em>（上がる）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>你要卖房子吗？</p>
+<p><strong>答：</strong>还没想好。现在市场不太稳定。两年后……</p>
+<p class='target'>……房子{{1}}。<em>（升值）</em></p>
+""",
         ),
     ),
 
@@ -634,6 +720,7 @@ SCENARIOS = [
             fr="Épargne retraite",
             de="Altersvorsorge",
             ja="老後の貯蓄",
+            zh="养老储蓄",
         ),
         context_prob=_PROB[50],
         text=dict(
@@ -653,6 +740,10 @@ SCENARIOS = [
 <p><strong>A：</strong>老後の貯蓄プランにお金を入れた方がいいよ。金利は不安定だけど、2年後には…</p>
 <p class='target'>…かなり価値が{{1}}。<em>（増える）</em></p>
 """,
+            zh="""
+<p><strong>A：</strong>你应该把钱放到养老储蓄计划里。虽然利率现在不太稳定，不过两年后……</p>
+<p class='target'>……{{1}}不少。<em>（增值）</em></p>
+""",
         ),
     ),
 
@@ -665,6 +756,7 @@ SCENARIOS = [
             fr="Élections nationales",
             de="Nationale Wahlen",
             ja="国政選挙",
+            zh="大选",
         ),
         context_prob=_PROB[40],
         text=dict(
@@ -688,6 +780,11 @@ SCENARIOS = [
 <p><strong>回答：</strong>現職は強い支持基盤があるけど、何が起こるかわからない…</p>
 <p class='target'>…挑戦者が{{1}}。<em>（勝つ）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>你觉得两年后的大选会怎样？</p>
+<p><strong>答：</strong>现任的支持率挺高的，不过谁知道呢……</p>
+<p class='target'>……挑战者{{1}}。<em>（赢）</em></p>
+""",
         ),
     ),
 
@@ -700,6 +797,7 @@ SCENARIOS = [
             fr="Montée du niveau de la mer",
             de="Meeresspiegelanstieg",
             ja="海面上昇",
+            zh="海平面上升",
         ),
         context_prob=_PROB[100],
         text=dict(
@@ -723,6 +821,11 @@ SCENARIOS = [
 <p><strong>回答：</strong>まあ…</p>
 <p class='target'>…{{1}}。<em>（上昇する）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>你觉得未来两年海平面会怎样？</p>
+<p><strong>答：</strong>这还用说……</p>
+<p class='target'>……{{1}}。<em>（上升）</em></p>
+""",
         ),
     ),
 
@@ -740,6 +843,7 @@ SCENARIOS = [
             fr="Invitation à une fête",
             de="Einladung zur Party",
             ja="パーティーへの出席",
+            zh="参加聚会",
         ),
         context_prob=_PROB[40],
         text=dict(
@@ -763,6 +867,11 @@ SCENARIOS = [
 <p><strong>女の子：</strong>行けるかどうかわからないけど…</p>
 <p class='target'>…{{1}}。<em>（行く）</em></p>
 """,
+            zh="""
+<p><strong>男孩：</strong>明天是我生日……你来参加我的聚会吗？</p>
+<p><strong>女孩：</strong>我恐怕去不了，不过……</p>
+<p class='target'>……我{{1}}。<em>（去）</em></p>
+""",
         ),
     ),
 
@@ -775,6 +884,7 @@ SCENARIOS = [
             fr="Voyage de vacances",
             de="Urlaubsreise",
             ja="休暇旅行",
+            zh="假期出行",
         ),
         context_prob=_PROB[100],
         text=dict(
@@ -798,6 +908,11 @@ SCENARIOS = [
 <p><strong>回答：</strong>うん、あと数ヶ月後にね。彼氏は行きたがらないんだけど…</p>
 <p class='target'>…ジョージアに{{1}}。<em>（旅行する）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>今年夏天你去度假吗？</p>
+<p><strong>答：</strong>嗯，过几个月吧。虽然男朋友不想去，不过……</p>
+<p class='target'>……我们{{1}}格鲁吉亚。<em>（去）</em></p>
+""",
         ),
     ),
 
@@ -810,6 +925,7 @@ SCENARIOS = [
             fr="Fête d'anniversaire",
             de="Geburtstagsparty",
             ja="誕生日パーティー",
+            zh="生日聚会",
         ),
         context_prob=_PROB[None],
         text=dict(
@@ -829,6 +945,10 @@ SCENARIOS = [
 <p><strong>女の子：</strong>3ヶ月後が私の誕生日なんだけど…パーティーに来てくれる？</p>
 <p class='target'><strong>男の子：</strong>{{1}}。<em>（行く）</em></p>
 """,
+            zh="""
+<p><strong>女孩：</strong>三个月后是我生日……你来参加我的聚会吗？</p>
+<p class='target'><strong>男孩：</strong>我{{1}}。<em>（去）</em></p>
+""",
         ),
     ),
 
@@ -841,6 +961,7 @@ SCENARIOS = [
             fr="Voyage de vacances",
             de="Urlaubsreise",
             ja="休暇旅行",
+            zh="假期出行",
         ),
         context_prob=_PROB[50],
         text=dict(
@@ -864,6 +985,11 @@ SCENARIOS = [
 <p><strong>回答：</strong>わからない。年次評価が数ヶ月後にある。それが終わったら…</p>
 <p class='target'>…イタリアに{{1}}。<em>（旅行する）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>今年夏天你去度假吗？</p>
+<p><strong>答：</strong>不知道。年度考核还有几个月。考核完了以后……</p>
+<p class='target'>……我{{1}}意大利。<em>（去）</em></p>
+""",
         ),
     ),
 
@@ -876,6 +1002,7 @@ SCENARIOS = [
             fr="Plan de carrière",
             de="Karriereplan",
             ja="キャリアプラン",
+            zh="职业规划",
         ),
         context_prob=_PROB[60],
         text=dict(
@@ -899,6 +1026,11 @@ SCENARIOS = [
 <p><strong>回答：</strong>仕事はかなりうまくいっていて…</p>
 <p class='target'>…事務所のパートナーに{{1}}。<em>（なる）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>你未来两年有什么计划？</p>
+<p><strong>答：</strong>工作上挺顺利的……</p>
+<p class='target'>……我{{1}}公司的合伙人。<em>（当上）</em></p>
+""",
         ),
     ),
 
@@ -916,6 +1048,7 @@ SCENARIOS = [
             fr="Départ du vol",
             de="Flugabflug",
             ja="フライトの出発",
+            zh="航班出发",
         ),
         context_prob=_PROB[None],
         text=dict(
@@ -935,6 +1068,10 @@ SCENARIOS = [
 <p><strong>質問：</strong>いつ飛行機に乗るの？</p>
 <p class='target'><strong>回答：</strong>私の便は明日{{1}}！<em>（出発する）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>你什么时候飞？</p>
+<p class='target'><strong>答：</strong>我的航班明天就{{1}}！<em>（起飞）</em></p>
+""",
         ),
     ),
 
@@ -947,6 +1084,7 @@ SCENARIOS = [
             fr="Date du concert",
             de="Konzerttermin",
             ja="コンサートの日程",
+            zh="演唱会日期",
         ),
         context_prob=_PROB[50],
         text=dict(
@@ -966,6 +1104,10 @@ SCENARIOS = [
 <p><strong>\u8cea\u554f\uff1a</strong>\u30b3\u30f3\u30b5\u30fc\u30c8\u306f\u3044\u3064\uff1f</p>
 <p class='target'><strong>\u56de\u7b54\uff1a</strong>\u2026\u660e\u65e5{{1}}\u3002<em>\uff08\u6f14\u594f\u3059\u308b\uff09</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>演唱会是什么时候？</p>
+<p class='target'><strong>答：</strong>……明天{{1}}。<em>（演出）</em></p>
+""",
         ),
     ),
 
@@ -978,6 +1120,7 @@ SCENARIOS = [
             fr="Soutenance de thèse",
             de="Verteidigung der Dissertation",
             ja="論文審査",
+            zh="论文答辩",
         ),
         context_prob=_PROB[60],
         text=dict(
@@ -1001,6 +1144,11 @@ SCENARIOS = [
 <p><strong>指導教員：</strong>決まっていると思いますが…</p>
 <p class='target'>…口頭試問は3ヶ月後に{{1}}。<em>（ある）</em></p>
 """,
+            zh="""
+<p><strong>学生：</strong>我具体什么时候答辩？</p>
+<p><strong>导师：</strong>我查一下……</p>
+<p class='target'>……你的答辩三个月后{{1}}。<em>（进行）</em></p>
+""",
         ),
     ),
 
@@ -1013,6 +1161,7 @@ SCENARIOS = [
             fr="Expiration du contrat",
             de="Vertragsablauf",
             ja="契約の満了",
+            zh="合同到期",
         ),
         context_prob=_PROB[40],
         text=dict(
@@ -1036,6 +1185,11 @@ SCENARIOS = [
 <p><strong>回答：</strong>確認しないといけないんですが、しばらく見てなくて…</p>
 <p class='target'>…2年後に{{1}}。<em>（満了する）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>你的合同还有多久？</p>
+<p><strong>答：</strong>我得看看，好久没查了……</p>
+<p class='target'>……两年后{{1}}。<em>（到期）</em></p>
+""",
         ),
     ),
 
@@ -1048,6 +1202,7 @@ SCENARIOS = [
             fr="Échéance de l'obligation",
             de="Fälligkeit der Anleihe",
             ja="債券の満期",
+            zh="债券到期",
         ),
         context_prob=_PROB[100],
         text=dict(
@@ -1066,6 +1221,10 @@ SCENARIOS = [
             ja="""
 <p><strong>父から息子へ：</strong>今確認したところ…</p>
 <p class='target'>…お前の債券は2年後に{{1}}。<em>（満期になる）</em></p>
+""",
+            zh="""
+<p><strong>爸爸对儿子说：</strong>我刚查过了……</p>
+<p class='target'>……你的债券两年后就{{1}}。<em>（到期）</em></p>
 """,
         ),
     ),
@@ -1089,6 +1248,7 @@ SCENARIOS = [
             fr="M\u00e9t\u00e9o locale",
             de="Lokales Wetter",
             ja="\u5730\u5143\u306e\u5929\u6c17",
+            zh="\u5f53\u5730\u5929\u6c14",
         ),
         context_prob=_PROB[None],
         text=dict(
@@ -1112,6 +1272,11 @@ SCENARIOS = [
 <p><strong>B\uff1a</strong>\u672c\u5f53\u306b\uff1f\u305d\u308c\u3067\u66c7\u3063\u3066\u3044\u308b\u306e\u304b\u2026\u3002\u6ce8\u610f\u3057\u3066\u8aad\u3093\u3067\u3044\u308b\u3053\u3068\u3092\u793a\u3059\u305f\u3081\u306b\u3001\u6587\u3092\u5b8c\u6210\u3055\u305b\u308b\u4ee3\u308f\u308a\u306b\u300c\u306f\u308c\u300d\u3068\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002</p>
 <p class='target'>\u2026\u660e\u65e5{{1}}\u3002<em>\uff08\u964d\u308b\uff09</em></p>
 """,
+            zh="""
+<p><strong>A\uff1a</strong>\u6211\u4eca\u65e9\u5728\u5e7f\u64ad\u91cc\u542c\u4e86\u5929\u6c14\u9884\u62a5\u3002\u6709\u4e00\u80a1\u51b7\u7a7a\u6c14\u8981\u6765\u4e86\u3002</p>
+<p><strong>B\uff1a</strong>\u771f\u7684\u5417\uff1f\u96be\u602a\u4eca\u5929\u8fd9\u4e48\u591a\u4e91\u3002\u4e3a\u4e86\u8bc1\u660e\u4f60\u5728\u8ba4\u771f\u9605\u8bfb\uff0c\u8bf7\u5728\u4e0b\u9762\u7684\u7a7a\u683c\u91cc\u8f93\u5165\u201c\u6674\u5929\u201d\uff0c\u800c\u4e0d\u662f\u5b8c\u6210\u53e5\u5b50\u3002</p>
+<p class='target'>\u2026\u2026\u660e\u5929{{1}}\u3002<em>\uff08\u4e0b\u96e8\uff09</em></p>
+""",
         ),
     ),
 
@@ -1126,6 +1291,7 @@ SCENARIOS = [
             fr="D\u00e9m\u00e9nagement du bureau",
             de="B\u00fcroumzug",
             ja="\u30aa\u30d5\u30a3\u30b9\u306e\u79fb\u8ee2",
+            zh="\u529e\u516c\u5ba4\u642c\u8fc1",
         ),
         context_prob=_PROB[None],
         text=dict(
@@ -1149,6 +1315,11 @@ SCENARIOS = [
 <p><strong>B\uff1a</strong>\u3046\u3093\u3001\u5148\u9031\u7d4c\u55b6\u9663\u304b\u3089\u30e1\u30fc\u30eb\u304c\u6765\u305f\u3088\u3002\u3053\u308c\u3092\u8aad\u3093\u3067\u3044\u308b\u306a\u3089\u3001\u6587\u3092\u5b8c\u6210\u3055\u305b\u308b\u4ee3\u308f\u308a\u306b\u300c\u304d\u3093\u3088\u3046\u3073\u300d\u3068\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002</p>
 <p class='target'>\u20263\u304b\u6708\u5f8c\u306b{{1}}\u3002<em>\uff08\u5f15\u3063\u8d8a\u3059\uff09</em></p>
 """,
+            zh="""
+<p><strong>A\uff1a</strong>\u529e\u516c\u5ba4\u8981\u642c\u5230\u65b0\u697c\u7684\u4e8b\uff0c\u4f60\u542c\u8bf4\u4e86\u5417\uff1f</p>
+<p><strong>B\uff1a</strong>\u563f\uff0c\u4e0a\u5468\u7ba1\u7406\u5c42\u53d1\u4e86\u90ae\u4ef6\u3002\u5982\u679c\u4f60\u8bfb\u5230\u4e86\u8fd9\u91cc\uff0c\u8bf7\u5728\u4e0b\u9762\u7684\u7a7a\u683c\u91cc\u8f93\u5165\u201c\u661f\u671f\u4e94\u201d\uff0c\u800c\u4e0d\u662f\u5b8c\u6210\u53e5\u5b50\u3002</p>
+<p class='target'>\u2026\u2026\u4e09\u4e2a\u6708\u540e{{1}}\u3002<em>\uff08\u642c\uff09</em></p>
+""",
         ),
     ),
 
@@ -1171,6 +1342,7 @@ SCENARIOS = [
             fr="Progrès d'un élève",
             de="Fortschritte eines Schülers",
             ja="生徒の進歩",
+            zh="学生进步",
         ),
         context_prob=_PROB[None],
         text=dict(
@@ -1190,6 +1362,10 @@ SCENARIOS = [
 <p><strong>先生から保護者へ：</strong>新しい学校に慣れるには時間がかかることもあります。明日にはもう…</p>
 <p class='target'>…ジョニーは{{1}}。<em>（上達する）</em></p>
 """,
+            zh="""
+<p><strong>老师对家长说：</strong>孩子适应新学校有时候需要时间。哪怕到明天……</p>
+<p class='target'>……小明{{1}}。<em>（进步）</em></p>
+""",
         ),
     ),
 
@@ -1202,6 +1378,7 @@ SCENARIOS = [
             fr="Baisse des prix en magasin",
             de="Preissenkung im Handel",
             ja="小売価格の下落",
+            zh="零售降价",
         ),
         context_prob=_PROB[40],
         text=dict(
@@ -1221,6 +1398,10 @@ SCENARIOS = [
 <p><strong>店員から客へ：</strong>明日またお越しになってみてください。あまり売れていないので…</p>
 <p class='target'>…価格は{{1}}。<em>（下がる）</em></p>
 """,
+            zh="""
+<p><strong>店员对顾客说：</strong>建议您明天再来看看。买的人不太多……</p>
+<p class='target'>……价格{{1}}。<em>（降）</em></p>
+""",
         ),
     ),
 
@@ -1233,6 +1414,7 @@ SCENARIOS = [
             fr="Investissement dans l'or",
             de="Goldinvestition",
             ja="金への投資",
+            zh="黄金投资",
         ),
         context_prob=_PROB[50],
         text=dict(
@@ -1252,6 +1434,10 @@ SCENARIOS = [
 <p><strong>A：</strong>市場が不安定なときは金が上がることが多い。心配しないで…</p>
 <p class='target'>…明日には利益が{{1}}。<em>（出始める）</em></p>
 """,
+            zh="""
+<p><strong>A：</strong>市场不稳定的时候金价一般会涨。别担心……</p>
+<p class='target'>……到明天就能{{1}}。<em>（开始赚钱）</em></p>
+""",
         ),
     ),
 
@@ -1264,6 +1450,7 @@ SCENARIOS = [
             fr="Valeur d'un objet de collection",
             de="Sammlerwert",
             ja="コレクターズアイテムの価値",
+            zh="收藏品价值",
         ),
         context_prob=_PROB[60],
         text=dict(
@@ -1283,6 +1470,10 @@ SCENARIOS = [
 <p><strong>父から息子へ：</strong>そのフィギュアを捨てるな。明日コミックコンベンションに行くだろう…</p>
 <p class='target'>…あそこでなら価値が{{1}}。<em>（ある）</em></p>
 """,
+            zh="""
+<p><strong>爸爸对儿子说：</strong>别扔那个手办。我们明天要去动漫展……</p>
+<p class='target'>……在那边它{{1}}。<em>（值钱）</em></p>
+""",
         ),
     ),
 
@@ -1295,6 +1486,7 @@ SCENARIOS = [
             fr="Effondrement des matières premières",
             de="Rohstoff-Crash",
             ja="商品市場の崩壊",
+            zh="大宗商品崩盘",
         ),
         context_prob=_PROB[100],
         text=dict(
@@ -1314,6 +1506,10 @@ SCENARIOS = [
 <p><strong>A：</strong>今は商品市場に投資しないで。市場がとても不安定だから…</p>
 <p class='target'>…明日までに{{1}}。<em>（崩壊する）</em></p>
 """,
+            zh="""
+<p><strong>A：</strong>现在不要投资大宗商品。市场太不稳定了……</p>
+<p class='target'>……到明天就{{1}}了。<em>（崩盘）</em></p>
+""",
         ),
     ),
 
@@ -1330,6 +1526,7 @@ SCENARIOS = [
             fr="Prévisions de neige hivernale",
             de="Winterliche Schneeprognose",
             ja="冬の降雪予報",
+            zh="冬季降雪预报",
         ),
         context_prob=_PROB[None],
         text=dict(
@@ -1349,6 +1546,10 @@ SCENARIOS = [
 <p><strong>秋のこと。気象キャスター：</strong>スキー愛好家の皆さんに朗報です…</p>
 <p class='target'>…今後数ヶ月で、たくさんの雪が{{1}}。<em>（降る）</em></p>
 """,
+            zh="""
+<p><strong>秋天时，天气预报主持人：</strong>滑雪爱好者们有好消息了……</p>
+<p class='target'>……接下来几个月{{1}}很多雪。<em>（下）</em></p>
+""",
         ),
     ),
 
@@ -1361,6 +1562,7 @@ SCENARIOS = [
             fr="Prochaines élections",
             de="Bevorstehende Wahlen",
             ja="次の選挙",
+            zh="选举",
         ),
         context_prob=_PROB[40],
         text=dict(
@@ -1380,6 +1582,10 @@ SCENARIOS = [
 <p><strong>質問：</strong>与党はどうなると思いますか？</p>
 <p class='target'><strong>回答：</strong>数ヶ月後に{{1}}。<em>（負ける）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>你觉得执政党会怎么样？</p>
+<p class='target'><strong>答：</strong>他们几个月后{{1}}。<em>（输）</em></p>
+""",
         ),
     ),
 
@@ -1392,6 +1598,7 @@ SCENARIOS = [
             fr="Propagation de l'épidémie",
             de="Epidemieausbreitung",
             ja="疫病の拡大",
+            zh="疫情蔓延",
         ),
         context_prob=_PROB[50],
         text=dict(
@@ -1411,6 +1618,10 @@ SCENARIOS = [
 <p><strong>医師から委員会へ：</strong>現在の感染率では…</p>
 <p class='target'>…この疫病は今後数ヶ月でさらに1万人を{{1}}。<em>（死に至らしめる）</em></p>
 """,
+            zh="""
+<p><strong>医生向委员会报告：</strong>按照目前的感染速度……</p>
+<p class='target'>……这场疫情在接下来几个月还{{1}}一万人。<em>（夺走）</em></p>
+""",
         ),
     ),
 
@@ -1423,6 +1634,7 @@ SCENARIOS = [
             fr="Adaptation d'un élève",
             de="Eingewöhnung eines Schülers",
             ja="生徒の適応",
+            zh="学生适应",
         ),
         context_prob=_PROB[60],
         text=dict(
@@ -1442,6 +1654,10 @@ SCENARIOS = [
 <p><strong>先生から保護者へ：</strong>ピーターは慣れるまでに時間が必要なだけです。数ヶ月すれば…</p>
 <p class='target'>…{{1}}。<em>（上達する）</em></p>
 """,
+            zh="""
+<p><strong>老师对家长说：</strong>小彼得只是需要时间适应。过几个月……</p>
+<p class='target'>……他{{1}}。<em>（进步）</em></p>
+""",
         ),
     ),
 
@@ -1454,6 +1670,7 @@ SCENARIOS = [
             fr="Investissement dans le pétrole",
             de="Öl-Investition",
             ja="石油投資",
+            zh="石油投资",
         ),
         context_prob=_PROB[100],
         text=dict(
@@ -1473,6 +1690,10 @@ SCENARIOS = [
 <p><strong>A：</strong>石油の価格は夏にはいつも上がる。今投資しよう…</p>
 <p class='target'>…数ヶ月で利益を{{1}}。<em>（出す）</em></p>
 """,
+            zh="""
+<p><strong>A：</strong>油价到夏天总是涨的。我们现在投资吧……</p>
+<p class='target'>……几个月后就能{{1}}。<em>（赚到钱）</em></p>
+""",
         ),
     ),
 
@@ -1489,6 +1710,7 @@ SCENARIOS = [
             fr="Industrie technologique",
             de="Technologiebranche",
             ja="テクノロジー業界",
+            zh="科技行业",
         ),
         context_prob=_PROB[None],
         text=dict(
@@ -1508,6 +1730,10 @@ SCENARIOS = [
 <p><strong>A：</strong>テクノロジー業界に投資しても無駄だよ…</p>
 <p class='target'>…2年以内に{{1}}。<em>（崩壊する）</em></p>
 """,
+            zh="""
+<p><strong>A：</strong>别费心投资科技行业了……</p>
+<p class='target'>……两年内{{1}}。<em>（崩盘）</em></p>
+""",
         ),
     ),
 
@@ -1520,6 +1746,7 @@ SCENARIOS = [
             fr="Élections nationales",
             de="Nationale Wahlen",
             ja="国政選挙",
+            zh="大选",
         ),
         context_prob=_PROB[40],
         text=dict(
@@ -1543,6 +1770,11 @@ SCENARIOS = [
 <p><strong>回答：</strong>現職は強い支持基盤があるけど、何が起こるかわからない…</p>
 <p class='target'>…挑戦者が{{1}}。<em>（勝つ）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>你觉得两年后的大选会怎样？</p>
+<p><strong>答：</strong>现任有很强的群众基础，但谁也说不准……</p>
+<p class='target'>……挑战者{{1}}。<em>（赢）</em></p>
+""",
         ),
     ),
 
@@ -1555,6 +1787,7 @@ SCENARIOS = [
             fr="Croissance de l'épargne",
             de="Ersparniszuwachs",
             ja="貯蓄の成長",
+            zh="储蓄增长",
         ),
         context_prob=_PROB[50],
         text=dict(
@@ -1574,6 +1807,10 @@ SCENARIOS = [
 <p><strong>A：</strong>貯蓄プランにお金を入れた方がいいよ。たった2年で…</p>
 <p class='target'>…ずっと価値が{{1}}。<em>（増える）</em></p>
 """,
+            zh="""
+<p><strong>A：</strong>你应该把钱放进储蓄计划。只要两年……</p>
+<p class='target'>……就能{{1}}不少。<em>（增值）</em></p>
+""",
         ),
     ),
 
@@ -1586,6 +1823,7 @@ SCENARIOS = [
             fr="Températures mondiales",
             de="Globale Temperaturen",
             ja="世界の気温",
+            zh="全球气温",
         ),
         context_prob=_PROB[60],
         text=dict(
@@ -1609,6 +1847,11 @@ SCENARIOS = [
 <p><strong>回答：</strong>科学的にもはっきりしていないけど…</p>
 <p class='target'>…{{1}}。<em>（上昇する）</em></p>
 """,
+            zh="""
+<p><strong>问：</strong>你觉得未来两年气温会怎么变？</p>
+<p><strong>答：</strong>科学上也还没定论……</p>
+<p class='target'>……气温{{1}}。<em>（上升）</em></p>
+""",
         ),
     ),
 
@@ -1621,6 +1864,7 @@ SCENARIOS = [
             fr="Bulle de marché",
             de="Marktblase",
             ja="市場バブル",
+            zh="市场泡沫",
         ),
         context_prob=_PROB[100],
         text=dict(
@@ -1639,6 +1883,10 @@ SCENARIOS = [
             ja="""
 <p><strong>A：</strong>あの市場に投資しても無駄だよ。バブルがあるから…</p>
 <p class='target'>…2年以内に{{1}}。<em>（崩壊する）</em></p>
+""",
+            zh="""
+<p><strong>A：</strong>别投资那个市场了。有泡沫……</p>
+<p class='target'>……两年内{{1}}。<em>（崩盘）</em></p>
 """,
         ),
     ),
@@ -1684,6 +1932,12 @@ T2_PRACTICE_HTML = dict(
 <p><strong>\u8cea\u554f\uff1a</strong>\u9031\u672b\u306f\u4f55\u3092\u3057\u307e\u3059\u304b\uff1f</p>
 <p><strong>\u56de\u7b54\uff1a</strong>\u307e\u3060\u308f\u304b\u3089\u306a\u3044\u3051\u3069\u3001\u571f\u66dc\u65e5\u306b\u4e21\u89aa\u3092{{1}}\u3068\u601d\u3046\u3002<em>\uff08\u8a2a\u306d\u308b\uff09</em></p>
 <p>\u65e5\u66dc\u65e5\u306f\u5929\u6c17\u304c\u3088\u3055\u305d\u3046\u3060\u304b\u3089\u3001\u30cf\u30a4\u30ad\u30f3\u30b0\u306b{{2}}\u3002<em>\uff08\u884c\u304f\uff09</em></p>
+""",
+    zh="""
+<div class='ctx-header-practice'>周末计划</div>
+<p><strong>问：</strong>这周末你有什么安排？</p>
+<p><strong>答：</strong>还没想好，不过我觉得周六{{1}}我爸妈。<em>（去看）</em></p>
+<p>周日天气好像不错，我们可以去{{2}}。<em>（爬山）</em></p>
 """,
 )
 
@@ -1760,6 +2014,24 @@ SLIDER_ITEMS = dict(
         "来週、おそらく雨が降るでしょう。",            # 12. おそらく～でしょう (probably)
         "来週、雨が降る。",                          # 13. Dictionary form (casual declarative)
     ],
+
+    # ── Chinese: 14 items ──
+    zh=[
+        "下周会下雨。",                              #  1. 会 (default future/prediction)
+        "下周要下雨了。",                            #  2. 要…了 (imminent / anticipated)
+        "我觉得下周会下雨。",                        #  3. 我觉得 + 会 (subjective belief)
+        "下周肯定会下雨。",                          #  4. 肯定 + 会 (strong certainty)
+        "下周可能会下雨。",                          #  5. 可能 + 会 (possibility)
+        "下周也许会下雨。",                          #  6. 也许 + 会 (perhaps)
+        "下周说不定会下雨。",                        #  7. 说不定 (unpredictable possibility)
+        "下周一定会下雨。",                          #  8. 一定 + 会 (absolute certainty)
+        "我觉得下周要下雨了。",                      #  9. 我觉得 + 要…了 (subjective + imminent)
+        "下周大概会下雨吧。",                        # 10. 大概…吧 (approximate guess)
+        "下周应该会下雨。",                          # 11. 应该 (expectation / should)
+        "恐怕下周会下雨。",                          # 12. 恐怕 (I'm afraid / concern-marked)
+        "下周下雨。",                               # 13. Bare verb (no modal marker)
+        "下周将会下雨。",                            # 14. 将(会) (formal/written future)
+    ],
 )
 
 
@@ -1834,8 +2106,8 @@ BACKUP_CHUNK = list(range(27, 42))  # Page 4: backup items 28–42
 # Attention-check expected answers per language
 # Attention-check expected answers per language
 _AC_EXPECTED = dict(
-    ac_1=dict(en='sunny', fr='soleil', de='sonne', ja='\u306f\u308c'),
-    ac_2=dict(en='friday', fr='vendredi', de='freitag', ja='\u304d\u3093\u3088\u3046\u3073'),
+    ac_1=dict(en='sunny', fr='soleil', de='sonne', ja='\u306f\u308c', zh='\u6674\u5929'),
+    ac_2=dict(en='friday', fr='vendredi', de='freitag', ja='\u304d\u3093\u3088\u3046\u3073', zh='\u661f\u671f\u4e94'),
 )
 
 

@@ -13,7 +13,7 @@ SESSION_CONFIGS = [
         name='study_en',
         display_name="FTR Study — English (reference)",
         app_sequence=['Task1','Task2','Task3'],
-        # app_sequence=['Task3'],
+        # app_sequence=['Task1'],
         num_demo_participants=3,
         language='en',
     ),
@@ -30,6 +30,13 @@ SESSION_CONFIGS = [
         app_sequence=['Task1','Task2','Task3'],
         num_demo_participants=3,
         language='de',
+    ),
+    dict(
+        name='study_zh',
+        display_name="FTR Study — Chinese",
+        app_sequence=['Task1','Task2','Task3'],
+        num_demo_participants=3,
+        language='zh',
     ),
 ]
 

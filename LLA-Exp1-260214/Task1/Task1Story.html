@@ -42,6 +42,7 @@
     display: none;
     width: 10ch;
     min-width: 6ch;
+    max-width: 100%;
     padding: 2px 4px;
     border: none;
     border-bottom: 2px solid #6366f1;
@@ -55,6 +56,8 @@
     vertical-align: baseline;
     outline: none;
     line-height: 1.6;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .gap-wrap input.blank:focus {
     border-bottom-color: #4f46e5;
@@ -78,6 +81,9 @@
     font-size: 1rem;
     padding: 0 4px;
 }
+
+/* Keep story paragraphs from overflowing the card */
+.story-para.show { overflow: hidden; }
 
 @media (max-width: 500px) {
     .gap-wrap input.blank { font-size: .88rem; }
@@ -201,7 +207,9 @@
         var text = input.value || '';
         sizer.textContent = text || '......';
         var w = sizer.offsetWidth + 16;
-        input.style.width = Math.max(w, 60) + 'px';
+        var container = input.closest('.story-para');
+        var maxW = container ? container.offsetWidth * 0.85 : 300;
+        input.style.width = Math.min(Math.max(w, 60), maxW) + 'px';
     }
 
     body.addEventListener('input', function(e) {

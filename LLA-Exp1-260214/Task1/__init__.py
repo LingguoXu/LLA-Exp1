@@ -3,7 +3,7 @@ import json
 
 doc = """
 Cross-linguistic FTR & Loss Aversion — Task 1 trial.
-Languages: English (en), French (fr), German (de), Japanese (ja).
+Languages: English (en), French (fr), German (de), Japanese (ja), Chinese (zh).
 """
 
 
@@ -18,15 +18,16 @@ class C(BaseConstants):
 # ═══════════════════════════════════════════════════════════
 UI = dict(
     # General buttons & messages
-    btn_continue=dict(en='Continue', fr='Continuer', de='Weiter', ja='次へ'),
-    btn_read_more=dict(en='Continue reading\u2026', fr='Lire la suite\u2026', de='Weiterlesen\u2026', ja='続きを読む...'),
-    btn_start=dict(en="Let's begin", fr='Commençons', de="Los geht's", ja='始めましょう'),
-    btn_finish=dict(en='Finish', fr='Terminer', de='Fertig', ja='終了'),
+    btn_continue=dict(en='Continue', fr='Continuer', de='Weiter', ja='次へ', zh='继续'),
+    btn_read_more=dict(en='Continue reading\u2026', fr='Lire la suite\u2026', de='Weiterlesen\u2026', ja='続きを読む...', zh='继续阅读\u2026'),
+    btn_start=dict(en="Let's begin", fr='Commençons', de="Los geht's", ja='始めましょう', zh='开始'),
+    btn_finish=dict(en='Finish', fr='Terminer', de='Fertig', ja='終了', zh='完成'),
     required_msg=dict(
         en='Please fill in every blank before continuing.',
         fr='Veuillez remplir tous les espaces avant de continuer.',
         de='Bitte f\u00fcllen Sie alle L\u00fccken aus, bevor Sie fortfahren.',
         ja='先に進む前にすべての空欄を埋めてください。',
+        zh='请填写所有空格后再继续。',
     ),
 
     # ── Welcome / Study Introduction ──
@@ -35,30 +36,35 @@ UI = dict(
         fr='Bienvenue',
         de='Willkommen',
         ja='ようこそ',
+        zh='欢迎',
     ),
     welcome_body=dict(
         en='Thank you for taking part in this study. You will complete a series of short language tasks — reading stories, filling in blanks, and rating sentences. There are no right or wrong answers; we are interested in how you naturally use language.',
         fr='Merci de participer à cette étude. Vous allez réaliser une série de courtes tâches linguistiques — lire des histoires, compléter des phrases et évaluer des énoncés. Il n\u2019y a pas de bonnes ou de mauvaises réponses ; nous nous intéressons à votre usage naturel de la langue.',
         de='Vielen Dank für Ihre Teilnahme an dieser Studie. Sie werden eine Reihe kurzer Sprachaufgaben bearbeiten — Geschichten lesen, Lücken ausfüllen und Sätze bewerten. Es gibt keine richtigen oder falschen Antworten; uns interessiert, wie Sie Sprache natürlich verwenden.',
         ja='この調査にご参加いただきありがとうございます。短い言語タスク（物語を読む、空欄を埋める、文を評価する）に取り組んでいただきます。正解や不正解はありません。あなたが自然に言葉を使う様子に関心があります。',
+        zh='感谢您参加本研究。您将完成一系列简短的语言任务——阅读故事、填写空格和评价句子。没有正确或错误的答案，我们感兴趣的是您自然使用语言的方式。',
     ),
     welcome_duration=dict(
         en='The study takes approximately 15–20 minutes.',
         fr='L\u2019étude dure environ 15 à 20 minutes.',
         de='Die Studie dauert etwa 15–20 Minuten.',
         ja='所要時間は約15〜20分です。',
+        zh='本研究大约需要15-20分钟。',
     ),
     welcome_anon=dict(
         en='All responses are anonymous and will be used for research purposes only.',
         fr='Toutes les réponses sont anonymes et seront utilisées uniquement à des fins de recherche.',
         de='Alle Antworten sind anonym und werden ausschließlich zu Forschungszwecken verwendet.',
         ja='すべての回答は匿名であり、研究目的にのみ使用されます。',
+        zh='所有回答均为匿名，仅用于研究目的。',
     ),
     btn_begin=dict(
         en='Begin',
         fr='Commencer',
         de='Beginnen',
         ja='始める',
+        zh='开始',
     ),
 
     # ── Screening Page ──
@@ -67,12 +73,14 @@ UI = dict(
         fr='À propos de vous',
         de='Über Sie',
         ja='あなたについて',
+        zh='关于您',
     ),
     screen_subtitle=dict(
         en='Please answer the following questions before we begin.',
         fr='Veuillez répondre aux questions suivantes avant de commencer.',
         de='Bitte beantworten Sie die folgenden Fragen, bevor wir beginnen.',
         ja='始める前に、以下の質問にお答えください。',
+        zh='在开始之前，请回答以下问题。',
     ),
 
     # ── Q1: Age Range (distractor) ──
@@ -81,13 +89,14 @@ UI = dict(
         fr='Quel est votre âge ?',
         de='Wie alt sind Sie?',
         ja='あなたの年齢は？',
+        zh='您的年龄是？',
     ),
-    age_18=dict(en='18–24', fr='18–24', de='18–24', ja='18〜24歳'),
-    age_25=dict(en='25–34', fr='25–34', de='25–34', ja='25〜34歳'),
-    age_35=dict(en='35–44', fr='35–44', de='35–44', ja='35〜44歳'),
-    age_45=dict(en='45–54', fr='45–54', de='45–54', ja='45〜54歳'),
-    age_55=dict(en='55–64', fr='55–64', de='55–64', ja='55〜64歳'),
-    age_65=dict(en='65+', fr='65+', de='65+', ja='65歳以上'),
+    age_18=dict(en='18–24', fr='18–24', de='18–24', ja='18〜24歳', zh='18-24岁'),
+    age_25=dict(en='25–34', fr='25–34', de='25–34', ja='25〜34歳', zh='25-34岁'),
+    age_35=dict(en='35–44', fr='35–44', de='35–44', ja='35〜44歳', zh='35-44岁'),
+    age_45=dict(en='45–54', fr='45–54', de='45–54', ja='45〜54歳', zh='45-54岁'),
+    age_55=dict(en='55–64', fr='55–64', de='55–64', ja='55〜64歳', zh='55-64岁'),
+    age_65=dict(en='65+', fr='65+', de='65+', ja='65歳以上', zh='65岁以上'),
 
     # ── Q2: Mother tongue (CRITICAL) ──
     q_mother_tongue=dict(
@@ -95,9 +104,10 @@ UI = dict(
         fr='Votre langue maternelle est-elle le français ?',
         de='Ist Ihre Muttersprache Deutsch?',
         ja='あなたの母国語は日本語ですか？',
+        zh='您的母语是中文吗？',
     ),
-    yes=dict(en='Yes', fr='Oui', de='Ja', ja='はい'),
-    no=dict(en='No', fr='Non', de='Nein', ja='いいえ'),
+    yes=dict(en='Yes', fr='Oui', de='Ja', ja='はい', zh='是'),
+    no=dict(en='No', fr='Non', de='Nein', ja='いいえ', zh='否'),
 
     # ── Q3: Education (distractor) ──
     q_education=dict(
@@ -105,36 +115,42 @@ UI = dict(
         fr='Quel est le plus haut niveau d\u2019études que vous avez atteint ?',
         de='Was ist Ihr höchster Bildungsabschluss?',
         ja='最終学歴を教えてください。',
+        zh='您的最高学历是？',
     ),
     edu_high=dict(
         en='Secondary school / High school',
         fr='Lycée / Baccalauréat',
         de='Abitur / Mittlere Reife',
         ja='高等学校卒業',
+        zh='高中 / 中专',
     ),
     edu_bachelor=dict(
         en='Bachelor\u2019s degree',
         fr='Licence',
         de='Bachelor',
         ja='学士号',
+        zh='本科学士',
     ),
     edu_master=dict(
         en='Master\u2019s degree',
         fr='Master',
         de='Master',
         ja='修士号',
+        zh='硕士',
     ),
     edu_phd=dict(
         en='Doctorate / PhD',
         fr='Doctorat',
         de='Promotion / Doktortitel',
         ja='博士号',
+        zh='博士',
     ),
     edu_other=dict(
         en='Other',
         fr='Autre',
         de='Sonstiges',
         ja='その他',
+        zh='其他',
     ),
 
     # ── Q4: Other language proficiency (CRITICAL) ──
@@ -143,6 +159,7 @@ UI = dict(
         fr='En dehors du français, quel est votre plus haut niveau de maîtrise dans une autre langue ?',
         de='Abgesehen von Deutsch, wie hoch ist Ihr höchstes Sprachniveau in einer anderen Sprache?',
         ja='日本語以外の言語で、あなたの最も高い習熟度はどのレベルですか？',
+        zh='除中文外，您其他语言的最高熟练程度是？',
     ),
 
     # Proficiency Levels
@@ -150,37 +167,43 @@ UI = dict(
         en="Level 0: I only know a few words. I cannot communicate at the sentence level at all, or I do not understand it at all.",
         fr="Niveau 0 : Je ne connais que quelques mots. Je ne peux pas du tout communiquer au niveau de la phrase, ou je ne comprends pas du tout.",
         de="Stufe 0: Ich kenne nur ein paar Wörter. Ich kann überhaupt nicht auf Satzebene kommunizieren oder verstehe es gar nicht.",
-        ja="レベル0：いくつかの単語を知っている程度です。文レベルでのコミュニケーションは全くできないか、全く理解できません。"
+        ja="レベル0：いくつかの単語を知っている程度です。文レベルでのコミュニケーションは全くできないか、全く理解できません。",
+        zh="等级0：我只认识几个单词。完全无法用句子交流，或者完全不理解。",
     ),
     lvl_1=dict(
         en="Level 1: I can ask for directions and answer simple questions.",
         fr="Niveau 1 : Je peux demander mon chemin et répondre à des questions simples.",
         de="Stufe 1: Ich kann nach dem Weg fragen und einfache Fragen beantworten.",
-        ja="レベル1：道を尋ねたり、簡単な質問に答えたりすることができます。"
+        ja="レベル1：道を尋ねたり、簡単な質問に答えたりすることができます。",
+        zh="等级1：我能问路和回答简单的问题。",
     ),
     lvl_2=dict(
         en="Level 2: I can have basic conversations on familiar topics.",
         fr="Niveau 2 : Je peux avoir des conversations de base sur des sujets familiers.",
         de="Stufe 2: Ich kann einfache Gespräche über vertraute Themen führen.",
-        ja="レベル2：身近な話題について基本的な会話ができます。"
+        ja="レベル2：身近な話題について基本的な会話ができます。",
+        zh="等级2：我能就熟悉的话题进行基本对话。",
     ),
     lvl_3=dict(
         en="Level 3: I can communicate effectively in most situations (e.g. telling a story or filling out forms), but not fluently.",
         fr="Niveau 3 : Je peux communiquer efficacement dans la plupart des situations, mais pas couramment.",
         de="Stufe 3: Ich kann in den meisten Situationen effektiv kommunizieren, aber nicht fließend.",
-        ja="レベル3：多くの状況で効果的にコミュニケーションをとることができますが、流暢ではありません。"
+        ja="レベル3：多くの状況で効果的にコミュニケーションをとることができますが、流暢ではありません。",
+        zh="等级3：我能在大多数情境中有效沟通（如讲故事或填表），但不够流利。",
     ),
     lvl_4=dict(
         en="Level 4: Fluent but occasionally make mistakes; clearly sound like a foreigner.",
         fr="Niveau 4 : Courant mais je fais parfois des erreurs ; on entend clairement que je suis étranger.",
         de="Stufe 4: Fließend, aber gelegentlich mache ich Fehler; ich klinge eindeutig wie ein Ausländer.",
-        ja="レベル4：流暢ですが、時々間違いをします。明らかに外国人のように聞こえます。"
+        ja="レベル4：流暢ですが、時々間違いをします。明らかに外国人のように聞こえます。",
+        zh="等级4：流利但偶尔犯错；明显像外国人。",
     ),
     lvl_5=dict(
         en="Level 5: Very fluent; I can use the language like a native speaker.",
         fr="Niveau 5 : Très courant ; je peux utiliser la langue comme un locuteur natif.",
         de="Stufe 5: Sehr fließend; ich kann die Sprache wie ein Muttersprachler verwenden.",
-        ja="レベル5：非常に流暢で、ネイティブスピーカーのように言語を使用できます。"
+        ja="レベル5：非常に流暢で、ネイティブスピーカーのように言語を使用できます。",
+        zh="等级5：非常流利，能像母语者一样使用该语言。",
     ),
 
     # ── Q5: Device (distractor) ──
@@ -189,24 +212,28 @@ UI = dict(
         fr='Quel appareil utilisez-vous pour répondre à cette étude ?',
         de='Welches Gerät verwenden Sie, um an dieser Studie teilzunehmen?',
         ja='この調査にはどのデバイスを使用していますか？',
+        zh='您使用什么设备完成本研究？',
     ),
     dev_computer=dict(
         en='Desktop / Laptop computer',
         fr='Ordinateur de bureau / portable',
         de='Desktop / Laptop',
         ja='デスクトップ / ノートパソコン',
+        zh='台式电脑 / 笔记本电脑',
     ),
     dev_tablet=dict(
         en='Tablet',
         fr='Tablette',
         de='Tablet',
         ja='タブレット',
+        zh='平板电脑',
     ),
     dev_phone=dict(
         en='Smartphone',
         fr='Smartphone',
         de='Smartphone',
         ja='スマートフォン',
+        zh='智能手机',
     ),
 
     # Screenout Message
@@ -215,6 +242,7 @@ UI = dict(
         fr="Malheureusement, vous ne correspondez pas au profil pour cette enquête. Merci de votre participation.",
         de="Leider entsprechen Sie nicht dem Profil für diese Umfrage. Vielen Dank für Ihre Teilnahme.",
         ja="残念ながら、この調査の対象プロファイルに適合しません。ご参加ありがとうございました。",
+        zh="很抱歉，您不符合本调查的参与条件。感谢您的参与。",
     ),
 
     # ── Task 1 ──
@@ -223,19 +251,22 @@ UI = dict(
         fr='Partie 1 \u2014 Compl\u00e9ter les histoires',
         de='Teil 1 \u2014 Geschichten vervollst\u00e4ndigen',
         ja='パート1 — ストーリーを完成させる',
+        zh='第一部分 \u2014 完成故事',
     ),
     task1_intro=dict(
         en='You will read four short stories. Some words are missing \u2014 please fill each gap with the word or phrase that feels most natural to you, as if you were talking to a close friend. There are no right or wrong answers.',
         fr='Vous allez lire quatre courtes histoires. Certains mots manquent \u2014 veuillez compl\u00e9ter chaque espace avec le mot ou l\u2019expression qui vous semble le plus naturel, comme si vous parliez \u00e0 un ami proche. Il n\u2019y a pas de bonne ou de mauvaise r\u00e9ponse.',
         de='Sie werden vier kurze Geschichten lesen. Einige W\u00f6rter fehlen \u2014 bitte f\u00fcllen Sie jede L\u00fccke mit dem Wort oder Ausdruck, der Ihnen am nat\u00fcrlichsten erscheint, als w\u00fcrden Sie mit einem guten Freund sprechen. Es gibt keine richtigen oder falschen Antworten.',
         ja='4つの短い物語を読みます。いくつかの言葉が抜けています。親しい友人と話しているようなつもりで、最も自然だと感じる言葉やフレーズで空欄を埋めてください。正しい答えや間違った答えはありません。',
+        zh='您将阅读四个短故事。有些词语缺失了——请用您觉得最自然的词语或短语来填写每个空格，就像您在跟好朋友聊天一样。没有正确或错误的答案。',
     ),
-    thankyou_title=dict(en='Thank you!', fr='Merci !', de='Vielen Dank!', ja='ありがとうございました！'),
+    thankyou_title=dict(en='Thank you!', fr='Merci !', de='Vielen Dank!', ja='ありがとうございました！', zh='谢谢！'),
     thankyou_msg=dict(
         en='Your responses have been recorded. You may now close this window.',
         fr='Vos r\u00e9ponses ont \u00e9t\u00e9 enregistr\u00e9es. Vous pouvez maintenant fermer cette fen\u00eatre.',
         de='Ihre Antworten wurden gespeichert. Sie k\u00f6nnen dieses Fenster jetzt schlie\u00dfen.',
         ja='回答が記録されました。このウィンドウを閉じてください。',
+        zh='您的回答已记录。您现在可以关闭此窗口。',
     ),
 
     # ── Task 1 Instructions ──
@@ -244,54 +275,63 @@ UI = dict(
         fr='Comment ça marche',
         de='So funktioniert es',
         ja='やり方',
+        zh='任务说明',
     ),
     task1_how_step1=dict(
         en='You will read short stories with some words missing. The missing words appear as <span style="color: black;"><strong>blue hints inside the gaps</strong></span>.',
         fr='Vous lirez de courtes histoires avec des mots manquants. Les mots manquants apparaissent sous forme d\u2019indices en bleu dans les espaces.',
         de='Sie lesen kurze Geschichten, in denen einige W\u00f6rter fehlen. Die fehlenden W\u00f6rter erscheinen als blaue Hinweise in den L\u00fccken.',
-        ja='\u77ed\u3044\u7269\u8a9e\u3092\u8aad\u307f\u307e\u3059\u3002\u3044\u304f\u3064\u304b\u306e\u5358\u8a9e\u304c\u6b20\u3051\u3066\u3044\u307e\u3059\u3002\u6b20\u3051\u3066\u3044\u308b\u5358\u8a9e\u306f\u7a7a\u6b04\u306e\u4e2d\u306b\u9752\u3044\u30d2\u30f3\u30c8\u3068\u3057\u3066\u8868\u793a\u3055\u308c\u307e\u3059\u3002',
+        ja='短い物語を読みます。いくつかの単語が欠けています。欠けている単語は空欄の中に青いヒントとして表示されます。',
+        zh='您将阅读一些短故事，其中有些词语缺失。缺失的词语会以<span style="color: black;"><strong>蓝色提示词</strong></span>的形式显示在空格中。',
     ),
     task1_how_step2=dict(
         en='Click on a blue hint to open the gap, then <span style="color: black;"><strong>type the word or short phrase that feels most natural to you</strong></span>.',
         fr='Cliquez sur un indice bleu pour ouvrir l\u2019espace, puis tapez le mot ou la courte expression qui vous semble le plus naturel.',
         de='Klicken Sie auf einen blauen Hinweis, um die L\u00fccke zu \u00f6ffnen, und geben Sie dann das Wort oder die kurze Phrase ein, die Ihnen am nat\u00fcrlichsten erscheint.',
-        ja='\u9752\u3044\u30d2\u30f3\u30c8\u3092\u30af\u30ea\u30c3\u30af\u3057\u3066\u7a7a\u6b04\u3092\u958b\u304d\u3001\u6700\u3082\u81ea\u7136\u3060\u3068\u611f\u3058\u308b\u8a00\u8449\u3084\u77ed\u3044\u30d5\u30ec\u30fc\u30ba\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002',
+        ja='青いヒントをクリックして空欄を開き、最も自然だと感じる言葉や短いフレーズを入力してください。',
+        zh='点击蓝色提示词打开空格，然后<span style="color: black;"><strong>输入您觉得最自然的词语或短语</strong></span>。',
     ),
     task1_how_step3=dict(
         en='If you click away without typing anything, the blue hint will reappear so you can come back to it later.',
         fr='Si vous cliquez ailleurs sans rien taper, l\u2019indice bleu r\u00e9appara\u00eetra pour que vous puissiez y revenir plus tard.',
         de='Wenn Sie woanders klicken, ohne etwas einzugeben, erscheint der blaue Hinweis wieder, damit Sie sp\u00e4ter darauf zur\u00fcckkommen k\u00f6nnen.',
-        ja='\u4f55\u3082\u5165\u529b\u305b\u305a\u306b\u4ed6\u306e\u5834\u6240\u3092\u30af\u30ea\u30c3\u30af\u3059\u308b\u3068\u3001\u9752\u3044\u30d2\u30f3\u30c8\u304c\u518d\u8868\u793a\u3055\u308c\u3001\u5f8c\u3067\u623b\u3063\u3066\u304f\u308b\u3053\u3068\u304c\u3067\u304d\u307e\u3059\u3002',
+        ja='何も入力せずに他の場所をクリックすると、青いヒントが再表示され、後で戻ってくることができます。',
+        zh='如果您没有输入任何内容就点击了其他地方，蓝色提示词会重新出现，方便您稍后返回填写。',
     ),
     task1_practice_label=dict(
         en='\u270f\ufe0f Try it yourself',
         fr='\u270f\ufe0f Essayez vous-m\u00eame',
         de='\u270f\ufe0f Probieren Sie es aus',
-        ja='\u270f\ufe0f \u7df4\u7fd2\u3057\u3066\u307f\u307e\u3057\u3087\u3046',
+        ja='\u270f\ufe0f 練習してみましょう',
+        zh='\u270f\ufe0f 试一试',
     ),
     task1_guidelines_title=dict(
         en='Tips',
         fr='Conseils',
         de='Tipps',
-        ja='\u30d2\u30f3\u30c8',
+        ja='ヒント',
+        zh='提示',
     ),
     task1_guideline_1=dict(
         en='\u2714\ufe0f Write whatever feels most natural \u2014 there are no right or wrong answers.',
         fr='\u2714\ufe0f \u00c9crivez ce qui vous semble le plus naturel \u2014 il n\u2019y a pas de bonne ou de mauvaise r\u00e9ponse.',
         de='\u2714\ufe0f Schreiben Sie, was Ihnen am nat\u00fcrlichsten vorkommt \u2014 es gibt keine richtigen oder falschen Antworten.',
-        ja='\u2714\ufe0f \u6700\u3082\u81ea\u7136\u3060\u3068\u611f\u3058\u308b\u3082\u306e\u3092\u66f8\u3044\u3066\u304f\u3060\u3055\u3044\u3002\u6b63\u89e3\u3084\u4e0d\u6b63\u89e3\u306f\u3042\u308a\u307e\u305b\u3093\u3002',
+        ja='\u2714\ufe0f 最も自然だと感じるものを書いてください。正解や不正解はありません。',
+        zh='\u2714\ufe0f 写下您觉得最自然的内容——没有正确或错误的答案。',
     ),
     task1_guideline_2=dict(
         en='\u2714\ufe0f Imagine you are telling the story to a close friend.',
         fr='\u2714\ufe0f Imaginez que vous racontez l\u2019histoire \u00e0 un ami proche.',
         de='\u2714\ufe0f Stellen Sie sich vor, Sie erz\u00e4hlen die Geschichte einem guten Freund.',
-        ja='\u2714\ufe0f \u89aa\u3057\u3044\u53cb\u4eba\u306b\u8a71\u3057\u3066\u3044\u308b\u3064\u3082\u308a\u3067\u66f8\u3044\u3066\u304f\u3060\u3055\u3044\u3002',
+        ja='\u2714\ufe0f 親しい友人に話しているつもりで書いてください。',
+        zh='\u2714\ufe0f 想象您正在给好朋友讲这个故事。',
     ),
     task1_guideline_3=dict(
         en='\u2714\ufe0f Use the hint word in any form \u2014 add extra words if they feel natural.',
         fr='\u2714\ufe0f Utilisez le mot-indice sous n\u2019importe quelle forme \u2014 ajoutez des mots si cela vous semble naturel.',
         de='\u2714\ufe0f Verwenden Sie das Hinweiswort in beliebiger Form \u2014 f\u00fcgen Sie weitere W\u00f6rter hinzu, wenn es sich nat\u00fcrlich anf\u00fchlt.',
-        ja='\u2714\ufe0f \u30d2\u30f3\u30c8\u306e\u5358\u8a9e\u306f\u3069\u3093\u306a\u5f62\u3067\u3082\u4f7f\u3048\u307e\u3059\u3002\u81ea\u7136\u306b\u611f\u3058\u308b\u306a\u3089\u8a00\u8449\u3092\u52a0\u3048\u3066\u304f\u3060\u3055\u3044\u3002',
+        ja='\u2714\ufe0f ヒントの単語はどんな形でも使えます。自然に感じるなら言葉を加えてください。',
+        zh='\u2714\ufe0f 提示词可以用任何形式——如果觉得自然，可以添加其他词语。',
     ),
 )
 
@@ -479,6 +519,48 @@ STORIES = dict(
         ]),
     ],
 
+    # ── CHINESE ─────────────────────────────────────────────
+    zh=[
+        # ── Story 1: 安娜的牙疼 ──
+        dict(title='安娜的牙疼', paragraphs=[
+            '安娜正在跟朋友吃晚饭。突然，她{{1}} **{感到}**智齿一阵剧痛。朋友提醒她："你得赶紧去看牙医，不然牙齿很快就{{2}} **{肿}**起来了。"',
+            '安娜运气不错，挂到了下午四点的号。她心想："虽然我怕疼，但是这个医生技术很好，我相信手术{{3}} **{顺利}**。"',
+            '安娜到了诊所。牙医{{4}} **{检查}**了她的牙，说："今天就得拔掉。手术很快的。伤口一个星期就{{5}} **{愈合}**，到时候你就{{6}} **{可以}**正常吃东西了。"',
+            '手术做完后，安娜{{7}} **{回到}**了家。可是还是很疼。她照了照镜子，才发现：医生拔错牙了！疼的那颗还好好的，医生把不疼的那颗给{{8}} **{拔}**了。朋友跟她说："那医生还{{9}} **{得}**把坏牙也拔了。"',
+            '安娜{{10}} **{哭}**了起来："天哪，我还得再来一次吗？"',
+        ]),
+
+        # ── Story 2: 小明的面试 ──
+        dict(title='小明的面试', paragraphs=[
+            '早上，小明带着不安的心情醒来。他{{1}} **{拉开}**窗帘，马上看到乌云正在城市上空{{2}} **{移动}**。他打开电视看新闻。天气预报员说："请大家做好准备，大雨整个下午都{{3}} **{持续}**。"',
+            '小明叹了口气，心想："糟了。要是这种天气走去车站，西装{{4}} **{淋}**湿了。"',
+            '突然，{{5}} **{他的}**手机弹出一条消息：市中心地铁因为技术故障已经{{6}} **{停运}**了。',
+            '小明说："这种路况开车的话，至少{{7}} **{花}**一个小时。我得赶紧叫出租车。"',
+            '他深吸一口气让自己冷静下来。"要是迟到了，面试官{{8}} **{觉得}**我不靠谱，"他想。',
+            '他开始收拾材料，{{9}} **{努力}**保持积极心态。他小声跟自己说："就算下雨，我知道这次面试{{10}} **{顺利}**。"',
+        ]),
+
+        # ── Story 3: 马可慌张的早晨 ──
+        dict(title='马可慌张的早晨', paragraphs=[
+            '马可醒来，{{1}} **{发现}**闹钟没有响。他赶到公交站，结果下一班车要八点半才来。突然开始下雨了。看着阴沉沉的天，他着急地想："完了，我{{2}} **{赶不上}**早上的会了。"',
+            '他叫了辆出租车。在车里，他{{3}} **{听到}**广播里说："雨下得很大，要到下午才{{4}} **{停}**。"',
+            '这时候，女朋友小丽打来电话："你今天下午{{5}} **{做}**什么？"马可焦急地说："今天{{6}} **{很忙}**，我得准备下周开会的材料。"',
+            '小丽很惊讶："可今天是星期天啊！"马可愣住了。小丽笑着说："对呀，星期天休息！咱们去{{7}} **{吃}**午饭吧。"',
+            '马可松了口气，心情一下子就{{8}} **{好}**了。"没问题。星期天餐厅{{9}} **{挤}**，我先订个位。吃完还可以去公园逛逛。"',
+            '出租车到了。马可付了车费，心想："今天{{10}} **{是}**美好的一天！"',
+        ]),
+
+        # ── Story 4: 小李的露营之旅 ──
+        dict(title='小李的露营之旅', paragraphs=[
+            '天空乌云密布，气温开始{{1}} **{下降}**。小李看了看手机，跟妻子说："天气预报说今晚{{2}} **{下雪}**。"小李觉得冷，想喝杯热咖啡。他正在{{3}} **{泡}**咖啡，妻子拦住他{{4}} **{说}**："你现在喝了咖啡，晚上{{5}} **{睡不着}**的。"',
+            '小李犹豫了一下，放下了杯子。"你说得对。明天得早起。要是睡不好，开车{{6}} **{危险}**。"',
+            '睡觉前，他查了查地图，{{7}} **{发现}**开车到山里大概要三个小时。',
+            '第二天早上，妻子问："需要带厚外套吗？"',
+            '小李又看了一下天气预报，说："带上吧。山里气温比这儿低多了。穿少了的话，我们{{8}} **{着凉}**，还容易{{9}} **{感冒}**。"',
+            '两人相视一笑，都觉得这次露营{{10}} **{好玩}**。',
+        ]),
+    ],
+
     # ── JAPANESE ───────────────────────────────────────────
     ja=[
         # ── Story 1: アンナの歯痛 ──
@@ -538,6 +620,10 @@ PRACTICE_PARAS = dict(
     ja=[
         '\u96e8\u306e\u671d\u3067\u3057\u305f\u3002\u30c8\u30e0\u306f\u7a93\u306e\u5916\u3092{{1}} **{\u898b\u308b}**\u3001\u901a\u308a\u304c\u3059\u3063\u304b\u308a\u6fe1\u308c\u3066\u3044\u308b\u3053\u3068\u306b\u6c17\u3065\u304d\u307e\u3057\u305f\u3002',
         '\u5f7c\u306f\u30b3\u30fc\u30c8\u3092\u624b\u306b\u53d6\u308a\u3001\u300c\u4eca\u65e5\u306f\u5098\u304c{{2}} **{\u5fc5\u8981}**\u3060\u3002\u305d\u3046\u3057\u306a\u3044\u3068\u3001\u4ed5\u4e8b\u306b\u884c\u304f\u9014\u4e2d\u3067{{3}} **{\u6fe1\u308c\u308b}**\u300d\u3068\u601d\u3044\u307e\u3057\u305f\u3002',
+    ],
+    zh=[
+        '那是一个下雨的早晨。小明往窗外{{1}} **{看}**了一眼，发现街上全是水。',
+        '他拿起外套，心想："今天{{2}} **{需要}**带把伞。不然上班路上{{3}} **{淋}**湿了。"',
     ],
 )
 

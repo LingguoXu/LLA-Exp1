@@ -35,6 +35,17 @@
     .bisect-card.selected-a { border-color: var(--success); background: #ecfdf5; box-shadow: 0 0 0 1px var(--success); }
     .bisect-card.selected-b { border-color: var(--primary); background: #eef2ff; box-shadow: 0 0 0 1px var(--primary); }
 
+    /* ── Swap card & button order on even steps ── */
+    .bisect-card-a { order: 0; }
+    .bisect-vs     { order: 1; }
+    .bisect-card-b { order: 2; }
+    .bisect-btn-a  { order: 0; }
+    .bisect-btn-b  { order: 1; }
+    .swapped .bisect-card-a { order: 2; }
+    .swapped .bisect-card-b { order: 0; }
+    .swapped .bisect-btn-a  { order: 1; }
+    .swapped .bisect-btn-b  { order: 0; }
+
     .bisect-card-label {
         font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
         letter-spacing: 0.08em; display: inline-block; padding: 2px 8px;
@@ -46,12 +57,30 @@
     .bisect-outcome { font-size: 0.92rem; color: #475569; line-height: 1.7; }
     .bisect-outcome strong { color: #1e293b; }
 
-    .outcome-tag {
-        display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-        letter-spacing: 0.05em; padding: 1px 6px; border-radius: 999px; margin-right: 4px; vertical-align: middle;
+    /* ── Side-by-side lottery outcomes ── */
+    .lottery-outcomes {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;
     }
-    .tag-good { background: #d1fae5; color: #065f46; }
-    .tag-bad  { background: #fee2e2; color: #991b1b; }
+    .lottery-half {
+        border-radius: 8px; padding: 12px 10px; text-align: center;
+    }
+    .lottery-half-win  { background: #dcfce7; }
+    .lottery-half-lose { background: #fee2e2; }
+    .lottery-half .lottery-pct {
+        font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.04em; margin-bottom: 4px;
+    }
+    .lottery-half-win  .lottery-pct { color: #065f46; }
+    .lottery-half-lose .lottery-pct { color: #991b1b; }
+    .lottery-half .lottery-amt { font-size: 0.95rem; font-weight: 700; color: #1e293b; }
+    .lottery-calc-row {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px;
+    }
+    .lottery-calc {
+        font-size: 0.78rem; text-align: center; line-height: 1.4;
+    }
+    .lottery-calc-win  { color: #065f46; }
+    .lottery-calc-lose { color: #991b1b; }
 
     .bisect-vs {
         display: flex; align-items: center; justify-content: center;
@@ -144,29 +173,46 @@
 
     <details class="info-collapse" id="infoDetails" open>
         <summary>
-            {% if lang == 'en' %}Task instructions — click to review
-            {% elif lang == 'fr' %}Instructions — cliquez pour revoir
-            {% elif lang == 'de' %}Aufgabenanleitung — klicken zum Anzeigen
-            {% elif lang == 'ja' %}タスクの説明 — クリックで表示{% endif %}
+            {% if lang == 'en' %}Quick reminder
+            {% elif lang == 'fr' %}Rappel rapide
+            {% elif lang == 'de' %}Kurze Erinnerung
+            {% elif lang == 'ja' %}簡単なおさらい
+            {% elif lang == 'zh' %}简要提示{% endif %}
         </summary>
         <div class="info-body">
-            <p style="color:#475569; margin-bottom:18px;">
-                {{ la2_intro_formatted }}
-            </p>
-
-            <div class="alert-custom" style="margin-bottom:0;">
-                <strong>{{ ui.la_alert_head }}</strong>
-                {% if lang == 'en' %}There are no right or wrong answers — we are simply trying to find the loss amount that makes the lottery and the safe option feel equally appealing <em>for you personally</em>.
-                {% elif lang == 'fr' %}Il n'y a pas de bonnes ou de mauvaises réponses — nous cherchons simplement le montant de perte où la loterie et l'option sûre vous semblent aussi attractives l'une que l'autre <em>pour vous personnellement</em>.
-                {% elif lang == 'de' %}Es gibt keine richtigen oder falschen Antworten — wir versuchen, den Verlustbetrag zu finden, bei dem die Lotterie und die sichere Option für <em>Sie persönlich</em> gleich attraktiv erscheinen.
-                {% elif lang == 'ja' %}正解や不正解はありません — <em>あなた個人にとって</em>、くじと安全な選択肢が同じくらい魅力的に感じる損失額を見つけようとしています。{% endif %}
-            </div>
+            <ul style="color:#475569; margin:0; padding-left:1.2em; line-height:1.8; font-size:0.9rem;">
+                {% if lang == 'en' %}
+                <li><strong>Lottery</strong> vs <strong>Safe option</strong> — the loss amount changes each round</li>
+                <li>No right or wrong answers — pick what feels right <em>for you</em></li>
+                <li>The outcome will be revealed immediately after you submit</li>
+                {% elif lang == 'fr' %}
+                <li><strong>Loterie</strong> vs <strong>Option sûre</strong> — le montant de la perte change à chaque tour</li>
+                <li>Pas de bonnes ou mauvaises réponses — choisissez ce qui vous semble juste <em>pour vous</em></li>
+                <li>Le résultat sera révélé immédiatement après votre soumission</li>
+                {% elif lang == 'de' %}
+                <li><strong>Lotterie</strong> vs <strong>Sichere Option</strong> — der Verlustbetrag ändert sich jede Runde</li>
+                <li>Keine richtigen oder falschen Antworten — wählen Sie, was sich <em>für Sie</em> richtig anfühlt</li>
+                <li>Das Ergebnis wird sofort nach dem Absenden angezeigt</li>
+                {% elif lang == 'ja' %}
+                <li><strong>くじ</strong> vs <strong>安全な選択肢</strong> — 損失額は毎回変わります</li>
+                <li>正解・不正解はありません — <em>あなたにとって</em>正しいと感じる方を選んでください</li>
+                <li>結果は送信後すぐに発表されます</li>
+                {% elif lang == 'zh' %}
+                <li><strong>抽奖</strong> vs <strong>稳妥选项</strong> — 损失金额每轮不同</li>
+                <li>没有对错之分 — 选择<em>您</em>觉得合适的</li>
+                <li>提交后将立即揭晓结果</li>
+                {% endif %}
+            </ul>
         </div>
     </details>
 
 
     <!-- ═══ PHASE 1: BISECTION CHOICES ═══ -->
     <div class="phase-bisection active" id="phase-bisection">
+
+        <div style="background:#f0f9ff; border-left:4px solid #0ea5e9; border-radius:6px; padding:12px 16px; margin-bottom:18px; font-size:0.9rem; color:#334155;">
+            {{ ui.la2_bonus_note|safe }}
+        </div>
 
         <div style="display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; justify-content:center; gap:6px; margin-bottom:1.5rem;">
             {% for i in steps_range %}
@@ -182,11 +228,7 @@
 
         <div class="bisect-step-fade" id="comparison-area">
 
-            <div style="background:#f0f9ff; border-left:4px solid #0ea5e9; border-radius:6px; padding:12px 16px; margin-bottom:18px; font-size:0.9rem; color:#334155;">
-                {{ ui.la2_bonus_note|safe }}
-            </div>
-
-            <div class="bisect-compare-row">
+            <div class="bisect-compare-row" id="compare-row">
 
                 <!-- Option A: Safe Option -->
                 <div class="bisect-card bisect-card-a" id="card-a">
@@ -201,12 +243,19 @@
                 <div class="bisect-card bisect-card-b" id="card-b">
                     <span class="bisect-card-label">B</span>
                     <div class="bisect-card-title">{{ ui.la2_lottery_label }}</div>
-                    <div class="bisect-outcome">
-                        <span class="outcome-tag tag-good">50%</span> {{ ui.la2_win_line_fmt }}<br>
-                        <span id="win-calc-text" style="font-size:0.82rem; color:#065f46; margin-left:42px; display:inline-block;"></span><br>
-                        <span class="outcome-tag tag-bad">50%</span>
-                        <span id="lose-line-text">{{ ui.la2_lose_line_init }}</span><br>
-                        <span id="lose-calc-text" style="font-size:0.82rem; color:#991b1b; margin-left:42px; display:inline-block;"></span>
+                    <div class="lottery-outcomes">
+                        <div class="lottery-half lottery-half-win">
+                            <div class="lottery-pct">50%</div>
+                            <div class="lottery-amt">{{ ui.la2_win_line_fmt }}</div>
+                        </div>
+                        <div class="lottery-half lottery-half-lose">
+                            <div class="lottery-pct">50%</div>
+                            <div class="lottery-amt" id="lose-line-text">{{ ui.la2_lose_line_init }}</div>
+                        </div>
+                    </div>
+                    <div class="lottery-calc-row">
+                        <div class="lottery-calc lottery-calc-win" id="win-calc-text"></div>
+                        <div class="lottery-calc lottery-calc-lose" id="lose-calc-text"></div>
                     </div>
                 </div>
 
@@ -216,7 +265,7 @@
                 {{ ui.la2_question }}
             </p>
 
-            <div class="bisect-choice-buttons">
+            <div class="bisect-choice-buttons" id="choice-buttons">
                 <button type="button" class="bisect-btn bisect-btn-a" onclick="bisectChoose('A')">
                     {{ ui.la2_opt_sure }}
                 </button>
@@ -251,12 +300,19 @@
             <div class="bisect-card bisect-card-b" style="cursor:default;">
                 <span class="bisect-card-label">B</span>
                 <div class="bisect-card-title">{{ ui.la2_lottery_label }}</div>
-                <div class="bisect-outcome">
-                    <span class="outcome-tag tag-good">50%</span> {{ ui.la2_win_line_fmt }}<br>
-                    <span id="slider-win-calc-text" style="font-size:0.82rem; color:#065f46; margin-left:42px; display:inline-block;"></span><br>
-                    <span class="outcome-tag tag-bad">50%</span>
-                    <span id="slider-lose-text">—</span><br>
-                    <span id="slider-lose-calc-text" style="font-size:0.82rem; color:#991b1b; margin-left:42px; display:inline-block;"></span>
+                <div class="lottery-outcomes">
+                    <div class="lottery-half lottery-half-win">
+                        <div class="lottery-pct">50%</div>
+                        <div class="lottery-amt">{{ ui.la2_win_line_fmt }}</div>
+                    </div>
+                    <div class="lottery-half lottery-half-lose">
+                        <div class="lottery-pct">50%</div>
+                        <div class="lottery-amt" id="slider-lose-text">—</div>
+                    </div>
+                </div>
+                <div class="lottery-calc-row">
+                    <div class="lottery-calc lottery-calc-win" id="slider-win-calc-text"></div>
+                    <div class="lottery-calc lottery-calc-lose" id="slider-lose-calc-text"></div>
                 </div>
             </div>
 
@@ -271,7 +327,8 @@
                     {% if lang == 'en' %}Move the slider to adjust
                     {% elif lang == 'fr' %}Déplacez le curseur pour ajuster
                     {% elif lang == 'de' %}Schieberegler bewegen, um anzupassen
-                    {% elif lang == 'ja' %}スライダーを動かして調整する{% endif %}
+                    {% elif lang == 'ja' %}スライダーを動かして調整する
+                    {% elif lang == 'zh' %}拖动滑动条进行调整{% endif %}
                 </div>
             </div>
 
@@ -280,8 +337,8 @@
                    oninput="bisectUpdateSlider(this.value)">
 
             <div class="slider-labels">
-                <span>{% if lang == 'en' %}Less loss{% elif lang == 'fr' %}Moins de perte{% elif lang == 'de' %}Geringerer Verlust{% elif lang == 'ja' %}損失が少ない{% endif %}</span>
-                <span>{% if lang == 'en' %}More loss{% elif lang == 'fr' %}Plus de perte{% elif lang == 'de' %}Höherer Verlust{% elif lang == 'ja' %}損失が多い{% endif %}</span>
+                <span>{% if lang == 'en' %}Less loss{% elif lang == 'fr' %}Moins de perte{% elif lang == 'de' %}Geringerer Verlust{% elif lang == 'ja' %}損失が少ない{% elif lang == 'zh' %}损失较少{% endif %}</span>
+                <span>{% if lang == 'en' %}More loss{% elif lang == 'fr' %}Plus de perte{% elif lang == 'de' %}Höherer Verlust{% elif lang == 'ja' %}損失が多い{% elif lang == 'zh' %}损失较多{% endif %}</span>
             </div>
         </div>
 
@@ -319,9 +376,36 @@
     var choices  = [];
     var currentX = (low + high) / 2;
 
+    // ── Swap card/button positions on alternating steps ──
+    function updateSwap(currentStep) {
+        var row = document.getElementById('compare-row');
+        var btns = document.getElementById('choice-buttons');
+        // Disable transitions so order swap is instant (no jitter)
+        row.style.transition = 'none';
+        btns.style.transition = 'none';
+        row.querySelectorAll('.bisect-card, .bisect-vs').forEach(function(el) { el.style.transition = 'none'; });
+        btns.querySelectorAll('.bisect-btn').forEach(function(el) { el.style.transition = 'none'; });
+
+        if (currentStep % 2 === 1) {
+            row.classList.add('swapped');
+            btns.classList.add('swapped');
+        } else {
+            row.classList.remove('swapped');
+            btns.classList.remove('swapped');
+        }
+
+        // Force reflow then restore transitions
+        row.offsetHeight;
+        row.style.transition = '';
+        btns.style.transition = '';
+        row.querySelectorAll('.bisect-card, .bisect-vs').forEach(function(el) { el.style.transition = ''; });
+        btns.querySelectorAll('.bisect-btn').forEach(function(el) { el.style.transition = ''; });
+    }
+
     // Initialise the first lose-line and calculations
     setLoseLine('lose-line-text', currentX);
     updateCalcLines(currentX);
+    updateSwap(step);
 
     // ── Binary choice ──
     window.bisectChoose = function(choice) {
@@ -349,6 +433,7 @@
                 setLoseLine('lose-line-text', currentX);
                 updateCalcLines(currentX);
                 updatePips(step);
+                updateSwap(step);
                 cardA.classList.remove('selected-a'); cardB.classList.remove('selected-b');
                 area.classList.remove('fading');
             } else {
@@ -365,6 +450,7 @@
         if (LANG === 'fr') el.innerHTML = '<strong>Perdre</strong> ' + xStr;
         else if (LANG === 'de') el.innerHTML = xStr + ' <strong>verlieren</strong>';
         else if (LANG === 'ja') el.innerHTML = xStr + ' <strong>損失</strong>';
+        else if (LANG === 'zh') el.innerHTML = '<strong>损失</strong> ' + xStr;
         else el.innerHTML = '<strong>Lose</strong> ' + xStr;
     }
 
@@ -404,6 +490,7 @@
             if (LANG === 'ja') lbl.textContent = '比較 ' + (currentStep + 1) + ' / ' + STEPS;
             else if (LANG === 'fr') lbl.textContent = 'Comparaison ' + (currentStep + 1) + ' sur ' + STEPS;
             else if (LANG === 'de') lbl.textContent = 'Vergleich ' + (currentStep + 1) + ' von ' + STEPS;
+            else if (LANG === 'zh') lbl.textContent = '第 ' + (currentStep + 1) + ' 次比较（共 ' + STEPS + ' 次）';
             else lbl.textContent = 'Comparison ' + (currentStep + 1) + ' of ' + STEPS;
         }
     }
@@ -456,12 +543,14 @@
             if (LANG === 'fr') big.textContent = 'Perdre ' + SYM + fmtAmt(x);
             else if (LANG === 'de') big.textContent = SYM + fmtAmt(x) + ' verlieren';
             else if (LANG === 'ja') big.textContent = SYM + fmtAmt(x) + 'を損失';
+            else if (LANG === 'zh') big.textContent = '损失 ' + SYM + fmtAmt(x);
             else big.textContent = 'Lose ' + SYM + fmtAmt(x);
         }
         if (sub) {
             if (LANG === 'fr') sub.textContent = '50% de chance de perdre ' + SYM + fmtAmt(x);
             else if (LANG === 'de') sub.textContent = '50% Chance, ' + SYM + fmtAmt(x) + ' zu verlieren';
             else if (LANG === 'ja') sub.textContent = '50%の確率で' + SYM + fmtAmt(x) + 'を損失';
+            else if (LANG === 'zh') sub.textContent = '50%的概率损失 ' + SYM + fmtAmt(x);
             else sub.textContent = '50% chance of losing ' + SYM + fmtAmt(x);
         }
 
