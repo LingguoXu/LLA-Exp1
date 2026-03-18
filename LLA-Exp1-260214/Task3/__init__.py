@@ -573,14 +573,23 @@ UI = dict(
         ja='続ける前に各行で選択してください。',
         zh='请在每行做出选择后再继续。',
     ),
-    end_title=dict(en='Experiment Completed', fr='Expérience terminée', de='Experiment beendet', ja='実験終了', zh='实验完成'),
+    end_title=dict(en='Experiment Completed!', fr='Expérience terminée !', de='Experiment abgeschlossen!', ja='実験完了！', zh='实验完成！'),
     end_msg=dict(
-        en='Thank you for participating! You may now close this window.',
-        fr='Merci de votre participation ! Vous pouvez maintenant fermer cette fenêtre.',
-        de='Vielen Dank für Ihre Teilnahme! Sie können dieses Fenster jetzt schließen.',
-        ja='ご参加ありがとうございました！このウィンドウを閉じてください。',
-        zh='感谢您的参与！您现在可以关闭此窗口。'
+        en='Thank you for participating! Your responses have been recorded.',
+        fr='Merci de votre participation ! Vos réponses ont été enregistrées.',
+        de='Vielen Dank für Ihre Teilnahme! Ihre Antworten wurden gespeichert.',
+        ja='ご参加ありがとうございました！回答が記録されました。',
+        zh='感谢您的参与！您的回答已被记录。',
     ),
+    end_redirect=dict(
+        en='You will be redirected to Prolific shortly. If not, click the button below.',
+        fr='Vous serez redirigé(e) vers Prolific sous peu. Sinon, cliquez sur le bouton ci-dessous.',
+        de='Sie werden in Kürze zu Prolific weitergeleitet. Falls nicht, klicken Sie auf die Schaltfläche unten.',
+        ja='まもなくProlificにリダイレクトされます。されない場合は、下のボタンをクリックしてください。',
+        zh='您将很快被重定向到Prolific。如果没有，请点击下面的按钮。',
+    ),
+    end_btn_prolific=dict(en='Return to Prolific', fr='Retourner à Prolific', de='Zurück zu Prolific', ja='Prolificに戻る', zh='返回Prolific'),
+    end_code_label=dict(en='Completion code', fr='Code de complétion', de='Abschlusscode', ja='完了コード', zh='完成码'),
     # --- Anticipation page (pre-outcome) ---
     antic_title=dict(
         en='Before the result is revealed…',
@@ -1203,7 +1212,12 @@ class Survey(Page):
 class FinalThankYou(Page):
     @staticmethod
     def vars_for_template(player):
-        return _ctx(player, 100)
+        completion_code = player.session.config.get('completion_code', 'CFZCG8H4')
+        prolific_url = f'https://app.prolific.com/submissions/complete?cc={completion_code}'
+        ctx = _ctx(player, 100)
+        ctx['completion_code'] = completion_code
+        ctx['prolific_url'] = prolific_url
+        return ctx
 
 
 page_sequence = [

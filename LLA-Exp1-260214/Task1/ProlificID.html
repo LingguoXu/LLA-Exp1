@@ -1,0 +1,107 @@
+{% extends "global/Base.html" %}
+{% load otree %}
+
+{% block extra_css %}
+
+.id-box {
+    background: var(--primary-l);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-top: 20px;
+}
+.id-label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+}
+.id-input {
+    display: block; width: 100%; box-sizing: border-box;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 1rem;
+    color: var(--text); background: white;
+    letter-spacing: 0.06em;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.id-input:focus {
+    outline: none; border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+}
+.id-input::placeholder { color: var(--muted); letter-spacing: 0.02em; opacity: 0.6; }
+.id-hint {
+    font-size: 0.8rem; color: var(--muted);
+    margin-top: 8px; line-height: 1.5;
+}
+.id-error {
+    display: none; background: #fef2f2;
+    border-left: 3px solid var(--error); padding: 10px 14px;
+    border-radius: 6px; font-size: 0.88rem; color: #991b1b; margin-top: 14px;
+}
+.id-error.show { display: block; }
+
+{% endblock %}
+
+
+{% block content %}
+<div class="card">
+
+    <h2 style="text-align:center;">{{ ui.prolific_title }}</h2>
+
+    <p style="color:#475569; margin-bottom:18px;">
+        {{ ui.prolific_intro }}
+    </p>
+
+    <div class="id-box">
+        <label class="id-label" for="id_prolific_id">{{ ui.prolific_label }}</label>
+        <input type="text" name="prolific_id" id="id_prolific_id" class="id-input"
+               placeholder="e.g. 5f3a8b2c1d4e6f7a8b9c0d1e"
+               autocomplete="off" spellcheck="false">
+        <p class="id-hint">{{ ui.prolific_hint }}</p>
+    </div>
+
+    <div class="id-error" id="id-error">
+        {{ ui.prolific_error }}
+    </div>
+
+    <div class="foot" style="margin-top:20px;">
+        <button type="button" class="btn btn-primary" onclick="submitProlific()">
+            {{ ui.btn_continue }} <span style="margin-left:4px;">&rarr;</span>
+        </button>
+    </div>
+
+</div>
+{% endblock %}
+
+
+{% block hidden_fields %}
+<input type="hidden" name="prolific_id" id="field_prolific_id">
+{% endblock %}
+
+
+{% block scripts %}
+(function () {
+    var inp   = document.getElementById('id_prolific_id');
+    var field = document.getElementById('field_prolific_id');
+    var err   = document.getElementById('id-error');
+
+    inp.addEventListener('input', function () {
+        err.classList.remove('show');
+    });
+
+    window.submitProlific = function () {
+        var val = inp.value.trim();
+        if (!val) {
+            err.classList.add('show');
+            inp.focus();
+            return;
+        }
+        field.value = val;
+        document.getElementById('form').submit();
+    };
+})();
+{% endblock %}

@@ -30,6 +30,31 @@ UI = dict(
         zh='请填写所有空格后再继续。',
     ),
 
+    # ── Prolific ID ──
+    prolific_title=dict(en='Your Prolific ID', fr='Votre identifiant Prolific', de='Ihre Prolific-ID', ja='Prolific ID', zh='您的Prolific ID'),
+    prolific_intro=dict(
+        en='Please enter your unique Prolific ID below. This is used to match your responses and process your payment.',
+        fr='Veuillez entrer votre identifiant Prolific ci-dessous. Il est utilisé pour associer vos réponses et traiter votre paiement.',
+        de='Bitte geben Sie unten Ihre Prolific-ID ein. Diese wird benötigt, um Ihre Antworten zuzuordnen und Ihre Vergütung zu verarbeiten.',
+        ja='以下にProlific IDを入力してください。回答の紐付けと報酬の処理に使用されます。',
+        zh='请在下方输入您的Prolific ID。这将用于匹配您的回答并处理您的报酬。',
+    ),
+    prolific_label=dict(en='Prolific ID', fr='Identifiant Prolific', de='Prolific-ID', ja='Prolific ID', zh='Prolific ID'),
+    prolific_hint=dict(
+        en='You can find this on your Prolific dashboard.',
+        fr='Vous pouvez le trouver sur votre tableau de bord Prolific.',
+        de='Sie finden diese auf Ihrem Prolific-Dashboard.',
+        ja='Prolificのダッシュボードで確認できます。',
+        zh='您可以在Prolific控制面板中找到。',
+    ),
+    prolific_error=dict(
+        en='Please enter your Prolific ID to continue.',
+        fr='Veuillez entrer votre identifiant Prolific pour continuer.',
+        de='Bitte geben Sie Ihre Prolific-ID ein, um fortzufahren.',
+        ja='続行するにはProlific IDを入力してください。',
+        zh='请输入您的Prolific ID以继续。',
+    ),
+
     # ── Consent ──
     consent_title=dict(en='Consent Form', fr='Formulaire de consentement', de='Einwilligungserklärung', ja='同意書', zh='知情同意书'),
     consent_btn_yes=dict(en='I Consent', fr='Je consens', de='Ich stimme zu', ja='同意する', zh='我同意'),
@@ -667,6 +692,7 @@ class Player(BasePlayer):
     device = models.StringField()
 
     # Track if user failed screening
+    prolific_id = models.StringField(blank=True, initial='')
     screened_out = models.BooleanField(initial=False)
 
     # Task 1 JSON: {"story_1":{"1":"when","2":"will",...}, ...}
@@ -702,6 +728,25 @@ class NoConsent(Page):
     @staticmethod
     def vars_for_template(player):
         return _ctx(player, 0)
+
+
+class ProlificID(Page):
+    form_model = 'player'
+    form_fields = ['prolific_id']
+
+    @staticmethod
+    def is_displayed(player):
+        return player.gave_consent
+
+    @staticmethod
+    def vars_for_template(player):
+        return _ctx(player, 0)
+
+    @staticmethod
+    def error_message(player, values):
+        if not values['prolific_id'] or not values['prolific_id'].strip():
+            lang = player.language
+            return ui_dict(lang).get('prolific_error', 'Please enter your Prolific ID.')
 
 
 class Screening(Page):
@@ -871,6 +916,7 @@ class Task1Story4(Page):
 page_sequence = [
     Consent,
     NoConsent,
+    ProlificID,
     Screening,
     ScreenOut,
     Task1Intro,

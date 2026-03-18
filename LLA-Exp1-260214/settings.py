@@ -16,6 +16,7 @@ SESSION_CONFIGS = [
         # app_sequence=['Task1'],
         num_demo_participants=3,
         language='en',
+        completion_code='CFZCG8H4',
     ),
     dict(
         name='study_fr',
@@ -46,7 +47,7 @@ SESSION_CONFIG_DEFAULTS = dict(
     doc="",
 )
 
-PARTICIPANT_FIELDS = ['language']
+PARTICIPANT_FIELDS = ['language', 'prolific_id']
 SESSION_FIELDS = []
 
 ROOMS = [
