@@ -49,6 +49,29 @@ SESSION_CONFIG_DEFAULTS = dict(
 PARTICIPANT_FIELDS = ['language']
 SESSION_FIELDS = []
 
+ROOMS = [
+    dict(
+        name='en',
+        display_name='English Session',
+    ),
+    dict(
+        name='fr',
+        display_name='French Session',
+    ),
+    dict(
+        name='de',
+        display_name='German Session',
+    ),
+    dict(
+        name='ja',
+        display_name='Japanese Session',
+    ),
+    dict(
+        name='zh',
+        display_name='Chinese Session',
+    ),
+]
+
 LANGUAGE_CODE = 'en'
 REAL_WORLD_CURRENCY_CODE = 'EUR'
 USE_POINTS = False
