@@ -119,7 +119,7 @@
     </div>
     <div class="instruction-step">
         <span class="step-icon">2</span>
-        <span class="step-text">{{ ui.task1_how_step2 }}</span>
+        <span class="step-text">{{ ui.task1_how_step2|safe }}</span>
     </div>
     <div class="instruction-step">
         <span class="step-icon">3</span>
@@ -133,9 +133,8 @@
 
     <div class="guidelines-box">
         <p><strong>{{ ui.task1_guidelines_title }}</strong></p>
-        <p>{{ ui.task1_guideline_1 }}</p>
+        <p>{{ ui.task1_guideline_1|safe }}</p>
         <p>{{ ui.task1_guideline_2 }}</p>
-        <p>{{ ui.task1_guideline_3 }}</p>
     </div>
 
     <div style="text-align:center;">

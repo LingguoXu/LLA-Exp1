@@ -4,6 +4,6 @@
 {% block content %}
 <div class="card" style="text-align: center; padding: 50px 20px;">
     <div style="font-size: 3rem; margin-bottom: 20px;">🚫</div>
-    <h3 style="margin-bottom: 20px;">{{ ui.screenout_msg }}</h3>
+    <h3 style="margin-bottom: 20px;">{{ ui.screenout_msg|safe }}</h3>
 </div>
 {% endblock %}

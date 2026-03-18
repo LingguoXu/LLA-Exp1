@@ -207,6 +207,14 @@
     </div>
 
     <script>
+    /* ── Prevent browser back button ──────── */
+    (function(){
+        history.pushState(null, '', location.href);
+        window.addEventListener('popstate', function(){
+            history.pushState(null, '', location.href);
+        });
+    })();
+
     /* ── Submit helper ─────────────────────── */
     function submitPage(){ document.getElementById('oTreeSubmit').click(); }
 

@@ -171,6 +171,10 @@
     function activateGap(hintEl) {
         var wrap  = hintEl.parentNode;
         var input = wrap.querySelector("input.blank");
+        /* Reset red highlight on hint before hiding */
+        hintEl.style.background = "";
+        hintEl.style.borderBottomColor = "";
+        hintEl.style.color = "";
         hintEl.style.display = "none";
         input.classList.add("active");
         input.focus();
@@ -230,15 +234,23 @@
 
             if(!v){
                 ok = false;
-                inp.classList.add("error");
-                /* Also reveal the input if hint is still showing */
                 var wrap = inp.parentNode;
                 var hint = wrap.querySelector(".gap-hint");
-                if (hint) hint.style.display = "none";
-                inp.classList.add("active");
+                if (inp.classList.contains("active")) {
+                    /* Input is already open — highlight it red */
+                    inp.classList.add("error");
+                } else if (hint && hint.style.display !== "none") {
+                    /* Hint is still showing — highlight hint red, keep it visible */
+                    hint.style.background = "#fef2f2";
+                    hint.style.borderBottomColor = "#ef4444";
+                    hint.style.color = "#ef4444";
+                }
                 if(!firstBad) firstBad = inp;
             } else {
                 inp.classList.remove("error");
+                var wrap2 = inp.parentNode;
+                var hint2 = wrap2.querySelector(".gap-hint");
+                if (hint2) { hint2.style.background = ""; hint2.style.borderBottomColor = ""; hint2.style.color = ""; }
             }
         });
 

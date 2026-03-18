@@ -90,11 +90,11 @@
     </div>
     <div class="instruction-step">
         <span class="step-icon">2</span>
-        <span class="step-text">{{ ui.t2_how_step2 }}</span>
+        <span class="step-text">{{ ui.t2_how_step2|safe }}</span>
     </div>
     <div class="instruction-step">
         <span class="step-icon">3</span>
-        <span class="step-text">{{ ui.t2_how_step3 }}</span>
+        <span class="step-text">{{ ui.t2_how_step3|safe }}</span>
     </div>
 
     <!-- Practice -->
@@ -106,9 +106,8 @@
     <!-- Guidelines -->
     <div class="guidelines-box">
         <p><strong>{{ ui.t2_guidelines_title }}</strong></p>
-        <p>{{ ui.t2_guideline_1 }}</p>
+        <p>{{ ui.t2_guideline_1|safe }}</p>
         <p>{{ ui.t2_guideline_2 }}</p>
-        <p>{{ ui.t2_guideline_3 }}</p>
     </div>
 
     <div style="text-align:center;">

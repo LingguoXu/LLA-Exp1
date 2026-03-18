@@ -10,17 +10,54 @@
         <!-- Gender -->
         <div style="margin-bottom: 28px;">
             <label class="form-label fw-bold" style="display:block; margin-bottom:8px;">{{ ui.q_gender }}</label>
-            <select name="gender" form="form" class="blank" required
+            <select name="gender" form="form" class="blank" required id="genderSelect"
                     style="width: 100%; max-width: 350px; display: block; margin: 0 auto;">
                 <option value="" disabled selected>...</option>
                 <option value="Male">{{ ui.gen_1 }}</option>
                 <option value="Female">{{ ui.gen_2 }}</option>
                 <option value="Non-binary">{{ ui.gen_3 }}</option>
+                <option value="__self_describe__">Self-describe</option>
                 <option value="Prefer not to say">{{ ui.gen_4 }}</option>
             </select>
+            <input type="text" id="genderOtherInput" placeholder="Please specify"
+                   style="display:none; width:100%; max-width:350px; margin:8px auto 0; padding:8px 12px;
+                          border:2px solid #cbd5e1; border-radius:6px; font-size:1rem; outline:none;">
         </div>
 
-        <!-- Years in country -->
+        <!-- Home country -->
+        <div style="margin-bottom: 28px;">
+            <label class="form-label fw-bold" style="display:block; margin-bottom:8px;">{{ ui.q_home_country }}</label>
+            <select name="home_country" form="form" class="blank" required id="countrySelect"
+                    style="width: 100%; max-width: 350px; display: block; margin: 0 auto;">
+                <option value="" disabled selected>...</option>
+                <option value="United Kingdom">{{ ui.country_uk }}</option>
+                <option value="United States">{{ ui.country_us }}</option>
+                <option value="France">{{ ui.country_fr }}</option>
+                <option value="Germany">{{ ui.country_de }}</option>
+                <option value="Japan">{{ ui.country_jp }}</option>
+                <option value="China">{{ ui.country_cn }}</option>
+                <option value="India">{{ ui.country_in }}</option>
+                <option value="Australia">{{ ui.country_au }}</option>
+                <option value="Canada">{{ ui.country_ca }}</option>
+                <option value="Ireland">Ireland</option>
+                <option value="New Zealand">New Zealand</option>
+                <option value="South Africa">South Africa</option>
+                <option value="Nigeria">Nigeria</option>
+                <option value="Pakistan">Pakistan</option>
+                <option value="Poland">Poland</option>
+                <option value="Italy">Italy</option>
+                <option value="Spain">Spain</option>
+                <option value="Brazil">Brazil</option>
+                <option value="Mexico">Mexico</option>
+                <option value="Philippines">Philippines</option>
+                <option value="__other__">{{ ui.country_other }}</option>
+            </select>
+            <input type="text" id="countryOtherInput" placeholder="Please specify your country"
+                   style="display:none; width:100%; max-width:350px; margin:8px auto 0; padding:8px 12px;
+                          border:2px solid #cbd5e1; border-radius:6px; font-size:1rem; outline:none;">
+        </div>
+
+        <!-- Years in UK -->
         <div style="margin-bottom: 28px;">
             <label class="form-label fw-bold" style="display:block; margin-bottom:8px;">{{ ui.q_years_in_country }}</label>
             <input type="number" name="years_in_country" form="form" min="0" required
@@ -120,4 +157,37 @@
         </button>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+(function(){
+    /* ── "Other" handler for any select + text input pair ── */
+    function setupOther(selectId, inputId, sentinel) {
+        var sel = document.getElementById(selectId);
+        var inp = document.getElementById(inputId);
+        if (!sel || !inp) return;
+        sel.addEventListener('change', function() {
+            if (sel.value === sentinel) {
+                inp.style.display = 'block';
+                inp.required = true;
+                inp.focus();
+            } else {
+                inp.style.display = 'none';
+                inp.required = false;
+                inp.value = '';
+            }
+        });
+        document.getElementById('form').addEventListener('submit', function() {
+            if (sel.value === sentinel && inp.value.trim()) {
+                var opt = document.createElement('option');
+                opt.value = inp.value.trim();
+                opt.selected = true;
+                sel.appendChild(opt);
+            }
+        });
+    }
+
+    setupOther('countrySelect', 'countryOtherInput', '__other__');
+    setupOther('genderSelect', 'genderOtherInput', '__self_describe__');
+})();
 {% endblock %}

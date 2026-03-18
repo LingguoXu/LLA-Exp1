@@ -125,6 +125,10 @@ class Player(BasePlayer):
     la2_bonus = models.FloatField(blank=True)
     la2_lambda = models.FloatField(blank=True)
 
+    # --- ANTICIPATION (pre-outcome) ---
+    la2_anticipation_worry = models.IntegerField(min=1, max=9, blank=True)
+    la2_anticipation_prob = models.IntegerField(min=0, max=100, blank=True)
+
     # --- BONUS CONTACT ---
     bonus_contact_email = models.StringField(blank=True)
 
@@ -148,6 +152,7 @@ class Player(BasePlayer):
 
     # --- SURVEY FIELDS ---
     gender = models.StringField()
+    home_country = models.StringField()
     years_in_country = models.IntegerField(min=0)
     employment_industry = models.StringField()
     income_level = models.StringField()
@@ -172,7 +177,7 @@ UI = dict(
             'In each round you pick either a <strong>lottery</strong> (a coin flip that can increase or decrease your balance) or a <strong>safe option</strong> (keep your balance unchanged). '
             'At the end, <strong>one round is selected at random and played out for real</strong>.'
             '<br><br>'
-            '1 in 10 participants will be randomly selected to receive their bonus <strong>through the CloudResearch platform</strong>. '
+            '1 in 10 participants will be randomly selected to receive their bonus <strong>through Prolific</strong>. '
             'Please decide as if every choice is real.'
         ),
         fr=(
@@ -182,7 +187,7 @@ UI = dict(
             'À chaque tour, vous choisissez soit une <strong>loterie</strong> (un tirage au sort qui peut augmenter ou diminuer votre solde), soit une <strong>option sûre</strong> (conserver votre solde inchangé). '
             'À la fin, <strong>un tour est sélectionné au hasard et joué pour de vrai</strong>.'
             '<br><br>'
-            '1 participant sur 10 sera sélectionné au hasard pour recevoir son bonus <strong>via la plateforme CloudResearch</strong>. '
+            '1 participant sur 10 sera sélectionné au hasard pour recevoir son bonus <strong>via Prolific</strong>. '
             'Veuillez décider comme si chaque choix était réel.'
         ),
         de=(
@@ -192,7 +197,7 @@ UI = dict(
             'In jeder Runde wählen Sie entweder eine <strong>Lotterie</strong> (ein Münzwurf, der Ihr Guthaben erhöhen oder verringern kann) oder eine <strong>sichere Option</strong> (Guthaben unverändert behalten). '
             'Am Ende wird <strong>eine Runde zufällig ausgewählt und tatsächlich ausgespielt</strong>.'
             '<br><br>'
-            '1 von 10 Teilnehmenden wird zufällig ausgewählt, um den Bonus <strong>über die CloudResearch-Plattform</strong> zu erhalten. '
+            '1 von 10 Teilnehmenden wird zufällig ausgewählt, um den Bonus <strong>über Prolific</strong> zu erhalten. '
             'Bitte entscheiden Sie so, als ob jede Wahl real wäre.'
         ),
         ja=(
@@ -202,7 +207,7 @@ UI = dict(
             '各ラウンドで<strong>くじ</strong>（コイン投げで残高が増減する）か<strong>安全な選択肢</strong>（残高をそのまま維持する）を選びます。'
             '最後に、<strong>1つのラウンドがランダムに選ばれ、実際に実行されます</strong>。'
             '<br><br>'
-            '参加者の10人に1人がランダムに選ばれ、<strong>CloudResearchプラットフォームを通じて</strong>ボーナスが支払われます。'
+            '参加者の10人に1人がランダムに選ばれ、<strong>Prolificを通じて</strong>ボーナスが支払われます。'
             'すべての選択が実際のものであるかのようにお答えください。'
         ),
         zh=(
@@ -212,7 +217,7 @@ UI = dict(
             '每轮您可以选择<strong>抽奖</strong>（掷硬币决定余额增减）或<strong>稳妥选项</strong>（余额不变）。'
             '最后，<strong>系统将随机抽取一轮进行真实结算</strong>。'
             '<br><br>'
-            '每10名参与者中将随机选出1名，<strong>通过CloudResearch平台</strong>发放奖金。'
+            '每10名参与者中将随机选出1名，<strong>通过Prolific</strong>发放奖金。'
             '请将每个选择都当作真实决定来对待。'
         ),
     ),
@@ -371,6 +376,24 @@ UI = dict(
     gen_3=dict(en='Non-binary / Third gender', fr='Non-binaire / Troisième genre', de='Nicht-binär / Drittes Geschlecht', ja='ノンバイナリー / 第三の性', zh='非二元性别 / 其他'),
     gen_4=dict(en='Prefer not to say', fr='Je préfère ne pas répondre', de='Keine Angabe', ja='回答したくない', zh='不愿透露'),
 
+    q_home_country=dict(
+        en='What is your home country?',
+        fr='Quel est votre pays d\'origine ?',
+        de='Was ist Ihr Heimatland?',
+        ja='あなたの出身国はどこですか？',
+        zh='您的祖国是哪里？',
+    ),
+    country_uk=dict(en='United Kingdom', fr='Royaume-Uni', de='Vereinigtes Königreich', ja='イギリス', zh='英国'),
+    country_us=dict(en='United States', fr='États-Unis', de='Vereinigte Staaten', ja='アメリカ', zh='美国'),
+    country_fr=dict(en='France', fr='France', de='Frankreich', ja='フランス', zh='法国'),
+    country_de=dict(en='Germany', fr='Allemagne', de='Deutschland', ja='ドイツ', zh='德国'),
+    country_jp=dict(en='Japan', fr='Japon', de='Japan', ja='日本', zh='日本'),
+    country_cn=dict(en='China', fr='Chine', de='China', ja='中国', zh='中国'),
+    country_in=dict(en='India', fr='Inde', de='Indien', ja='インド', zh='印度'),
+    country_au=dict(en='Australia', fr='Australie', de='Australien', ja='オーストラリア', zh='澳大利亚'),
+    country_ca=dict(en='Canada', fr='Canada', de='Kanada', ja='カナダ', zh='加拿大'),
+    country_other=dict(en='Other', fr='Autre', de='Andere', ja='その他', zh='其他'),
+
     q_years_in_country=dict(
         en='How many years have you lived in the United Kingdom? Enter 0 if you do not currently reside there.',
         fr='Depuis combien d\'années vivez-vous en France ? Entrez 0 si vous n\'y résidez pas actuellement.',
@@ -380,11 +403,11 @@ UI = dict(
     ),
 
     q_feedback=dict(
-        en='Do you have any thoughts or comments about this study?',
-        fr='Avez-vous des remarques ou commentaires sur cette étude ?',
-        de='Haben Sie Anmerkungen oder Kommentare zu dieser Studie?',
-        ja='この調査についてご意見やコメントはありますか？',
-        zh='您对本研究有什么想法或意见吗？',
+        en='Please feel free to leave any thoughts or comments about this study.',
+        fr='N\'hésitez pas à laisser vos remarques ou commentaires sur cette étude.',
+        de='Bitte hinterlassen Sie gerne Ihre Anmerkungen oder Kommentare zu dieser Studie.',
+        ja='この調査についてのご意見やコメントがあれば、ぜひお聞かせください。',
+        zh='如果您对本研究有任何想法或意见，请随时留言。',
     ),
 
     q_industry=dict(
@@ -412,12 +435,12 @@ UI = dict(
         ja='おおよその年収はいくらですか？',
         zh='您的大致年收入是多少？'
     ),
-    inc_1=dict(en='Less than $30,000', fr='Moins de 30 000 €', de='Weniger als 30.000 €', ja='450万円未満', zh='10万元以下'),
-    inc_2=dict(en='$30,000 to $59,999', fr='30 000 € à 59 999 €', de='30.000 € bis 59.999 €', ja='450万円 ～ 899万円', zh='10万 ～ 20万元'),
-    inc_3=dict(en='$60,000 to $89,999', fr='60 000 € à 89 999 €', de='60.000 € bis 89.999 €', ja='900万円 ～ 1,349万円', zh='20万 ～ 30万元'),
-    inc_4=dict(en='$90,000 to $119,999', fr='90 000 € à 119 999 €', de='90.000 € bis 119.999 €',
+    inc_1=dict(en='Less than £25,000', fr='Moins de 30 000 €', de='Weniger als 30.000 €', ja='450万円未満', zh='10万元以下'),
+    inc_2=dict(en='£25,000 to £49,999', fr='30 000 € à 59 999 €', de='30.000 € bis 59.999 €', ja='450万円 ～ 899万円', zh='10万 ～ 20万元'),
+    inc_3=dict(en='£50,000 to £74,999', fr='60 000 € à 89 999 €', de='60.000 € bis 89.999 €', ja='900万円 ～ 1,349万円', zh='20万 ～ 30万元'),
+    inc_4=dict(en='£75,000 to £99,999', fr='90 000 € à 119 999 €', de='90.000 € bis 119.999 €',
                ja='1,350万円 ～ 1,799万円', zh='30万 ～ 50万元'),
-    inc_5=dict(en='$120,000 or more', fr='120 000 € ou plus', de='120.000 € oder mehr', ja='1,800万円以上', zh='50万元以上'),
+    inc_5=dict(en='£100,000 or more', fr='120 000 € ou plus', de='120.000 € oder mehr', ja='1,800万円以上', zh='50万元以上'),
     inc_6=dict(en='Prefer not to say', fr='Je préfère ne pas répondre', de='Keine Angabe', ja='回答したくない', zh='不愿透露'),
 
     q_risk=dict(
@@ -447,11 +470,11 @@ UI = dict(
         zh='报酬',
     ),
     payment_box_note=dict(
-        en='You start with {symbol}{endowment}. One round will be played out for real. 1 in 10 participants will receive their bonus through the CloudResearch platform.',
-        fr='Vous commencez avec {symbol}{endowment}. Un tour sera joué pour de vrai. 1 participant sur 10 recevra son bonus via la plateforme CloudResearch.',
-        de='Sie starten mit {symbol}{endowment}. Eine Runde wird tatsächlich ausgespielt. 1 von 10 Teilnehmenden erhält den Bonus über die CloudResearch-Plattform.',
-        ja='{symbol}{endowment}からスタートします。1つのラウンドが実際に実行されます。10人に1人がCloudResearchプラットフォームを通じてボーナスを受け取ります。',
-        zh='您的起始金额为{symbol}{endowment}。系统将随机抽取一轮进行真实结算。每10名参与者中有1名可通过CloudResearch平台获得奖金。',
+        en='You start with {symbol}{endowment}. One round will be played out for real. 1 in 10 participants will receive their bonus through Prolific.',
+        fr='Vous commencez avec {symbol}{endowment}. Un tour sera joué pour de vrai. 1 participant sur 10 recevra son bonus via Prolific.',
+        de='Sie starten mit {symbol}{endowment}. Eine Runde wird tatsächlich ausgespielt. 1 von 10 Teilnehmenden erhält den Bonus über Prolific.',
+        ja='{symbol}{endowment}からスタートします。1つのラウンドが実際に実行されます。10人に1人がProlificを通じてボーナスを受け取ります。',
+        zh='您的起始金额为{symbol}{endowment}。系统将随机抽取一轮进行真实结算。每10名参与者中有1名可通过Prolific获得奖金。',
     ),
 
     td_title=dict(
@@ -466,63 +489,58 @@ UI = dict(
             'You will now make a series of hypothetical choices between two payment options. '
             'One option pays a <strong>smaller amount sooner</strong>; '
             'the other pays a <strong>larger amount later</strong>. '
-            'There are no right or wrong answers — we simply want to know your genuine preference. '
-            '<em>These choices are not paid out. Please imagine the situations as realistically as possible.</em>'
+            'There are no right or wrong answers — we simply want to know your genuine preference.'
         ),
         fr=(
             'Vous allez maintenant faire une série de choix hypothétiques entre deux options de paiement. '
             'Une option verse un <strong>montant plus faible plus tôt</strong> ; '
             "l'autre verse un <strong>montant plus élevé plus tard</strong>. "
-            "Il n'y a pas de bonnes ou de mauvaises réponses — nous voulons simplement connaître vos préférences réelles. "
-            '<em>Ces choix ne sont pas rémunérés. Veuillez imaginer les situations aussi réellement que possible.</em>'
+            "Il n'y a pas de bonnes ou de mauvaises réponses — nous voulons simplement connaître vos préférences réelles."
         ),
         de=(
             'Sie treffen nun eine Reihe von hypothetischen Entscheidungen zwischen zwei Zahlungsoptionen. '
             'Eine Option zahlt einen <strong>kleineren Betrag früher</strong>; '
             'die andere zahlt einen <strong>größeren Betrag später</strong>. '
-            'Es gibt keine richtigen oder falschen Antworten — wir möchten nur Ihre ehrliche Präferenz kennen. '
-            '<em>Diese Entscheidungen werden nicht ausgezahlt. Bitte stellen Sie sich die Situationen so realistisch wie möglich vor.</em>'
+            'Es gibt keine richtigen oder falschen Antworten — wir möchten nur Ihre ehrliche Präferenz kennen.'
         ),
         ja=(
             'これから、2つの支払いオプションの間で一連の仮想的な選択を行います。'
             '一方は<strong>少額を早く</strong>受け取るオプション、'
             'もう一方は<strong>多額を後で</strong>受け取るオプションです。'
             '正解・不正解はありません。あなたの正直な好みを教えてください。'
-            '<em>これらの選択は実際には支払われません。できるだけ現実的に状況を想像してお答えください。</em>'
         ),
         zh=(
             '接下来，您将在两个假设的支付方案之间做出一系列选择。'
             '一个方案是<strong>较早获得较少金额</strong>；'
             '另一个方案是<strong>较晚获得较多金额</strong>。'
             '没有对错之分，我们只是想了解您的真实偏好。'
-            '<em>这些选择不涉及实际支付，请尽可能真实地想象这些情境。</em>'
         ),
     ),
     td_alert=dict(
         en=(
             '<strong>How it works:</strong> Each row offers the same sooner amount but a higher later amount. '
             'Once you prefer the sooner option on a row, you will prefer it on all rows above too — '
-            'click once to set your switch point and the table updates automatically.'
+            '<strong>click once to set your switch point</strong> and the table updates automatically.'
         ),
         fr=(
             '<strong>Comment ça marche :</strong> Chaque ligne propose le même montant précoce mais un montant tardif plus élevé. '
             "Une fois que vous préférez l'option précoce sur une ligne, vous la préférerez aussi sur toutes les lignes supérieures — "
-            'cliquez une fois pour définir votre point de bascule, le tableau se met à jour automatiquement.'
+            '<strong>cliquez une fois pour définir votre point de bascule</strong>, le tableau se met à jour automatiquement.'
         ),
         de=(
             '<strong>So funktioniert es:</strong> Jede Zeile bietet denselben früheren Betrag, aber einen höheren späteren Betrag. '
             'Wenn Sie in einer Zeile die frühere Option bevorzugen, tun Sie dies auch in allen darüber liegenden — '
-            'klicken Sie einmal, um Ihren Wechselpunkt festzulegen, die Tabelle aktualisiert sich automatisch.'
+            '<strong>klicken Sie einmal, um Ihren Wechselpunkt festzulegen</strong>, die Tabelle aktualisiert sich automatisch.'
         ),
         ja=(
             '<strong>仕組み：</strong>各行は同じ早期金額ですが、後期金額が高くなっています。'
             'ある行で早期オプションを選ぶなら、それより上の全ての行でも早期を選ぶはずです。'
-            '一度クリックして切り替えポイントを設定すると、テーブルが自動更新されます。'
+            '<strong>一度クリックして切り替えポイントを設定すると</strong>、テーブルが自動更新されます。'
         ),
         zh=(
             '<strong>规则说明：</strong>每行的较早金额相同，但较晚金额逐行增加。'
             '如果您在某行更倾向较早选项，那么该行以上的所有行也应如此。'
-            '点击一次即可设置切换点，表格会自动更新。'
+            '<strong>点击一次即可设置切换点</strong>，表格会自动更新。'
         ),
     ),
     td_tracker_header=dict(
@@ -563,6 +581,40 @@ UI = dict(
         ja='ご参加ありがとうございました！このウィンドウを閉じてください。',
         zh='感谢您的参与！您现在可以关闭此窗口。'
     ),
+    # --- Anticipation page (pre-outcome) ---
+    antic_title=dict(
+        en='Before the result is revealed…',
+        fr='Avant que le résultat ne soit révélé…',
+        de='Bevor das Ergebnis enthüllt wird…',
+        ja='結果が発表される前に…',
+        zh='在结果揭晓之前…',
+    ),
+    antic_worry_q=dict(
+        en='How worried are you <em>right now</em> about <em>losing</em> some of your {symbol}{endowment} bonus?',
+        fr='À quel point êtes-vous inquiet(e) <em>en ce moment</em> de <em>perdre</em> une partie de votre bonus de {symbol}{endowment} ?',
+        de='Wie besorgt sind Sie <em>gerade</em>, <em>einen Teil</em> Ihres {symbol}{endowment}-Bonus zu verlieren?',
+        ja='<em>今</em>、{symbol}{endowment}のボーナスの一部を<em>失う</em>ことについてどのくらい心配していますか？',
+        zh='您<em>现在</em>对可能<em>损失</em>{symbol}{endowment}奖金的一部分有多担心？',
+    ),
+    antic_worry_lo=dict(en='Not at all worried', fr='Pas du tout inquiet(e)', de='Überhaupt nicht besorgt', ja='まったく心配していない', zh='完全不担心'),
+    antic_worry_hi=dict(en='Extremely worried', fr='Extrêmement inquiet(e)', de='Extrem besorgt', ja='非常に心配している', zh='非常担心'),
+    antic_prob_q=dict(
+        en='How likely do you think you are about to <em>lose</em> some of your {symbol}{endowment} bonus?',
+        fr='Quelle est selon vous la probabilité que vous <em>perdiez</em> une partie de votre bonus de {symbol}{endowment} ?',
+        de='Wie wahrscheinlich ist es Ihrer Meinung nach, dass Sie einen Teil Ihres {symbol}{endowment}-Bonus <em>verlieren</em>?',
+        ja='{symbol}{endowment}のボーナスの一部を<em>失う</em>可能性はどのくらいだと思いますか？',
+        zh='您觉得<em>损失</em>{symbol}{endowment}奖金的一部分的可能性有多大？',
+    ),
+    antic_prob_lo=dict(en='Impossible', fr='Impossible', de='Unmöglich', ja='ありえない', zh='不可能'),
+    antic_prob_hi=dict(en='Certain', fr='Certain', de='Sicher', ja='確実', zh='一定会'),
+    antic_required=dict(
+        en='Please answer both questions before continuing.',
+        fr='Veuillez répondre aux deux questions avant de continuer.',
+        de='Bitte beantworten Sie beide Fragen, bevor Sie fortfahren.',
+        ja='続ける前に両方の質問にお答えください。',
+        zh='请先回答两个问题，再继续。',
+    ),
+
     res_title=dict(en='Task Result', fr='Résultat de la tâche', de='Aufgabenergebnis', ja='課題の結果', zh='任务结果'),
     res_selected=dict(
         en='The computer randomly selected <strong>Comparison {step}</strong> for payment.',
@@ -679,11 +731,11 @@ UI = dict(
         zh='全部回答正确！您可以继续了。'
     ),
     comp_wrong_q1=dict(
-        en='<strong>Question 1 is incorrect.</strong> When you choose the Safe Option, nothing changes — you simply keep your starting bonus of {symbol}{endowment}. The correct answer is <strong>{symbol}{endowment}</strong>.',
-        fr='<strong>La question 1 est incorrecte.</strong> Lorsque vous choisissez l\'Option Sûre, rien ne change — vous conservez simplement votre bonus de départ de {symbol}{endowment}. La bonne réponse est <strong>{symbol}{endowment}</strong>.',
-        de='<strong>Frage 1 ist falsch.</strong> Wenn Sie die Sichere Option wählen, ändert sich nichts — Sie behalten einfach Ihren Startbonus von {symbol}{endowment}. Die richtige Antwort ist <strong>{symbol}{endowment}</strong>.',
-        ja='<strong>質問1は不正解です。</strong>安全な選択肢を選ぶと、何も変わりません — 開始ボーナスの{symbol}{endowment}をそのまま受け取ります。正解は<strong>{symbol}{endowment}</strong>です。',
-        zh='<strong>问题1回答错误。</strong>选择稳妥选项时，什么都不会改变——您只需保留初始奖金{symbol}{endowment}。正确答案是<strong>{symbol}{endowment}</strong>。'
+        en='<strong>Question 1 is incorrect.</strong> When you choose the Safe Option, nothing changes — you simply keep your starting bonus. Please try again.',
+        fr='<strong>La question 1 est incorrecte.</strong> Lorsque vous choisissez l\'Option Sûre, rien ne change — vous conservez simplement votre bonus de départ. Veuillez réessayer.',
+        de='<strong>Frage 1 ist falsch.</strong> Wenn Sie die Sichere Option wählen, ändert sich nichts — Sie behalten einfach Ihren Startbonus. Bitte versuchen Sie es erneut.',
+        ja='<strong>質問1は不正解です。</strong>安全な選択肢を選ぶと、何も変わりません — 開始ボーナスをそのまま受け取ります。もう一度お試しください。',
+        zh='<strong>问题1回答错误。</strong>选择稳妥选项时，什么都不会改变——您只需保留初始奖金。请再试一次。'
     ),
     comp_wrong_q2=dict(
         en='<strong>Question 2 is incorrect.</strong> When you choose the Lottery and the coin flip results in a loss of {symbol}{example_loss}, that amount is subtracted from your starting bonus: {symbol}{endowment} &minus; {symbol}{example_loss} = <strong>{symbol}{loss_total}</strong>.',
@@ -757,7 +809,7 @@ class Task3Intro(Page):
             symbol=symbol,
             lang=lang,
             ui=ui,
-            progress=99,
+            progress=62,
         )
 
 
@@ -832,7 +884,7 @@ class ComprehensionCheck(Page):
         return dict(
             lang=lang,
             ui=ui,
-            progress=99,
+            progress=66,
             symbol=symbol,
             endowment=endowment_s,
             gain=gain_s,
@@ -912,7 +964,7 @@ class LossAversionBisection(Page):
         return dict(
             lang=lang,
             ui=ui,
-            progress=99,
+            progress=72,
             gain=gain,
             x_min=x_min,
             x_max=x_max,
@@ -972,6 +1024,29 @@ class LossAversionBisection(Page):
             player.la2_lambda = None
 
 
+class LossAversionAnticipation(Page):
+    form_model = 'player'
+    form_fields = ['la2_anticipation_worry', 'la2_anticipation_prob']
+
+    @staticmethod
+    def vars_for_template(player):
+        lang = player.language
+        cur = C.CURRENCY.get(lang, C.CURRENCY['en'])
+        symbol = cur['symbol']
+        dec = cur['decimals']
+        endowment = C.LA_ENDOWMENT_BASE * cur['rate']
+        endowment_s = f'{endowment:.0f}' if dec == 0 else f'{endowment:.{dec}f}'
+
+        ctx = _ctx(player, 78)
+        fmt = dict(symbol=symbol, endowment=endowment_s)
+        ctx['ui']['antic_worry_q'] = ctx['ui']['antic_worry_q'].format(**fmt)
+        ctx['ui']['antic_prob_q'] = ctx['ui']['antic_prob_q'].format(**fmt)
+        return dict(
+            likert_range=list(range(1, 10)),
+            **ctx,
+        )
+
+
 class LossAversionResult(Page):
     form_model = 'player'
     form_fields = ['bonus_contact_email']
@@ -1014,7 +1089,7 @@ class LossAversionResult(Page):
         return dict(
             lang=lang,
             ui=ui,
-            progress=99,
+            progress=82,
             selected_choice=selected_choice,
             coin_flip=coin_flip,
             bonus=bonus,
@@ -1066,7 +1141,7 @@ class TemporalDiscounting(Page):
             horizons=horizons_localised,
             n_horizons=len(C.TD_HORIZONS),
             symbol=symbol,
-            **_ctx(player, 99),
+            **_ctx(player, 88),
         )
 
     @staticmethod
@@ -1115,13 +1190,13 @@ class TemporalDiscounting(Page):
 
 class Survey(Page):
     form_model = 'player'
-    form_fields = ['gender', 'years_in_country', 'employment_industry', 'income_level', 'risk_general', 'patience_general', 'study_feedback']
+    form_fields = ['gender', 'home_country', 'years_in_country', 'employment_industry', 'income_level', 'risk_general', 'patience_general', 'study_feedback']
 
     @staticmethod
     def vars_for_template(player):
         return dict(
             likert_range=C.LIKERT_RANGE,
-            **_ctx(player, 100)
+            **_ctx(player, 95)
         )
 
 
@@ -1135,6 +1210,7 @@ page_sequence = [
     Task3Intro,
     ComprehensionCheck,
     LossAversionBisection,
+    LossAversionAnticipation,
     LossAversionResult,
     TemporalDiscounting,
     Survey,

@@ -216,6 +216,11 @@
         if (e.target.classList.contains('blank')) {
             e.target.classList.toggle('filled', e.target.value.trim().length > 0);
             autoSize(e.target);
+            /* Clear red highlight when user types */
+            if (e.target.value.trim()) {
+                e.target.style.borderBottomColor = '';
+                e.target.style.background = '';
+            }
         }
     });
 
@@ -252,16 +257,34 @@
             if (!v) { ok = false; if (!firstBad) firstBad = inp; }
         });
 
-        // DEBUG: set ok = true to skip validation
-        ok = true;
-
         if (!ok) {
             valMsg.classList.add('show');
+            /* Highlight all unanswered gaps */
+            inputs.forEach(function(inp){
+                var wrap = inp.parentNode;
+                var hint = wrap.querySelector('.gap-hint');
+                if (!inp.value.trim()) {
+                    if (hint) {
+                        hint.style.background = '#fef2f2';
+                        hint.style.borderBottomColor = '#ef4444';
+                        hint.style.color = '#ef4444';
+                    }
+                    if (inp.classList.contains('active')) {
+                        inp.style.borderBottomColor = '#ef4444';
+                        inp.style.background = '#fef2f2';
+                    }
+                } else {
+                    if (hint) { hint.style.background = ''; hint.style.borderBottomColor = ''; hint.style.color = ''; }
+                    inp.style.borderBottomColor = ''; inp.style.background = '';
+                }
+            });
             if (firstBad) {
                 var wrap = firstBad.parentNode;
                 var hint = wrap.querySelector('.gap-hint');
                 if (hint) hint.style.display = 'none';
                 firstBad.classList.add('active');
+                firstBad.style.borderBottomColor = '#ef4444';
+                firstBad.style.background = '#fef2f2';
                 firstBad.focus();
                 firstBad.scrollIntoView({ behavior:'smooth', block:'center' });
             }

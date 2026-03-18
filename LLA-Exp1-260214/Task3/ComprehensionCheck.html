@@ -2,13 +2,31 @@
 {% load otree static %}
 
 {% block extra_css %}
-<style>
-    .outcome-tag {
-        display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-        letter-spacing: 0.05em; padding: 1px 6px; border-radius: 999px; margin-right: 4px; vertical-align: middle;
+
+    /* ── Side-by-side lottery outcomes (matching bisection page) ── */
+    .lottery-outcomes {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;
     }
-    .tag-good { background: #d1fae5; color: #065f46; }
-    .tag-bad  { background: #fee2e2; color: #991b1b; }
+    .lottery-half {
+        border-radius: 8px; padding: 12px 10px; text-align: center;
+    }
+    .lottery-half-win  { background: #dcfce7; }
+    .lottery-half-lose { background: #fee2e2; }
+    .lottery-half .lottery-pct {
+        font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 0.04em; margin-bottom: 4px;
+    }
+    .lottery-half-win  .lottery-pct { color: #065f46; }
+    .lottery-half-lose .lottery-pct { color: #991b1b; }
+    .lottery-half .lottery-amt { font-size: 0.95rem; font-weight: 700; color: #1e293b; }
+    .lottery-calc-row {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px;
+    }
+    .lottery-calc {
+        font-size: 0.78rem; text-align: center; line-height: 1.4;
+    }
+    .lottery-calc-win  { color: #065f46; }
+    .lottery-calc-lose { color: #991b1b; }
 
     .comp-question {
         background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
@@ -52,7 +70,7 @@
 
     /* Hide oTree's default Next button — we control visibility */
     .otree-btn-next { visibility: hidden; position: absolute; pointer-events: none; }
-</style>
+
 {% endblock %}
 
 
@@ -97,15 +115,23 @@
         <div style="border:2px solid #e2e8f0; border-radius:10px; padding:20px; background:#fff;">
             <span class="bisect-card-label" style="background:#e0e7ff; color:#3730a3; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; display:inline-block; padding:2px 8px; border-radius:999px; margin-bottom:8px;">B</span>
             <div style="font-weight:600; font-size:1rem; margin-bottom:10px; color:#1e293b;">{{ ui.la2_lottery_label }}</div>
-            <div style="font-size:0.92rem; color:#475569; line-height:1.7;">
-                <span class="outcome-tag tag-good">50%</span> {{ win_line|safe }}<br>
-                <span style="font-size:0.82rem; color:#065f46; margin-left:42px; display:inline-block;">
-                    ({{ symbol }}{{ endowment }} + {{ symbol }}{{ gain }} = <strong style="color:#1e293b;">{{ symbol }}{{ win_total }}</strong>)
-                </span><br>
-                <span class="outcome-tag tag-bad">50%</span> {{ lose_line|safe }}<br>
-                <span style="font-size:0.82rem; color:#991b1b; margin-left:42px; display:inline-block;">
-                    ({{ symbol }}{{ endowment }} &minus; {{ symbol }}{{ example_loss }} = <strong style="color:#1e293b;">{{ symbol }}{{ loss_total }}</strong>)
-                </span>
+            <div class="lottery-outcomes">
+                <div class="lottery-half lottery-half-win">
+                    <div class="lottery-pct">50%</div>
+                    <div class="lottery-amt">{{ win_line|safe }}</div>
+                </div>
+                <div class="lottery-half lottery-half-lose">
+                    <div class="lottery-pct">50%</div>
+                    <div class="lottery-amt">{{ lose_line|safe }}</div>
+                </div>
+            </div>
+            <div class="lottery-calc-row">
+                <div class="lottery-calc lottery-calc-win">
+                    ({{ symbol }}{{ endowment }} + {{ symbol }}{{ gain }} = <strong>{{ symbol }}{{ win_total }}</strong>)
+                </div>
+                <div class="lottery-calc lottery-calc-lose">
+                    ({{ symbol }}{{ endowment }} &minus; {{ symbol }}{{ example_loss }} = <strong>{{ symbol }}{{ loss_total }}</strong>)
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,109 @@
+{% extends "global/Base.html" %}
+{% load otree %}
+
+{% block extra_css %}
+
+.consent-body { font-size: 0.95rem; color: #334155; line-height: 1.8; }
+.consent-body h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 22px 0 8px; }
+.consent-body p { margin-bottom: 14px; }
+
+.consent-buttons {
+    display: flex; gap: 16px; justify-content: center;
+    margin-top: 30px; flex-wrap: wrap;
+}
+.consent-btn {
+    padding: 14px 36px; border-radius: 8px; font-size: 1rem; font-weight: 600;
+    cursor: pointer; border: 2px solid; transition: all 0.2s ease;
+}
+.consent-btn-yes {
+    background: #ecfdf5; border-color: #22c55e; color: #065f46;
+}
+.consent-btn-yes:hover { background: #dcfce7; box-shadow: 0 2px 8px rgba(34,197,94,0.2); }
+.consent-btn-no {
+    background: #fff; border-color: #e2e8f0; color: #64748b;
+}
+.consent-btn-no:hover { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2 style="text-align:center; margin-bottom:24px;">{{ ui.consent_title }}</h2>
+
+    <div class="consent-body">
+
+        <p>
+            This experiment is part of an academic research project conducted by
+            <strong>Zexiyue Cheng</strong> (Osaka University) and
+            <strong>Lingguo Xu</strong> (University of Waterloo).
+            It has been reviewed and approved by the Research Ethics Committee of the
+            Institute of Social and Economic Research at Osaka University.
+        </p>
+
+        <h3>Duration</h3>
+        <p>This experiment takes <strong>about 20 minutes</strong> to complete.</p>
+
+        <h3>Compensation</h3>
+        <p>
+            You will receive a base payment of <strong>£3.50</strong> for completing this study,
+            delivered directly through Prolific. You may also earn <strong>an additional bonus payment</strong>
+            based on your decisions during the experiment.
+        </p>
+
+        <h3>Voluntary Participation</h3>
+        <p>
+            Your participation is entirely voluntary. You may withdraw your consent at
+            any time during or after the experiment. If you choose to withdraw, all data
+            you have provided will be permanently deleted.
+        </p>
+
+        <h3>Confidentiality</h3>
+        <p>
+            Please do not post about the content of this experiment on social media
+            (e.g. X/Twitter, Facebook) or online forums. If the research team determines
+            that study details have been shared publicly, you may forfeit your compensation
+            and be excluded from future studies.
+        </p>
+
+        <h3>Data Protection</h3>
+        <p>
+            Your responses will be recorded as experimental data. All responses and
+            behavioural records will be fully separated from any personally identifying
+            information and managed solely by participant ID numbers. Your individual data
+            will never be disclosed to third parties. All recorded data will be analysed
+            statistically using specialised software for research purposes only and will
+            not be used for any other purpose.
+        </p>
+
+        <hr style="border:none; border-top:1px solid #e2e8f0; margin:28px 0;">
+
+        <p style="text-align:center; font-weight:600; color:#1e293b;">
+            If you understand the above and agree to participate, please click
+            <em>"I Consent"</em> below.
+        </p>
+
+    </div>
+
+    <div class="consent-buttons">
+        <button type="button" class="consent-btn consent-btn-yes" onclick="submitConsent(true)">
+            &#x2714; {{ ui.consent_btn_yes }}
+        </button>
+        <button type="button" class="consent-btn consent-btn-no" onclick="submitConsent(false)">
+            {{ ui.consent_btn_no }}
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block hidden_fields %}
+<input type="hidden" name="gave_consent" id="field_consent" value="">
+{% endblock %}
+
+{% block scripts %}
+(function(){
+    window.submitConsent = function(consented) {
+        document.getElementById('field_consent').value = consented ? '1' : '0';
+        document.getElementById('form').submit();
+    };
+})();
+{% endblock %}

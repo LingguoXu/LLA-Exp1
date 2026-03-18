@@ -95,11 +95,11 @@ UI = dict(
         zh='你将看到一些简短的对话场景。每段对话中都有一个空格，缺少一个词或短语。<span style="color: black;"><strong>缺少的词会以蓝色提示的形式显示</strong></span>。',
     ),
     t2_how_step2=dict(
-        en='Click the blue hint to open the gap, then <span style="color: black;"><strong>type what feels most natural to you</strong></span>. Use the hint verb as a guide.',
-        fr='Cliquez sur l\u2019indice bleu pour ouvrir l\u2019espace, puis tapez ce qui vous semble le plus naturel. Utilisez le verbe indiqué comme guide.',
-        de='Klicken Sie auf den blauen Hinweis, um die Lücke zu öffnen, und geben Sie ein, was sich für Sie am natürlichsten anfühlt. Verwenden Sie das Hinweiswort als Orientierung.',
-        ja='青いヒントをクリックして空欄を開き、最も自然だと感じる表現を入力してください。ヒントの動詞を参考にしてください。',
-        zh='点击蓝色提示打开空格，然后<span style="color: black;"><strong>输入你觉得最自然的表达</strong></span>。以提示词为参考。',
+        en='Click the blue hint to open the gap. <span style="color: black;"><strong>Use the hint word in any form — add extra words if they feel natural.</strong></span>',
+        fr='Cliquez sur l\u2019indice bleu pour ouvrir l\u2019espace. <span style="color: black;"><strong>Utilisez le mot-indice sous n\u2019importe quelle forme — ajoutez des mots si cela vous semble naturel.</strong></span>',
+        de='Klicken Sie auf den blauen Hinweis, um die Lücke zu öffnen. <span style="color: black;"><strong>Verwenden Sie das Hinweiswort in beliebiger Form — fügen Sie weitere Wörter hinzu, wenn es sich natürlich anfühlt.</strong></span>',
+        ja='青いヒントをクリックして空欄を開いてください。<span style="color: black;"><strong>ヒントの言葉をどんな形でも使い、自然に感じるなら言葉を追加してください。</strong></span>',
+        zh='点击蓝色提示打开空格。<span style="color: black;"><strong>可以用任何形式使用提示词——如果觉得自然，可以添加额外的词语。</strong></span>',
     ),
     t2_how_step3=dict(
         en='<span style="color: black;"><strong>Where a certainty percentage is shown, imagine you are exactly that certain</strong></span> and write what you would naturally say.',
@@ -123,11 +123,11 @@ UI = dict(
         zh='提示',
     ),
     t2_guideline_1=dict(
-        en='\u2714\ufe0f There are no right or wrong answers. Write whatever feels most natural.',
-        fr='\u2714\ufe0f Il n\u2019y a pas de bonne ou de mauvaise r\u00e9ponse. \u00c9crivez ce qui vous semble le plus naturel.',
-        de='\u2714\ufe0f Es gibt keine richtigen oder falschen Antworten. Schreiben Sie, was Ihnen am nat\u00fcrlichsten vorkommt.',
-        ja='\u2714\ufe0f 正解や不正解はありません。最も自然だと感じるものを書いてください。',
-        zh='\u2714\ufe0f 没有对错之分。写出你觉得最自然的表达就好。',
+        en='\u2714\ufe0f There are no right or wrong answers. Write whatever <strong>feels most natural</strong>.',
+        fr='\u2714\ufe0f Il n\u2019y a pas de bonne ou de mauvaise r\u00e9ponse. \u00c9crivez ce qui vous <strong>semble le plus naturel</strong>.',
+        de='\u2714\ufe0f Es gibt keine richtigen oder falschen Antworten. Schreiben Sie, was Ihnen <strong>am nat\u00fcrlichsten vorkommt</strong>.',
+        ja='\u2714\ufe0f 正解や不正解はありません。<strong>最も自然だと感じるもの</strong>を書いてください。',
+        zh='\u2714\ufe0f 没有对错之分。写出你觉得<strong>最自然的表达</strong>就好。',
     ),
     t2_guideline_2=dict(
         en='\u2714\ufe0f Imagine you are the speaker in the conversation.',
@@ -135,13 +135,6 @@ UI = dict(
         de='\u2714\ufe0f Stellen Sie sich vor, Sie sind die sprechende Person im Gespr\u00e4ch.',
         ja='\u2714\ufe0f \u4f1a\u8a71\u306e\u8a71\u3057\u624b\u306e\u7acb\u5834\u3067\u66f8\u3044\u3066\u304f\u3060\u3055\u3044\u3002',
         zh='\u2714\ufe0f 想象你就是对话中的说话人。',
-    ),
-    t2_guideline_3=dict(
-        en='\u2714\ufe0f Use the hint word in any form \u2014 add extra words if they feel natural.',
-        fr='\u2714\ufe0f Utilisez le mot-indice sous n\u2019importe quelle forme \u2014 ajoutez des mots si cela vous semble naturel.',
-        de='\u2714\ufe0f Verwenden Sie das Hinweiswort in beliebiger Form \u2014 f\u00fcgen Sie weitere W\u00f6rter hinzu, wenn es sich nat\u00fcrlich anf\u00fchlt.',
-        ja='\u2714\ufe0f \u30d2\u30f3\u30c8\u306e\u5358\u8a9e\u306f\u3069\u3093\u306a\u5f62\u3067\u3082\u4f7f\u3048\u307e\u3059\u3002\u81ea\u7136\u306b\u611f\u3058\u308b\u306a\u3089\u8a00\u8449\u3092\u52a0\u3048\u3066\u304f\u3060\u3055\u3044\u3002',
-        zh='\u2714\ufe0f 提示词可以用任何形式——觉得自然的话，可以加上其他词。',
     ),
     # ── Task 2.1 Instructions ──
     t2_instructions = dict(

@@ -333,7 +333,7 @@
             </div>
 
             <input type="range" id="bisect-slider"
-                   min="{{ x_min }}" max="{{ x_max }}" step="{% if decimals == 0 %}1{% else %}0.01{% endif %}"
+                   min="{{ x_min }}" max="{{ x_max }}" step="{% if decimals == 0 %}1{% else %}0.05{% endif %}"
                    oninput="bisectUpdateSlider(this.value)">
 
             <div class="slider-labels">
@@ -366,6 +366,8 @@
     var DEC    = {{ decimals }};
     var ENDOW  = {{ endowment }};
 
+    var SNAP = DEC === 0 ? 1 : 0.05;
+    function snapTo(v) { return Math.round(v / SNAP) * SNAP; }
     function fmtAmt(v) {
         return DEC === 0 ? Math.round(v).toString() : v.toFixed(DEC);
     }
@@ -374,7 +376,7 @@
     var high     = X_MAX;
     var step     = 0;
     var choices  = [];
-    var currentX = (low + high) / 2;
+    var currentX = snapTo((low + high) / 2);
 
     // ── Swap card/button positions on alternating steps ──
     function updateSwap(currentStep) {
@@ -429,7 +431,7 @@
         setTimeout(function() {
             step++;
             if (step < STEPS) {
-                currentX = (low + high) / 2;
+                currentX = snapTo((low + high) / 2);
                 setLoseLine('lose-line-text', currentX);
                 updateCalcLines(currentX);
                 updatePips(step);
@@ -503,9 +505,12 @@
         sp.classList.add('active');
 
         var slider = document.getElementById('bisect-slider');
-        var sliderStep = DEC === 0 ? 1 : 0.01;
-        var sLow  = Math.max(parseFloat(low.toFixed(DEC)),  X_MIN);
-        var sHigh = Math.min(parseFloat(high.toFixed(DEC)), X_MAX);
+        var sliderStep = DEC === 0 ? 1 : 0.05;
+        var bisectLow  = parseFloat(low.toFixed(DEC));
+        var bisectHigh = parseFloat(high.toFixed(DEC));
+        var range = bisectHigh - bisectLow;
+        var sLow  = snapTo(Math.max(bisectLow  - range * 4, 0));
+        var sHigh = snapTo(Math.min(bisectHigh + range * 4, X_MAX));
         slider.min   = sLow;
         slider.max   = sHigh;
         slider.step  = sliderStep;
@@ -517,7 +522,7 @@
 
     // ── Slider update ──
     window.bisectUpdateSlider = function(val) {
-        var x = parseFloat(val);
+        var x = snapTo(parseFloat(val));
         currentX = x;
 
         // Sync to form field on every slider move

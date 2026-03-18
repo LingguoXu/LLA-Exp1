@@ -30,6 +30,18 @@ UI = dict(
         zh='请填写所有空格后再继续。',
     ),
 
+    # ── Consent ──
+    consent_title=dict(en='Consent Form', fr='Formulaire de consentement', de='Einwilligungserklärung', ja='同意書', zh='知情同意书'),
+    consent_btn_yes=dict(en='I Consent', fr='Je consens', de='Ich stimme zu', ja='同意する', zh='我同意'),
+    consent_btn_no=dict(en='I Do Not Consent', fr='Je ne consens pas', de='Ich stimme nicht zu', ja='同意しない', zh='我不同意'),
+    noconsent_msg=dict(
+        en='Thank you for your time. Because you did not consent to participate, the study cannot proceed. You may now close this window.',
+        fr='Merci pour votre temps. Comme vous n\'avez pas donné votre consentement, l\'étude ne peut pas continuer. Vous pouvez maintenant fermer cette fenêtre.',
+        de='Vielen Dank für Ihre Zeit. Da Sie nicht zugestimmt haben, kann die Studie nicht fortgesetzt werden. Sie können dieses Fenster jetzt schließen.',
+        ja='お時間をいただきありがとうございます。同意いただけなかったため、本研究を進めることができません。このウィンドウを閉じてください。',
+        zh='感谢您的时间。由于您未同意参与，本研究无法继续。您现在可以关闭此窗口。',
+    ),
+
     # ── Welcome / Study Introduction ──
     welcome_title=dict(
         en='Welcome',
@@ -39,25 +51,18 @@ UI = dict(
         zh='欢迎',
     ),
     welcome_body=dict(
-        en='Thank you for taking part in this study. You will complete a series of short language tasks — reading stories, filling in blanks, and rating sentences. There are no right or wrong answers; we are interested in how you naturally use language.',
+        en='Thank you for taking part in this study. It takes <strong>about 20 minutes</strong> to complete. You will complete a series of short language tasks — reading stories, filling in blanks, and rating sentences. There are no right or wrong answers; we are interested in how you naturally use language.',
         fr='Merci de participer à cette étude. Vous allez réaliser une série de courtes tâches linguistiques — lire des histoires, compléter des phrases et évaluer des énoncés. Il n\u2019y a pas de bonnes ou de mauvaises réponses ; nous nous intéressons à votre usage naturel de la langue.',
         de='Vielen Dank für Ihre Teilnahme an dieser Studie. Sie werden eine Reihe kurzer Sprachaufgaben bearbeiten — Geschichten lesen, Lücken ausfüllen und Sätze bewerten. Es gibt keine richtigen oder falschen Antworten; uns interessiert, wie Sie Sprache natürlich verwenden.',
         ja='この調査にご参加いただきありがとうございます。短い言語タスク（物語を読む、空欄を埋める、文を評価する）に取り組んでいただきます。正解や不正解はありません。あなたが自然に言葉を使う様子に関心があります。',
         zh='感谢您参加本研究。您将完成一系列简短的语言任务——阅读故事、填写空格和评价句子。没有正确或错误的答案，我们感兴趣的是您自然使用语言的方式。',
     ),
-    welcome_duration=dict(
-        en='The study takes approximately 15–20 minutes.',
-        fr='L\u2019étude dure environ 15 à 20 minutes.',
-        de='Die Studie dauert etwa 15–20 Minuten.',
-        ja='所要時間は約15〜20分です。',
-        zh='本研究大约需要15-20分钟。',
-    ),
-    welcome_anon=dict(
-        en='All responses are anonymous and will be used for research purposes only.',
-        fr='Toutes les réponses sont anonymes et seront utilisées uniquement à des fins de recherche.',
-        de='Alle Antworten sind anonym und werden ausschließlich zu Forschungszwecken verwendet.',
-        ja='すべての回答は匿名であり、研究目的にのみ使用されます。',
-        zh='所有回答均为匿名，仅用于研究目的。',
+    welcome_bonus=dict(
+        en='In addition to your £3.50 participation fee, you may have the opportunity to <strong>earn a bonus payment</strong> based on your decisions in the study, so please read the instructions carefully and pay close attention throughout.',
+        fr='En plus de votre indemnité de participation, vous pourrez <strong>gagner un bonus</strong> en fonction de vos décisions dans l\u2019étude. Veuillez donc lire attentivement les instructions et rester concentré(e) tout au long de l\u2019étude.',
+        de='Zusätzlich zu Ihrer Teilnahmegebühr haben Sie die Möglichkeit, <strong>einen Bonus zu verdienen</strong>, basierend auf Ihren Entscheidungen in der Studie. Bitte lesen Sie die Anweisungen sorgfältig und achten Sie durchgehend aufmerksam.',
+        ja='参加謝金に加えて、調査中の意思決定に基づいて<strong>ボーナスを獲得</strong>できる場合があります。説明をよくお読みになり、最後まで注意深くご参加ください。',
+        zh='除参与费外，您还有机会根据研究中的决策<strong>获得额外奖金</strong>，请仔细阅读说明并全程认真作答。',
     ),
     btn_begin=dict(
         en='Begin',
@@ -238,7 +243,7 @@ UI = dict(
 
     # Screenout Message
     screenout_msg=dict(
-        en="Unfortunately you do not fit the profile for this survey. Thank you for participating.",
+        en="Unfortunately you do not fit the profile for this survey. You will still receive <strong>£0.15</strong> for your time. Thank you for participating.",
         fr="Malheureusement, vous ne correspondez pas au profil pour cette enquête. Merci de votre participation.",
         de="Leider entsprechen Sie nicht dem Profil für diese Umfrage. Vielen Dank für Ihre Teilnahme.",
         ja="残念ながら、この調査の対象プロファイルに適合しません。ご参加ありがとうございました。",
@@ -285,11 +290,11 @@ UI = dict(
         zh='您将阅读一些短故事，其中有些词语缺失。缺失的词语会以<span style="color: black;"><strong>蓝色提示词</strong></span>的形式显示在空格中。',
     ),
     task1_how_step2=dict(
-        en='Click on a blue hint to open the gap, then <span style="color: black;"><strong>type the word or short phrase that feels most natural to you</strong></span>.',
-        fr='Cliquez sur un indice bleu pour ouvrir l\u2019espace, puis tapez le mot ou la courte expression qui vous semble le plus naturel.',
-        de='Klicken Sie auf einen blauen Hinweis, um die L\u00fccke zu \u00f6ffnen, und geben Sie dann das Wort oder die kurze Phrase ein, die Ihnen am nat\u00fcrlichsten erscheint.',
-        ja='青いヒントをクリックして空欄を開き、最も自然だと感じる言葉や短いフレーズを入力してください。',
-        zh='点击蓝色提示词打开空格，然后<span style="color: black;"><strong>输入您觉得最自然的词语或短语</strong></span>。',
+        en='Click on a blue hint to open the gap. <span style="color: black;"><strong>Use the hint word in any form — add extra words if they feel natural.</strong></span>',
+        fr='Cliquez sur un indice bleu pour ouvrir l\u2019espace. <span style="color: black;"><strong>Utilisez le mot-indice sous n\u2019importe quelle forme — ajoutez des mots si cela vous semble naturel.</strong></span>',
+        de='Klicken Sie auf einen blauen Hinweis, um die L\u00fccke zu \u00f6ffnen. <span style="color: black;"><strong>Verwenden Sie das Hinweiswort in beliebiger Form — f\u00fcgen Sie weitere W\u00f6rter hinzu, wenn es sich nat\u00fcrlich anf\u00fchlt.</strong></span>',
+        ja='青いヒントをクリックして空欄を開いてください。<span style="color: black;"><strong>ヒントの言葉をどんな形でも使い、自然に感じるなら言葉を追加してください。</strong></span>',
+        zh='点击蓝色提示词打开空格。<span style="color: black;"><strong>可以用任何形式使用提示词——如果觉得自然，可以添加额外的词语。</strong></span>',
     ),
     task1_how_step3=dict(
         en='If you click away without typing anything, the blue hint will reappear so you can come back to it later.',
@@ -313,11 +318,11 @@ UI = dict(
         zh='提示',
     ),
     task1_guideline_1=dict(
-        en='\u2714\ufe0f Write whatever feels most natural \u2014 there are no right or wrong answers.',
-        fr='\u2714\ufe0f \u00c9crivez ce qui vous semble le plus naturel \u2014 il n\u2019y a pas de bonne ou de mauvaise r\u00e9ponse.',
-        de='\u2714\ufe0f Schreiben Sie, was Ihnen am nat\u00fcrlichsten vorkommt \u2014 es gibt keine richtigen oder falschen Antworten.',
-        ja='\u2714\ufe0f 最も自然だと感じるものを書いてください。正解や不正解はありません。',
-        zh='\u2714\ufe0f 写下您觉得最自然的内容——没有正确或错误的答案。',
+        en='\u2714\ufe0f Write whatever feels most natural \u2014 <strong>there are no right or wrong answers</strong>.',
+        fr='\u2714\ufe0f \u00c9crivez ce qui vous semble le plus naturel \u2014 <strong>il n\u2019y a pas de bonne ou de mauvaise r\u00e9ponse</strong>.',
+        de='\u2714\ufe0f Schreiben Sie, was Ihnen am nat\u00fcrlichsten vorkommt \u2014 <strong>es gibt keine richtigen oder falschen Antworten</strong>.',
+        ja='\u2714\ufe0f 最も自然だと感じるものを書いてください。<strong>正解や不正解はありません</strong>。',
+        zh='\u2714\ufe0f 写下您觉得最自然的内容——<strong>没有正确或错误的答案</strong>。',
     ),
     task1_guideline_2=dict(
         en='\u2714\ufe0f Imagine you are telling the story to a close friend.',
@@ -641,6 +646,9 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     language = models.StringField(initial='en')
 
+    # ── Consent ──
+    gave_consent = models.BooleanField(initial=False, blank=True)
+
     # ── Screening Fields ──
     # Distractor: Age range
     age_range = models.StringField()
@@ -675,18 +683,38 @@ def _ctx(player, progress):
     return dict(lang=lang, ui=ui_dict(lang), progress=progress)
 
 
-class Screening(Page):
+class Consent(Page):
     form_model = 'player'
-    form_fields = ['age_range', 'is_native', 'education', 'other_language_level', 'device']
+    form_fields = ['gave_consent']
 
     @staticmethod
     def vars_for_template(player):
-        # 1. Detect language from config or participant label
         lang = player.session.config.get('language', 'en')
         player.language = lang
         player.participant.language = lang
+        return _ctx(player, 0)
 
-        # 2. Get the base context (lang + ui + progress)
+class NoConsent(Page):
+    @staticmethod
+    def is_displayed(player):
+        return not player.gave_consent
+
+    @staticmethod
+    def vars_for_template(player):
+        return _ctx(player, 0)
+
+
+class Screening(Page):
+    form_model = 'player'
+    form_fields = ['age_range', 'is_native', 'education', 'other_language_level']
+
+    @staticmethod
+    def is_displayed(player):
+        return player.gave_consent
+
+    @staticmethod
+    def vars_for_template(player):
+        # Get the base context (lang + ui + progress)
         ctx = _ctx(player, 0)
         ui = ctx['ui']
 
@@ -734,8 +762,8 @@ class Screening(Page):
     @staticmethod
     def before_next_page(player, timeout_happened):
         # SCREENING LOGIC:
-        # Pass if: Native Speaker (True) AND Other Language Level is 0
-        if player.is_native and player.other_language_level == 0:
+        # Pass if: Native Speaker (True) AND Other Language Level is 0 or 1
+        if player.is_native and player.other_language_level <= 1:
             player.screened_out = False
         else:
             player.screened_out = True
@@ -743,7 +771,7 @@ class Screening(Page):
 
 class ScreenOut(Page):
     def is_displayed(player):
-        return player.screened_out
+        return player.gave_consent and player.screened_out
 
     @staticmethod
     def vars_for_template(player):
@@ -753,7 +781,7 @@ class ScreenOut(Page):
 
 class Task1Intro(Page):
     def is_displayed(player):
-        return not player.screened_out
+        return player.gave_consent and not player.screened_out
 
     @staticmethod
     def vars_for_template(player):
@@ -769,7 +797,7 @@ class Task1Story1(Page):
     form_fields = ['task1_responses']
 
     def is_displayed(player):
-        return not player.screened_out
+        return player.gave_consent and not player.screened_out
 
     @staticmethod
     def vars_for_template(player):
@@ -789,7 +817,7 @@ class Task1Story2(Page):
     form_fields = ['task1_responses']
 
     def is_displayed(player):
-        return not player.screened_out
+        return player.gave_consent and not player.screened_out
 
     @staticmethod
     def vars_for_template(player):
@@ -808,7 +836,7 @@ class Task1Story3(Page):
     form_fields = ['task1_responses']
 
     def is_displayed(player):
-        return not player.screened_out
+        return player.gave_consent and not player.screened_out
 
     @staticmethod
     def vars_for_template(player):
@@ -827,7 +855,7 @@ class Task1Story4(Page):
     form_fields = ['task1_responses']
 
     def is_displayed(player):
-        return not player.screened_out
+        return player.gave_consent and not player.screened_out
 
     @staticmethod
     def vars_for_template(player):
@@ -841,6 +869,8 @@ class Task1Story4(Page):
 
 
 page_sequence = [
+    Consent,
+    NoConsent,
     Screening,
     ScreenOut,
     Task1Intro,
