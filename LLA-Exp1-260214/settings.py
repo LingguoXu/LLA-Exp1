@@ -96,7 +96,7 @@ DEBUG = environ.get('OTREE_DEBUG', 'True') == 'True'
 #
 # 3. Push to Heroku (app lives in subfolder LLA-Exp1-260214/):
 #       git subtree push --prefix LLA-Exp1-260214 heroku main
-#
+#   https://lla-exp1-171d3b09e770.herokuapp.com/
 #    If rejected due to non-fast-forward error, force push with:
 #       git push heroku `git subtree split --prefix LLA-Exp1-260214 main`:main --force
 #
