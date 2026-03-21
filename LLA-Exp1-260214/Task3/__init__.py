@@ -818,7 +818,7 @@ class Task3Intro(Page):
             symbol=symbol,
             lang=lang,
             ui=ui,
-            progress=64,
+            progress=75,
         )
 
 
@@ -893,7 +893,7 @@ class ComprehensionCheck(Page):
         return dict(
             lang=lang,
             ui=ui,
-            progress=70,
+            progress=78,
             symbol=symbol,
             endowment=endowment_s,
             gain=gain_s,
@@ -973,7 +973,7 @@ class LossAversionBisection(Page):
         return dict(
             lang=lang,
             ui=ui,
-            progress=76,
+            progress=82,
             gain=gain,
             x_min=x_min,
             x_max=x_max,
@@ -1046,7 +1046,7 @@ class LossAversionAnticipation(Page):
         endowment = C.LA_ENDOWMENT_BASE * cur['rate']
         endowment_s = f'{endowment:.0f}' if dec == 0 else f'{endowment:.{dec}f}'
 
-        ctx = _ctx(player, 80)
+        ctx = _ctx(player, 85)
         fmt = dict(symbol=symbol, endowment=endowment_s)
         ctx['ui']['antic_worry_q'] = ctx['ui']['antic_worry_q'].format(**fmt)
         ctx['ui']['antic_prob_q'] = ctx['ui']['antic_prob_q'].format(**fmt)
@@ -1098,7 +1098,7 @@ class LossAversionResult(Page):
         return dict(
             lang=lang,
             ui=ui,
-            progress=84,
+            progress=88,
             selected_choice=selected_choice,
             coin_flip=coin_flip,
             bonus=bonus,
@@ -1150,7 +1150,7 @@ class TemporalDiscounting(Page):
             horizons=horizons_localised,
             n_horizons=len(C.TD_HORIZONS),
             symbol=symbol,
-            **_ctx(player, 89),
+            **_ctx(player, 92),
         )
 
     @staticmethod
@@ -1205,7 +1205,7 @@ class Survey(Page):
     def vars_for_template(player):
         return dict(
             likert_range=C.LIKERT_RANGE,
-            **_ctx(player, 95)
+            **_ctx(player, 96)
         )
 
 
