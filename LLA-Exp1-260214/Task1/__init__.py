@@ -852,7 +852,7 @@ class Task1Story1(Page):
             story=stories[0],
             story_num=1, total=4,
             existing=player.task1_responses or '{}',
-            **_ctx(player, 14),
+            **_ctx(player, 10),
         )
 
 
@@ -871,7 +871,7 @@ class Task1Story2(Page):
             story=stories[1],
             story_num=2, total=4,
             existing=player.task1_responses or '{}',
-            **_ctx(player, 23),
+            **_ctx(player, 16),
         )
 
 
@@ -890,7 +890,7 @@ class Task1Story3(Page):
             story=stories[2],
             story_num=3, total=4,
             existing=player.task1_responses or '{}',
-            **_ctx(player, 32),
+            **_ctx(player, 22),
         )
 
 
@@ -909,7 +909,7 @@ class Task1Story4(Page):
             story=stories[3],
             story_num=4, total=4,
             existing=player.task1_responses or '{}',
-            **_ctx(player, 41),
+            **_ctx(player, 28),
         )
 
 

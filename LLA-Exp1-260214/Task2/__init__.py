@@ -2069,7 +2069,7 @@ class Task2Intro(Page):
     def vars_for_template(player):
         lang = player.session.config.get('language', 'en')
         player.language = lang
-        ctx = _ctx(player, 50)
+        ctx = _ctx(player, 34)
         ctx['t2_practice_html'] = T2_PRACTICE_HTML.get(lang, T2_PRACTICE_HTML['en'])
         return ctx
 
@@ -2154,7 +2154,7 @@ def _make_item_page(indices, progress, label):
 
 # Build primary pages (progress 55 → 70 → 80)
 _ITEM_PAGES = []
-_primary_progresses = [55, 68, 80]
+_primary_progresses = [40, 46, 52]
 for i, chunk in enumerate(PRIMARY_CHUNKS):
     label = f'{chunk[0] + 1}_{chunk[-1] + 1}'
     _ITEM_PAGES.append(_make_item_page(chunk, _primary_progresses[i], label))
@@ -2176,7 +2176,7 @@ class Task2Slider(Page):
         return dict(
             items=items,
             existing=player.t2_perception_data or '{}',
-            **_ctx(player, 98),
+            **_ctx(player, 58),
         )
 
 

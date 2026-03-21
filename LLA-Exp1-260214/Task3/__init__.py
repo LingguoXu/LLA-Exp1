@@ -818,7 +818,7 @@ class Task3Intro(Page):
             symbol=symbol,
             lang=lang,
             ui=ui,
-            progress=62,
+            progress=64,
         )
 
 
@@ -893,7 +893,7 @@ class ComprehensionCheck(Page):
         return dict(
             lang=lang,
             ui=ui,
-            progress=66,
+            progress=70,
             symbol=symbol,
             endowment=endowment_s,
             gain=gain_s,
@@ -973,7 +973,7 @@ class LossAversionBisection(Page):
         return dict(
             lang=lang,
             ui=ui,
-            progress=72,
+            progress=76,
             gain=gain,
             x_min=x_min,
             x_max=x_max,
@@ -1046,7 +1046,7 @@ class LossAversionAnticipation(Page):
         endowment = C.LA_ENDOWMENT_BASE * cur['rate']
         endowment_s = f'{endowment:.0f}' if dec == 0 else f'{endowment:.{dec}f}'
 
-        ctx = _ctx(player, 78)
+        ctx = _ctx(player, 80)
         fmt = dict(symbol=symbol, endowment=endowment_s)
         ctx['ui']['antic_worry_q'] = ctx['ui']['antic_worry_q'].format(**fmt)
         ctx['ui']['antic_prob_q'] = ctx['ui']['antic_prob_q'].format(**fmt)
@@ -1098,7 +1098,7 @@ class LossAversionResult(Page):
         return dict(
             lang=lang,
             ui=ui,
-            progress=82,
+            progress=84,
             selected_choice=selected_choice,
             coin_flip=coin_flip,
             bonus=bonus,
@@ -1150,7 +1150,7 @@ class TemporalDiscounting(Page):
             horizons=horizons_localised,
             n_horizons=len(C.TD_HORIZONS),
             symbol=symbol,
-            **_ctx(player, 88),
+            **_ctx(player, 89),
         )
 
     @staticmethod
