@@ -29,7 +29,7 @@ class C(BaseConstants):
 
     # ── Currency per language ────────────
     CURRENCY = dict(
-        en=dict(rate=0.50, symbol='$', code='USD', decimals=2),
+        en=dict(rate=0.50, symbol='£', code='GBP', decimals=2),
         fr=dict(rate=0.50, symbol='€', code='EUR', decimals=2),
         de=dict(rate=0.50, symbol='€', code='EUR', decimals=2),
         ja=dict(rate=75.0, symbol='¥', code='JPY', decimals=0),
