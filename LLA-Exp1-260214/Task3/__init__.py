@@ -171,13 +171,12 @@ UI = dict(
                      ja='パート3: 意思決定', zh='第三部分：决策'),
     intro_text=dict(
         en=(
-            'In this final part, you will choose between lotteries and safe options involving potential gains and losses.'
+            'In this final part, you will choose between lotteries and safe options.'
             '<br><br>'
             'You start with a bonus balance of <strong>{symbol}{endowment}</strong>. '
             'In each round you pick either a <strong>lottery</strong> (a coin flip that can increase or decrease your balance) or a <strong>safe option</strong> (keep your balance unchanged). '
             'At the end, <strong>one round is selected at random and played out for real</strong>.'
             '<br><br>'
-            '1 in 10 participants will be randomly selected to receive their bonus <strong>through Prolific</strong>. '
             'Please decide as if every choice is real.'
         ),
         fr=(
