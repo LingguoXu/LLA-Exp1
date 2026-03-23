@@ -93,6 +93,15 @@
         err.classList.remove('show');
     });
 
+    /* Auto-fill from URL: ?participant_label=PROLIFIC_PID or ?PROLIFIC_PID=xxx */
+    var params = new URLSearchParams(window.location.search);
+    var pid = params.get('participant_label') || params.get('PROLIFIC_PID') || '';
+    if (pid) {
+        inp.value = pid;
+        inp.readOnly = true;
+        inp.style.backgroundColor = '#f1f5f9';
+    }
+
     window.submitProlific = function () {
         var val = inp.value.trim();
         if (!val) {
