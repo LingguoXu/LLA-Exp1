@@ -268,7 +268,7 @@ UI = dict(
 
     # Screenout Message
     screenout_msg=dict(
-        en="Unfortunately you do not fit the profile for this survey. You will still receive <strong>£0.15</strong> for your time. Thank you for participating.",
+        en="Unfortunately you do not fit the profile for this survey. You will still receive <strong>£0.10</strong> for your time. Thank you for participating.",
         fr="Malheureusement, vous ne correspondez pas au profil pour cette enquête. Merci de votre participation.",
         de="Leider entsprechen Sie nicht dem Profil für diese Umfrage. Vielen Dank für Ihre Teilnahme.",
         ja="残念ながら、この調査の対象プロファイルに適合しません。ご参加ありがとうございました。",
