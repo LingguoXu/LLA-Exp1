@@ -84,11 +84,11 @@
                           font-size: 1rem; outline: none; transition: border-color 0.2s;"
                    onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#cbd5e1'">
             <div id="yearsWarning" style="display:none; color:#dc2626; font-size:0.85rem; max-width:350px; margin:6px auto 0; text-align:left;">
-                {% if lang == 'en' %}Please enter 100 if you have lived here for more than 100 years.
-                {% elif lang == 'fr' %}Veuillez entrer 100 si vous y vivez depuis plus de 100 ans.
-                {% elif lang == 'de' %}Bitte geben Sie 100 ein, wenn Sie hier seit mehr als 100 Jahren leben.
-                {% elif lang == 'ja' %}100年以上住んでいる場合は100と入力してください。
-                {% elif lang == 'zh' %}如果您在此居住超过100年，请输入100。
+                {% if lang == 'en' %}Please enter a valid number. If you have lived here for more than 100 years, please enter 100.
+                {% elif lang == 'fr' %}Veuillez entrer un nombre valide. Si vous y vivez depuis plus de 100 ans, veuillez entrer 100.
+                {% elif lang == 'de' %}Bitte geben Sie eine gültige Zahl ein. Wenn Sie hier seit mehr als 100 Jahren leben, geben Sie bitte 100 ein.
+                {% elif lang == 'ja' %}有効な数字を入力してください。100年以上住んでいる場合は100と入力してください。
+                {% elif lang == 'zh' %}请输入有效数字。如果您在此居住超过100年，请输入100。
                 {% endif %}
             </div>
         </div>
