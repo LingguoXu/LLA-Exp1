@@ -151,9 +151,10 @@ class Player(BasePlayer):
     td_choice = models.StringField(blank=True)
 
     # --- SURVEY FIELDS ---
+    age = models.IntegerField(min=18, max=100)
     gender = models.StringField()
     home_country = models.StringField()
-    years_in_country = models.IntegerField(min=0)
+    years_in_country = models.IntegerField(min=0, max=100)
     employment_industry = models.StringField()
     income_level = models.StringField()
     risk_general = models.IntegerField(min=0, max=10)
@@ -364,6 +365,13 @@ UI = dict(
     # --- Survey labels ---
     surv_title=dict(en='Final Survey', fr='Enquête finale', de='Abschlussumfrage', ja='最終アンケート', zh='最终问卷'),
 
+    q_age=dict(
+        en='What is your age?',
+        fr='Quel est votre âge ?',
+        de='Wie alt sind Sie?',
+        ja='あなたの年齢は？',
+        zh='您的年龄是？',
+    ),
     q_gender=dict(
         en='What is your gender?',
         fr='Quel est votre genre ?',
@@ -1195,7 +1203,7 @@ class TemporalDiscounting(Page):
 
 class Survey(Page):
     form_model = 'player'
-    form_fields = ['gender', 'home_country', 'years_in_country', 'employment_industry', 'income_level', 'risk_general', 'patience_general', 'study_feedback']
+    form_fields = ['age', 'gender', 'home_country', 'years_in_country', 'employment_industry', 'income_level', 'risk_general', 'patience_general', 'study_feedback']
 
     @staticmethod
     def vars_for_template(player):

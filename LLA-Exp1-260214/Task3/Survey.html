@@ -24,6 +24,24 @@
                           border:2px solid #cbd5e1; border-radius:6px; font-size:1rem; outline:none;">
         </div>
 
+        <!-- Age -->
+        <div style="margin-bottom: 28px;">
+            <label class="form-label fw-bold" style="display:block; margin-bottom:8px;">{{ ui.q_age }}</label>
+            <input type="number" name="age" form="form" min="18" max="100" required id="ageInput"
+                   style="width: 100%; max-width: 350px; display: block; margin: 0 auto;
+                          padding: 8px 12px; border: 2px solid #cbd5e1; border-radius: 6px;
+                          font-size: 1rem; outline: none; transition: border-color 0.2s;"
+                   onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#cbd5e1'">
+            <div id="ageWarning" style="display:none; color:#dc2626; font-size:0.85rem; max-width:350px; margin:6px auto 0; text-align:left;">
+                {% if lang == 'en' %}Please enter an age between 18 and 100.
+                {% elif lang == 'fr' %}Veuillez entrer un âge entre 18 et 100.
+                {% elif lang == 'de' %}Bitte geben Sie ein Alter zwischen 18 und 100 ein.
+                {% elif lang == 'ja' %}18歳から100歳の間で入力してください。
+                {% elif lang == 'zh' %}请输入18到100之间的年龄。
+                {% endif %}
+            </div>
+        </div>
+
         <!-- Home country -->
         <div style="margin-bottom: 28px;">
             <label class="form-label fw-bold" style="display:block; margin-bottom:8px;">{{ ui.q_home_country }}</label>
@@ -60,11 +78,19 @@
         <!-- Years in UK -->
         <div style="margin-bottom: 28px;">
             <label class="form-label fw-bold" style="display:block; margin-bottom:8px;">{{ ui.q_years_in_country }}</label>
-            <input type="number" name="years_in_country" form="form" min="0" required
+            <input type="number" name="years_in_country" form="form" min="0" max="100" required id="yearsInput"
                    style="width: 100%; max-width: 350px; display: block; margin: 0 auto;
                           padding: 8px 12px; border: 2px solid #cbd5e1; border-radius: 6px;
                           font-size: 1rem; outline: none; transition: border-color 0.2s;"
                    onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#cbd5e1'">
+            <div id="yearsWarning" style="display:none; color:#dc2626; font-size:0.85rem; max-width:350px; margin:6px auto 0; text-align:left;">
+                {% if lang == 'en' %}Please enter 100 if you have lived here for more than 100 years.
+                {% elif lang == 'fr' %}Veuillez entrer 100 si vous y vivez depuis plus de 100 ans.
+                {% elif lang == 'de' %}Bitte geben Sie 100 ein, wenn Sie hier seit mehr als 100 Jahren leben.
+                {% elif lang == 'ja' %}100年以上住んでいる場合は100と入力してください。
+                {% elif lang == 'zh' %}如果您在此居住超过100年，请输入100。
+                {% endif %}
+            </div>
         </div>
 
         <!-- Industry -->
@@ -189,5 +215,22 @@
 
     setupOther('countrySelect', 'countryOtherInput', '__other__');
     setupOther('genderSelect', 'genderOtherInput', '__self_describe__');
+
+    /* ── Range warnings for age and years ── */
+    function rangeWarning(inputId, warningId, min, max) {
+        var inp = document.getElementById(inputId);
+        var warn = document.getElementById(warningId);
+        if (!inp || !warn) return;
+        inp.addEventListener('input', function() {
+            var v = parseInt(inp.value);
+            if (inp.value !== '' && (isNaN(v) || v < min || v > max)) {
+                warn.style.display = 'block';
+            } else {
+                warn.style.display = 'none';
+            }
+        });
+    }
+    rangeWarning('ageInput', 'ageWarning', 18, 100);
+    rangeWarning('yearsInput', 'yearsWarning', 0, 100);
 })();
 {% endblock %}
