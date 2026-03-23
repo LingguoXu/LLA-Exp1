@@ -592,11 +592,7 @@ UI = dict(
     end_code_label=dict(en='Completion code', fr='Code de complétion', de='Abschlusscode', ja='完了コード', zh='完成码'),
     # --- Anticipation page (pre-outcome) ---
     antic_title=dict(
-        en='Before the result is revealed…',
-        fr='Avant que le résultat ne soit révélé…',
-        de='Bevor das Ergebnis enthüllt wird…',
-        ja='結果が発表される前に…',
-        zh='在结果揭晓之前…',
+        en='', fr='', de='', ja='', zh='',
     ),
     antic_worry_q=dict(
         en='How worried are you <em>right now</em> about <em>losing</em> some of your {symbol}{endowment} bonus?',
