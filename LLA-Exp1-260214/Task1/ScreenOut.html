@@ -1,9 +1,62 @@
 {% extends "global/Base.html" %}
 {% load otree %}
 
+{% block extra_css %}
+
+.code-box {
+    display: inline-block;
+    background: #f1f5f9;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 24px;
+    margin: 14px 0 20px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--primary);
+}
+.code-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+}
+.redirect-note {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 8px;
+    margin-bottom: 20px;
+}
+
+{% endblock %}
+
+
 {% block content %}
 <div class="card" style="text-align: center; padding: 50px 20px;">
     <div style="font-size: 3rem; margin-bottom: 20px;">🚫</div>
     <h3 style="margin-bottom: 20px;">{{ ui.screenout_msg|safe }}</h3>
+
+    <div style="margin-top: 24px;">
+        <div class="code-label">Completion Code</div>
+        <div class="code-box">{{ screenout_code }}</div>
+    </div>
+
+    <p class="redirect-note">You will be redirected to Prolific automatically in 5 seconds.</p>
+
+    <a href="{{ prolific_url }}" class="btn btn-primary" style="font-size: 1rem; padding: 13px 36px;">
+        Return to Prolific <span style="margin-left: 4px;">&rarr;</span>
+    </a>
 </div>
+{% endblock %}
+
+
+{% block scripts %}
+(function () {
+    setTimeout(function () {
+        window.location.href = '{{ prolific_url }}';
+    }, 5000);
+})();
 {% endblock %}

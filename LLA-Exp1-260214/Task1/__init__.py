@@ -820,8 +820,12 @@ class ScreenOut(Page):
 
     @staticmethod
     def vars_for_template(player):
-        # Still need to pass base context so Base.html can render the head/css correctly
-        return _ctx(player, 0)
+        ctx = _ctx(player, 0)
+        screenout_code = player.session.config.get('screenout_code', 'C1SG14NP')
+        prolific_url = f'https://app.prolific.com/submissions/complete?cc={screenout_code}'
+        ctx['screenout_code'] = screenout_code
+        ctx['prolific_url'] = prolific_url
+        return ctx
 
 
 class Task1Intro(Page):

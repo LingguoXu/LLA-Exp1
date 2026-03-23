@@ -13,10 +13,11 @@ SESSION_CONFIGS = [
         name='study_en',
         display_name="FTR Study — English (reference)",
         app_sequence=['Task1','Task2','Task3'],
-        # app_sequence=['Task1'],
+        # app_sequence=['Task3'],
         num_demo_participants=3,
         language='en',
         completion_code='CFZCG8H4',
+        screenout_code='C1SG14NP',
     ),
     dict(
         name='study_fr',
