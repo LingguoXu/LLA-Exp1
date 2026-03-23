@@ -388,7 +388,7 @@ STORIES = dict(
             'Anna was having dinner with her friend. Suddenly, she {{1}} **{FEEL}** a sharp pain in her wisdom tooth. Her friend warned her: "You must see a dentist immediately, otherwise the tooth {{2}} **{SWELL}** up very soon."',
             'Anna was lucky and got an appointment for 4:00 PM. She thought to herself, "Although I am afraid of pain, this doctor is very skilled. I believe the surgery {{3}} **{GO}** smoothly."',
             'Anna arrived at the clinic. The dentist {{4}} **{EXAMINE}** her teeth and said, "We must pull it out today. It\u2019s a quick procedure. The wound {{5}} **{HEAL}** completely within a week, and by then you {{6}} **{BE}** able to eat normally."',
-            'Anna {{7}} **{RETURN}** home after the surgery was finished. However, the pain was still intense. She looked in the mirror and then realized: the doctor had pulled the wrong one! The painful left tooth was still there; the doctor {{8}} **{REMOVE}** the good one, which hadn\u2019t hurt at all. Her friend told her, "Then the dentist {{9}} **{NEED}** to pull the bad tooth as well."',
+            'Anna {{7}} **{RETURN}** home after the surgery was finished. However, the pain was still intense. She looked in the mirror and then realised: the doctor had pulled the wrong one! The painful left tooth was still there; the doctor {{8}} **{REMOVE}** the good one, which hadn\u2019t hurt at all. Her friend told her, "Then the dentist {{9}} **{NEED}** to pull the bad tooth as well."',
             'Anna {{10}} **{CRY}**: "Oh no, does that mean I have to do this again?"'
         ]),
 
@@ -430,7 +430,7 @@ STORIES = dict(
 #             'Anna was having dinner {{1}} suddenly, she felt a sharp pain in her wisdom tooth. Her friend warned her: \u201cYou must see a dentist immediately, otherwise the tooth {{2}} swell up very soon.\u201d',
 #             'Anna was lucky and got an appointment for 4:00 PM. She thought to herself, \u201cAlthough I am afraid of pain, this doctor is very skilled. I believe the surgery {{3}} go smoothly.\u201d',
 #             'Anna arrived at the clinic. The dentist examined {{4}} teeth and said, \u201cWe must pull it out today. It\u2019s a quick procedure. The wound {{5}} heal completely within a week, and by then you {{6}} be able to eat normally.\u201d',
-#             'Anna returned home after she had finished {{7}} the extraction. However, the pain was still intense. She looked in the mirror and {{8}} realized: the doctor had pulled the wrong one! The painful left tooth was still there; the one removed was {{9}} the right one, which hadn\u2019t hurt at all.',
+#             'Anna returned home after she had finished {{7}} the extraction. However, the pain was still intense. She looked in the mirror and {{8}} realised: the doctor had pulled the wrong one! The painful left tooth was still there; the one removed was {{9}} the right one, which hadn\u2019t hurt at all.',
 #             'Anna burst into tears: \u201cOh my god, does that mean I {{10}} suffer through this all over again? Just my luck!\u201d',
 #         ]),
 #         # ── Story 2: Alex's Interview ──
@@ -445,7 +445,7 @@ STORIES = dict(
 #         ]),
 #         # ── Story 3: Marco's Panic Morning ──
 #         dict(title="Marco\u2019s Panic Morning", paragraphs=[
-#             'Marco woke up and {{1}} realized his alarm hadn\u2019t gone off. He rushed to the bus stop, only to find the next bus wasn\u2019t coming until 8:30. Suddenly, it started to rain. Looking at the gloomy sky, he was worried that he {{2}} miss the morning meeting.',
+#             'Marco woke up and {{1}} realised his alarm hadn\u2019t gone off. He rushed to the bus stop, only to find the next bus wasn\u2019t coming until 8:30. Suddenly, it started to rain. Looking at the gloomy sky, he was worried that he {{2}} miss the morning meeting.',
 #             'He quickly hailed a taxi. Inside, he {{3}} the radio announcer say, \u201cThe rain is heavy, and it {{4}} not stop until this afternoon.\u201d',
 #             'At that moment, his girlfriend Sarah called and asked, \u201cWhat are you {{5}} this afternoon?\u201d Marco replied anxiously, \u201cToday {{6}} be very busy; I have to prepare materials for next week\u2019s meeting.\u201d',
 #             'Sarah was surprised: \u201cBut today is Sunday!\u201d Marco was stunned. Sarah laughed, \u201cYes, Sunday is a rest day! Let\u2019s go have lunch instead.\u201d',
