@@ -337,11 +337,11 @@ UI = dict(
         zh='即将完成 — 请调整精确金额'
     ),
     la2_slider_intro=dict(
-        en='Based on your choices, we\'ve narrowed it down to a small range. Use the slider to set the <strong>exact loss amount</strong> where the lottery and the safe option feel equally appealing to you.',
-        fr='Sur la base de vos choix, nous avons réduit la plage. Utilisez le curseur pour définir le <strong>montant de perte exact</strong> où la loterie et l\'option sûre vous semblent aussi attractives l\'une que l\'autre.',
-        de='Basierend auf Ihren Entscheidungen haben wir den Bereich eingegrenzt. Verwenden Sie den Schieberegler, um den <strong>genauen Verlustbetrag</strong> einzustellen, bei dem Lotterie und sichere Option für Sie gleich attraktiv erscheinen.',
-        ja='あなたの選択に基づいて、範囲を狭めました。スライダーを使って、くじと安全な選択肢が同じくらい魅力的に感じる<strong>正確な損失額</strong>を設定してください。',
-        zh='根据您的选择，我们已缩小范围。请使用滑动条设置一个<strong>精确的损失金额</strong>，使抽奖和稳妥选项对您来说同样有吸引力。'
+        en='Based on your choices, we\'ve narrowed it down to a small range. If you are unhappy with the slider\'s range of values, please refresh this page to remake your choices.<br><br>Use the slider to set the <strong>exact loss amount</strong> where the lottery and the safe option feel equally appealing to you.',
+        fr='Sur la base de vos choix, nous avons réduit la plage. Si la plage de valeurs du curseur ne vous convient pas, veuillez actualiser cette page pour refaire vos choix.<br><br>Utilisez le curseur pour définir le <strong>montant de perte exact</strong> où la loterie et l\'option sûre vous semblent aussi attractives l\'une que l\'autre.',
+        de='Basierend auf Ihren Entscheidungen haben wir den Bereich eingegrenzt. Wenn Sie mit dem Wertebereich des Schiebereglers nicht zufrieden sind, aktualisieren Sie bitte diese Seite, um Ihre Entscheidungen zu wiederholen.<br><br>Verwenden Sie den Schieberegler, um den <strong>genauen Verlustbetrag</strong> einzustellen, bei dem Lotterie und sichere Option für Sie gleich attraktiv erscheinen.',
+        ja='あなたの選択に基づいて、範囲を狭めました。スライダーの値の範囲にご不満がある場合は、このページを更新して選択をやり直してください。<br><br>スライダーを使って、くじと安全な選択肢が同じくらい魅力的に感じる<strong>正確な損失額</strong>を設定してください。',
+        zh='根据您的选择，我们已缩小范围。如果您对滑动条的取值范围不满意，请刷新此页面重新进行选择。<br><br>请使用滑动条设置一个<strong>精确的损失金额</strong>，使抽奖和稳妥选项对您来说同样有吸引力。'
     ),
     la2_slider_label_lose=dict(en='Lose', fr='Perdre', de='Verlieren', ja='損失', zh='损失'),
     la2_slider_label_cur=dict(en='', fr='', de='', ja='', zh=''),
